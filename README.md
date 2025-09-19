@@ -1,4 +1,4 @@
-# LogSensei MVP (user studies)
+# LogSensei Plugin
 
 ### IntelliJ plugin (Java) that helps beginners add the right logs in the right places. 
 
