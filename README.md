@@ -6,8 +6,6 @@
 
 - Help beginner Java developers add the right logs in the right places.
 
-- KISS: works immediately after install, no config, no AI.
-
 - Faster debugging and clearer code flow.
 
 ## MVP scope
