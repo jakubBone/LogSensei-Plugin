@@ -1,19 +1,29 @@
 plugins {
     id("java")
+    id("org.jetbrains.intellij") version "1.17.4"
 }
 
-group = "org.example"
+group = "com.jakubbone"
 version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+intellij {
+    version.set("2024.1.7")
+    type.set("IC") // IntelliJ IDEA Community Edition
+    plugins.set(listOf("java"))
 }
 
-tasks.test {
-    useJUnitPlatform()
+tasks {
+    withType<JavaCompile> {
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
+    }
+
+    patchPluginXml {
+        sinceBuild.set("241")
+        untilBuild.set("243.*")
+    }
 }

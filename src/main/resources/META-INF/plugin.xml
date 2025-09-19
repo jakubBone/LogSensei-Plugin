@@ -1,0 +1,38 @@
+<idea-plugin>
+    <id>com.jakubbone.logsensei</id>
+    <name>LogSensei</name>
+    <vendor email="jakub.bone@gmail.com" url="https://github.com/jakubBone">Jakub Bone</vendor>
+
+    <description><![CDATA[
+    LogSensei helps Java developers learn good logging practices by suggesting where and what type of logs to add.
+    Features:
+    - Suggests adding error logs in empty catch blocks
+    - Warns about null checks without logging
+    - Recommends debug logs for public method entries
+    - Adds info logs for service methods
+    - Educational tooltips explaining log levels
+    ]]></description>
+
+    <change-notes><![CDATA[
+    <h3>1.0.0</h3>
+    <ul>
+        <li>Initial release</li>
+        <li>Basic logging suggestions for catch blocks</li>
+        <li>Null check warnings</li>
+        <li>Public method entry logging</li>
+        <li>Service method logging</li>
+        <li>Educational tooltips</li>
+    </ul>
+    ]]></change-notes>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Inspections here -->
+    </extensions>
+
+    <actions>
+        <!-- Actions here -->
+    </actions>
+</idea-plugin>
