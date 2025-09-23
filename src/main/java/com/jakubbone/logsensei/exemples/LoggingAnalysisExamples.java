@@ -5,7 +5,7 @@ package com.jakubbone.logsensei.exemples;
  *
  * This class contains all the scenarios that LogSensei should detect and analyze.
  * Each method represents a different test case from the plugin requirements.
- * PSI Viewer analyse them  to understand the PSI structure of each case.
+ * PSI Viewer analyze them to understand the PSI structure of each case.
  */
 public class LoggingAnalysisExamples {
 
