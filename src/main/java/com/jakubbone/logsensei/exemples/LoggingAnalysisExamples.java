@@ -1,5 +1,7 @@
 package com.jakubbone.logsensei.exemples;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * Java code examples for PSI analysis and logging pattern testing.
  *
@@ -7,14 +9,28 @@ package com.jakubbone.logsensei.exemples;
  * Each method represents a different test case from the plugin requirements.
  * PSI Viewer analyze them to understand the PSI structure of each case.
  */
+
+@Log4j2
 public class LoggingAnalysisExamples {
+    // ================================
+    // 1. CATCH BLOCKS
+    // ================================
 
     // Expected: LogSensei should suggest adding log.error()
     public void emptyCatchBlock() {
         try {
             int result = 10 / 0;
-        } catch (Exception e) {
+        } catch (Exception ex) {
             // Empty catch
+        }
+    }
+
+    // Expected: LogSensei should NOT flag this
+    public void catchWithLogging() {
+        try {
+            int result = 10 / 0;
+        } catch (Exception ex) {
+            System.out.println("Error occurred: " + e.getMessage());
         }
     }
 }

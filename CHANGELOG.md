@@ -7,4 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 ### Added
-Build setup using **Gradle IntelliJ Plugin** (`org.jetbrains.intellij`) to automate plugin packaging and testing in IntelliJ IDEA.
+- Basic project structure
+- Migration build.gradle.kts → build.gradle
+- LoggingAnalysisExamples with code examples for PSI structure analysis

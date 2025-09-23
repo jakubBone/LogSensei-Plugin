@@ -6,6 +6,15 @@ plugins {
 group = 'com.jakubbone'
 version = '1.0-SNAPSHOT'
 
+dependencies {
+    // Log4j
+    implementation 'org.apache.logging.log4j:log4j-core:2.23.0'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+}
+
 repositories {
     mavenCentral()
 }
