@@ -19,5 +19,4 @@ Main feature: Error logging in catch blocks
 - Inspection: catch block without logging 
 - QuickFix 1: add log.error() and @Log4j2 annotation 
 - Automatic Log4j2 import 
-- Context-aware error logging with method names
 
