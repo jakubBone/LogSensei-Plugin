@@ -25,7 +25,7 @@ public class LoggingCatchBlockInspection extends AbstractBaseJavaLocalInspection
                     holder.registerProblem(section.getFirstChild(), // Highlight
                             "LogSensei: Catch block without error logging"
                     ,ProblemHighlightType.WEAK_WARNING,
-                            new AddErrorLogQuickFix());
+                            new CatchBlockLoggingFix());
                 }
             }
 

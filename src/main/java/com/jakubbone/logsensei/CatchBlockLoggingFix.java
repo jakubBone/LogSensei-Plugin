@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * It will insert the log.error(...) snippet.
  */
-public class AddErrorLogQuickFix implements LocalQuickFix {
+public class CatchBlockLoggingFix implements LocalQuickFix {
     private static final String LOMBOK_LOG4J2_ANNOTATION = "lombok.extern.log4j.Log4j2";
 
     public @IntentionFamilyName @NotNull String getFamilyName() {
