@@ -21,7 +21,7 @@ public class LoggingAnalysisExamples {
         try {
             int result = 10 / 0;
         } catch (Exception ex) {
-            // Empty catch
+
         }
     }
 
@@ -30,7 +30,7 @@ public class LoggingAnalysisExamples {
         try {
             int result = 10 / 0;
         } catch (Exception ex) {
-            System.out.println("Error occurred: " + e.getMessage());
+            log.error("An error occurred: {}", ex.getMessage());
         }
     }
 }
