@@ -9,4 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 - Basic project structure
 - Migration build.gradle.kts → build.gradle
-- LoggingAnalysisExamples with code examples for PSI structure analysis
+
+## [0.1.0] - 2025-09-24 - Initial Release
+### Added
+
+Main feature: Error logging in catch blocks
+
+- Basic project structure and build configuration
+- Inspection: catch block without logging 
+- QuickFix 1: add log.error() and @Log4j2 annotation 
+- Automatic Log4j2 import 
+- Context-aware error logging with method names
+
