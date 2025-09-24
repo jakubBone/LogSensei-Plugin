@@ -1,36 +1,48 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '1.17.4'
+    id 'org.jetbrains.intellij.platform' version '2.9.0'
 }
 
 group = 'com.jakubbone'
 version = '1.0-SNAPSHOT'
 
-dependencies {
-    // Log4j
-    implementation 'org.apache.logging.log4j:log4j-core:2.23.0'
-
-    // Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.32'
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
-}
-
 repositories {
     mavenCentral()
+
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
-intellij {
-    version = '2024.1.7'
-    type = 'IC' // IntelliJ IDEA Community Edition
-    plugins = ['java']
+dependencies {
+    intellijPlatform {
+        intellijIdeaCommunity('2024.3')
+        bundledPlugin('com.intellij.java')
+
+        instrumentationTools()
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 tasks.withType(JavaCompile) {
-    sourceCompatibility = '17'
-    targetCompatibility = '17'
+    options.encoding = 'UTF-8'
 }
 
-patchPluginXml {
-    sinceBuild = '241'
-    untilBuild = '243.*'
+intellijPlatform {
+    pluginConfiguration {
+        ideaVersion {
+            sinceBuild = '243'
+            untilBuild = '244.*'
+        }
+    }
+
+    pluginVerification {
+        ides {
+            recommended()
+        }
+    }
 }
