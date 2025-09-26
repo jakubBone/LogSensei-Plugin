@@ -1,10 +1,11 @@
-package com.jakubbone.logsensei;
+package com.jakubbone.logsensei.inspection;
 
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.*;
 
+import com.jakubbone.logsensei.quickfix.CatchBlockLoggingFix;
 import org.jetbrains.annotations.NotNull;
 
 public class LoggingCatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {

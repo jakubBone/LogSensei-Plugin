@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei;
+package com.jakubbone.logsensei.quickfix;
 
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
