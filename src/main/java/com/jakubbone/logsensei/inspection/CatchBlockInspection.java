@@ -8,7 +8,7 @@ import com.intellij.psi.*;
 import com.jakubbone.logsensei.quickfix.CatchBlockLoggingFix;
 import org.jetbrains.annotations.NotNull;
 
-public class LoggingCatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
+public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
 
     @Override
     public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {

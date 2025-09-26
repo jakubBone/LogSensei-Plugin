@@ -35,7 +35,7 @@
                 groupName="LogSensei"
                 enabledByDefault="true"
                 level="WARNING"
-                implementationClass="com.jakubbone.logsensei.inspection.LoggingCatchBlockInspection"/>
+                implementationClass="com.jakubbone.logsensei.inspection.CatchBlockInspection"/>
     </extensions>
 
     <actions>
