@@ -36,6 +36,13 @@
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.CatchBlockInspection"/>
+        <localInspection
+                language="JAVA"
+                displayName="LogSensei: null check without error logging"
+                groupName="LogSensei"
+                enabledByDefault="true"
+                level="WARNING"
+                implementationClass="com.jakubbone.logsensei.inspection.NullCheckInspection"/>
     </extensions>
 
     <actions>

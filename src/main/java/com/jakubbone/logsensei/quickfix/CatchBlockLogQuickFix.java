@@ -46,7 +46,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
         }
         String methodName = containingMethod.getName();
 
-                PsiParameter exceptionParameter = catchSection.getParameter();
+        PsiParameter exceptionParameter = catchSection.getParameter();
         if(exceptionParameter == null){
             return;
         }
@@ -59,7 +59,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
 
         String logStatementText = String.format(
-                "log.error(\"[%s] An exception occurred.\", %s);",
+                "log.warn(\"[%s] Null c occurred.\", %s);",
                 methodName,
                 exceptionName
         );
