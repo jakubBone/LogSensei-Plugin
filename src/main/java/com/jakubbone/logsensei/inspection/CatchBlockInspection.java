@@ -5,7 +5,7 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.*;
 
-import com.jakubbone.logsensei.quickfix.CatchBlockLoggingFix;
+import com.jakubbone.logsensei.quickfix.CatchBlockLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
@@ -26,7 +26,7 @@ public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
                     holder.registerProblem(section.getFirstChild(), // Highlight
                             "LogSensei: Catch block without error logging"
                     ,ProblemHighlightType.WEAK_WARNING,
-                            new CatchBlockLoggingFix());
+                            new CatchBlockLogQuickFix());
                 }
             }
 

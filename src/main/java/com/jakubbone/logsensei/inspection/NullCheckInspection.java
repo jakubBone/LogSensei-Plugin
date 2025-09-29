@@ -5,7 +5,7 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.jakubbone.logsensei.quickfix.AddWarningLogQuickFix;
+import com.jakubbone.logsensei.quickfix.NullCheckLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 public class NullCheckInspection extends AbstractBaseJavaLocalInspectionTool {
@@ -37,7 +37,7 @@ public class NullCheckInspection extends AbstractBaseJavaLocalInspectionTool {
                         holder.registerProblem(condition.getFirstChild(), // Highlight
                                 "LogSensei: Null check without warning log"
                                 , ProblemHighlightType.WEAK_WARNING,
-                                new AddWarningLogQuickFix(variableName)
+                                new NullCheckLogQuickFix(variableName)
                         );
                     }
                 }

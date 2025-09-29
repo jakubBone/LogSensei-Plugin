@@ -6,10 +6,10 @@ import com.intellij.codeInspection.util.IntentionFamilyName;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
-public class AddWarningLogQuickFix implements LocalQuickFix {
+public class NullCheckLogQuickFix implements LocalQuickFix {
     private final String variableName;
 
-    public AddWarningLogQuickFix(String variableName) {
+    public NullCheckLogQuickFix(String variableName) {
         this.variableName = variableName;
     }
 
