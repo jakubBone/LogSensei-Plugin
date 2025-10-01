@@ -40,7 +40,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
         }
 
         // 4. Find the method catch section to log.error(" ");
-        PsiMethod containingMethod = PsiTreeUtil.getParentOfType(catchSection, PsiMethod.class);
+        PsiMethod containingMethod = PsiTreeUtil.getParentOfType(catchSection, PsiMethod.class, false);
         if (containingMethod == null) {
             return;
         }
@@ -59,7 +59,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
 
         String logStatementText = String.format(
-                "log.warn(\"[%s] Null c occurred.\", %s);",
+                "log.error(\"[%s] An exception occurred.\", %s);",
                 methodName,
                 exceptionName
         );

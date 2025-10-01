@@ -39,7 +39,11 @@ public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
 
                 for(PsiStatement stmt: statements){
                     String text = stmt.getText();
-                    if(text.contains("log.error")){
+                    if(text.contains("log.error") ||
+                            text.contains("log.warn") ||
+                            text.contains("logger.error") ||
+                            text.contains("System.out.print") ||
+                            text.contains("printStackTrace")){
                         return false;
                     }
                 }
