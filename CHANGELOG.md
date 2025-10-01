@@ -10,13 +10,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Basic project structure
 - Migration build.gradle.kts → build.gradle
 
+## [0.2.0] - 2025-10-01
+### Added
+
+Main feature: Warning logging for null checks
+
+- Inspection 2: null check without warning log
+- QuickFix 2: add log.warn() and @Log4j2 annotation 
+- Context-aware warning messages with method and variable names
+
 ## [0.1.0] - 2025-09-24 - Initial Release
 ### Added
 
 Main feature: Error logging in catch blocks
 
 - Basic project structure and build configuration
-- Inspection: catch block without logging 
+- Inspection 1: catch block without error log 
 - QuickFix 1: add log.error() and @Log4j2 annotation 
 - Automatic Log4j2 import 
+
+
 
