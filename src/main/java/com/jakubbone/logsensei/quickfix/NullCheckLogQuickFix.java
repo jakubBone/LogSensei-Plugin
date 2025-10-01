@@ -71,20 +71,7 @@ public class NullCheckLogQuickFix implements LocalQuickFix {
             } else {
                 codeBlock.add(logStatement);
             }
-        } else {
-            // Single statement - a new block creating
-            PsiBlockStatement newBlock = (PsiBlockStatement) factory.createStatementFromText("{}", thenBranch);
-            PsiCodeBlock codeBlock = newBlock.getCodeBlock();
-
-            // Add log statement
-            codeBlock.add(logStatement);
-            // Add original statement
-            codeBlock.add(thenBranch.copy());
-
-            // Replace the original statement with the new block
-            thenBranch.replace(newBlock);
         }
-
     }
 
     private void addLog4jAnnotationAndImports(@NotNull Project project, @NotNull PsiClass psiClass){
