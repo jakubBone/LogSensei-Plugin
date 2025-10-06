@@ -60,7 +60,7 @@ public class NullCheckLogQuickFix implements LocalQuickFix {
 
         // Add the statement to existing or new created block
         if (thenBranch instanceof PsiBlockStatement) {
-            // Existing block
+            // Existing block { }
             PsiBlockStatement blockStatement = (PsiBlockStatement) thenBranch;
             PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
 
@@ -71,6 +71,16 @@ public class NullCheckLogQuickFix implements LocalQuickFix {
             } else {
                 codeBlock.add(logStatement);
             }
+        } else {
+            // Single statement without { } - need to create a block
+            // Example: if (x == null) return; → if (x == null) { log.warn(...); return; }
+            String blockText = String.format(
+                    "{ %s %s }",
+                    logStatementText,
+                    thenBranch.getText()
+            );
+            PsiBlockStatement newBlock = (PsiBlockStatement) factory.createStatementFromText(blockText, ifStatement);
+            thenBranch.replace(newBlock);
         }
     }
 
