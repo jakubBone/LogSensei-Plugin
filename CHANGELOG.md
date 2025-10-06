@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Basic project structure
 - Migration build.gradle.kts → build.gradle
 
+## [0.2.1] - 2025-10-06
+### Fixed
+- NullCheckLogQuickFix now properly handles single-statement if blocks without braces
+- Example: `if (x == null) return;` now correctly transforms to `if (x == null) { log.warn(...); return; }`
+
 ## [0.2.0] - 2025-10-01
 ### Added
 
