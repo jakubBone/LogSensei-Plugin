@@ -18,14 +18,12 @@ public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
                 super.visitCatchSection(section);
 
                 PsiCodeBlock catchBlock = section.getCatchBlock();
-                if(catchBlock == null){
-                    return;
-                }
+                if(catchBlock == null) return;
 
                 if(isWithoutLogger(catchBlock)){
                     holder.registerProblem(section.getFirstChild(), // Highlight
-                            "LogSensei: Catch block without error logging"
-                    ,ProblemHighlightType.WEAK_WARNING,
+                            "LogSensei: Catch block without error logging",
+                            ProblemHighlightType.WEAK_WARNING,
                             new CatchBlockLogQuickFix());
                 }
             }
