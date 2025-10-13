@@ -15,7 +15,7 @@ import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiStatement;
 import org.jetbrains.annotations.NotNull;
 
-public class LoopLoggingInspestion extends AbstractBaseJavaLocalInspectionTool {
+public class LoopInspestion extends AbstractBaseJavaLocalInspectionTool {
     /*
     * PsiForStatement          // for(int i = 0; i < 10; i++)
       ├── PsiCodeBlock         // {}
@@ -65,7 +65,6 @@ public class LoopLoggingInspestion extends AbstractBaseJavaLocalInspectionTool {
             );
         }
     }
-
 
     private List<PsiMethodCallExpression> findProblematicLogCalls(PsiStatement statement){
         List<PsiMethodCallExpression> problematicLogs = new ArrayList<>();
