@@ -8,11 +8,15 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.JavaRecursiveElementVisitor;
+import com.intellij.psi.PsiDoWhileStatement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiForStatement;
+import com.intellij.psi.PsiForeachStatement;
+import com.intellij.psi.PsiLoopStatement;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiStatement;
+import com.intellij.psi.PsiWhileStatement;
 import org.jetbrains.annotations.NotNull;
 
 public class LoopInspestion extends AbstractBaseJavaLocalInspectionTool {
@@ -42,12 +46,33 @@ public class LoopInspestion extends AbstractBaseJavaLocalInspectionTool {
                 super.visitForStatement(statement);
                 checkLoopForHighFrequencyLogging(statement, holder);
             }
+
+            @Override
+            public void visitForeachStatement(@NotNull PsiForeachStatement statement) {
+                super.visitForeachStatement(statement);
+                checkLoopForHighFrequencyLogging(statement, holder);
+            }
+
+            @Override
+            public void visitWhileStatement(@NotNull PsiWhileStatement statement) {
+                super.visitWhileStatement(statement);
+                checkLoopForHighFrequencyLogging(statement, holder);
+
+            }
+
+            @Override
+            public void visitDoWhileStatement(@NotNull PsiDoWhileStatement statement) {
+                super.visitDoWhileStatement(statement);
+                checkLoopForHighFrequencyLogging(statement, holder);
+            }
+
+
         };
     }
 
     private void checkLoopForHighFrequencyLogging(
-            PsiForStatement statement,
-            ProblemsHolder holder) {
+            @NotNull PsiLoopStatement statement,
+            @NotNull ProblemsHolder holder) {
 
         PsiStatement loopBody = statement.getBody();
         if (loopBody == null) {
