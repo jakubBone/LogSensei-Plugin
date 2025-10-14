@@ -17,6 +17,7 @@ import com.intellij.psi.PsiLoopStatement;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiWhileStatement;
+import com.jakubbone.logsensei.quickfix.LoopLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 public class LoopInspestion extends AbstractBaseJavaLocalInspectionTool {
@@ -86,7 +87,8 @@ public class LoopInspestion extends AbstractBaseJavaLocalInspectionTool {
 
             holder.registerProblem(loopKeyword,
                     "LogSensei: High-frequency logging detected in loop. Consider using DEBUG level.",
-                    ProblemHighlightType.WEAK_WARNING
+                    ProblemHighlightType.WEAK_WARNING,
+                    new LoopLogQuickFix(problematicLogs)
             );
         }
     }
