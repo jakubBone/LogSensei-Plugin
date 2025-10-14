@@ -43,6 +43,13 @@
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.NullCheckInspection"/>
+        <localInspection
+                language="JAVA"
+                displayName="LogSensei: high-frequency logging in loop"
+                groupName="LogSensei"
+                enabledByDefault="true"
+                level="WARNING"
+                implementationClass="com.jakubbone.logsensei.inspection.LoopInspection"/>
     </extensions>
 
     <actions>
