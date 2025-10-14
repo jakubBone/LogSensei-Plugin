@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * It will insert the log.error(...) snippet.
  */
 public class CatchBlockLogQuickFix implements LocalQuickFix {
-    private static final String LOMBOK_LOG4J2_ANNOTATION = "lombok.extern.log4j.Log4j2";
+    private final String lombok_log4J_annotation = "lombok.extern.log4j.Log4j2";
 
     public @IntentionFamilyName @NotNull String getFamilyName() {
         return "Add error log";
@@ -74,13 +74,13 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
 
     private void addLog4jAnnotationAndImports(@NotNull Project project, @NotNull PsiClass psiClass){
         PsiModifierList modifierList = psiClass.getModifierList();
-        if(modifierList == null || modifierList.hasAnnotation(LOMBOK_LOG4J2_ANNOTATION)){
+        if(modifierList == null || modifierList.hasAnnotation(lombok_log4J_annotation)){
             return;
         }
 
         // Add annotation
         PsiElementFactory factory =  JavaPsiFacade.getElementFactory(project);
-        PsiAnnotation annotation = factory.createAnnotationFromText("@"+LOMBOK_LOG4J2_ANNOTATION, psiClass);
+        PsiAnnotation annotation = factory.createAnnotationFromText("@"+lombok_log4J_annotation, psiClass);
         modifierList.addBefore(annotation, modifierList.getFirstChild());
 
         // Add imports and shorten class names
