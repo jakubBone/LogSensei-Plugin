@@ -20,7 +20,7 @@ import com.intellij.psi.PsiWhileStatement;
 import com.jakubbone.logsensei.quickfix.LoopLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
-public class LoopInspestion extends AbstractBaseJavaLocalInspectionTool {
+public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
     /*
     * PsiForStatement          // for(int i = 0; i < 10; i++)
       ├── PsiCodeBlock         // {}
