@@ -31,7 +31,7 @@ public class LoopLogQuickFix implements LocalQuickFix {
 
     @Override
     public @IntentionFamilyName @NotNull String getFamilyName() {
-        return "Add debug log";
+        return "Change log level: INFO -> DEBUG";
     }
 
     @Override
