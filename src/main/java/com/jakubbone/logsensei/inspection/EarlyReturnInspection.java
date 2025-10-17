@@ -1,16 +1,20 @@
 package com.jakubbone.logsensei.inspection;
 
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReturnStatement;
 import com.intellij.psi.PsiStatement;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jakubbone.logsensei.quickfix.EarlyReturnLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 public class EarlyReturnInspection extends AbstractBaseJavaLocalInspectionTool {
@@ -41,9 +45,17 @@ public class EarlyReturnInspection extends AbstractBaseJavaLocalInspectionTool {
                     return;
                 }
 
-                // hasLogBeforeReturn()
-                // hasPrintBeforeMethod()
-                // registerProblem()
+                if(hasLogBeforeReturn(statement, body)){
+                    return;
+                }
+
+                holder.registerProblem(
+                        statement.getFirstChild(),
+                        "LogSensei: Early return without logging",
+                        ProblemHighlightType.WEAK_WARNING,
+                        new EarlyReturnLogQuickFix()
+                );
+
             }
         };
     }
@@ -57,11 +69,20 @@ public class EarlyReturnInspection extends AbstractBaseJavaLocalInspectionTool {
         return returnStmt.equals(lastStmt);
     }
 
-    private void hasLogBeforeReturn(){
+    private boolean hasLogBeforeReturn(PsiReturnStatement returnStmt, PsiCodeBlock methodBody){
+        PsiElement previous = returnStmt.getPrevSibling();
 
-    }
+        if(previous != null &&
+                (previous instanceof PsiWhiteSpace || previous instanceof PsiComment)){
+            previous = previous.getPrevSibling();
+        }
 
-    private void hasPrintBeforeMethod(){
-
+        if(previous instanceof PsiStatement){
+            String text = previous.getText();
+            return text.contains("log.") ||
+                    text.contains("logger.") ||
+                    text.contains("System.out.print");
+        }
+        return false;
     }
 }
