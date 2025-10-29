@@ -52,7 +52,7 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
 
         // Create log statement
         String logStatementText = String.format(
-                "log.debug(\"[%s] Early return.\", %s);",
+                "log.debug(\"[%s] Early return\");",
                 methodName
         );
 
@@ -61,11 +61,12 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
         // Create log statement
         PsiStatement logStatement = factory.createStatementFromText(logStatementText, returnStatement);
 
-        PsiElement parent = returnKeyword.getParent();
+        PsiElement parent = returnStatement.getParent();
         // Add the statement to existing or new created block
         if(parent instanceof PsiCodeBlock){
             // Existing block { }
-            parent.addBefore(logStatement, returnStatement);
+            PsiCodeBlock codeBlock = (PsiCodeBlock) parent;
+            codeBlock.addBefore(logStatement, returnStatement);
         } else {
             // Single statement without { }
             // Example: if (x == null) return; → if (x == null) { log.debug(...); return; }
