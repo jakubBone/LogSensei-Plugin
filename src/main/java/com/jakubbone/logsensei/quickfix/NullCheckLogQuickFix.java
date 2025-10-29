@@ -13,14 +13,13 @@ public class NullCheckLogQuickFix implements LocalQuickFix {
     private final String variableName;
     private String lombok_log4J_annotation = "lombok.extern.log4j.Log4j2";
 
-
     public NullCheckLogQuickFix(String variableName) {
         this.variableName = variableName;
     }
 
     @Override
     public @IntentionFamilyName @NotNull String getFamilyName() {
-        return "Add warning log for null check";
+        return "Add WARN log for null check";
     }
 
     @Override
@@ -72,7 +71,7 @@ public class NullCheckLogQuickFix implements LocalQuickFix {
                 codeBlock.add(logStatement);
             }
         } else {
-            // Single statement without { } - need to create a block
+            // Single statement without { }
             // Example: if (x == null) return; → if (x == null) { log.warn(...); return; }
             String blockText = String.format(
                     "{ %s %s }",

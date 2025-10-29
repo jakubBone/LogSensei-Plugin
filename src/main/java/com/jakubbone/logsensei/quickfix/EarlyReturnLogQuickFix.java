@@ -24,7 +24,7 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
 
     @Override
     public @IntentionFamilyName @NotNull String getFamilyName() {
-        return "Add debug log before early return";
+        return "Add DEBUG log before early return";
     }
 
     @Override

@@ -19,7 +19,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
     private final String lombok_log4J_annotation = "lombok.extern.log4j.Log4j2";
 
     public @IntentionFamilyName @NotNull String getFamilyName() {
-        return "Add error log";
+        return "Add ERROR log";
     }
 
     @Override

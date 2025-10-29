@@ -50,6 +50,13 @@
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.LoopInspection"/>
+        <localInspection
+                language="JAVA"
+                displayName="LogSensei: early return logging"
+                groupName="LogSensei"
+                enabledByDefault="true"
+                level="WARNING"
+                implementationClass="com.jakubbone.logsensei.inspection.EarlyReturnInspection"/>
     </extensions>
 
     <actions>

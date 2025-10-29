@@ -115,5 +115,3 @@ public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
         return problematicLogs;
     }
 }
-
-

@@ -102,8 +102,6 @@ public class NullCheckInspection extends AbstractBaseJavaLocalInspectionTool {
         } else if (right != null && !rightIsNull) {
             return right.getText();
         }
-
         return "variable";
     }
-
 }
