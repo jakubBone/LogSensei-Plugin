@@ -45,7 +45,7 @@ public class EarlyReturnInspection extends AbstractBaseJavaLocalInspectionTool {
                     return;
                 }
 
-                if(hasLogBeforeReturn(statement, body)){
+                if(hasLogBeforeReturn(statement)){
                     return;
                 }
 
@@ -69,11 +69,10 @@ public class EarlyReturnInspection extends AbstractBaseJavaLocalInspectionTool {
         return returnStmt.equals(lastStmt);
     }
 
-    private boolean hasLogBeforeReturn(PsiReturnStatement returnStmt, PsiCodeBlock methodBody){
+    private boolean hasLogBeforeReturn(PsiReturnStatement returnStmt){
         PsiElement previous = returnStmt.getPrevSibling();
 
-        if(previous != null &&
-                (previous instanceof PsiWhiteSpace || previous instanceof PsiComment)){
+        if((previous instanceof PsiWhiteSpace || previous instanceof PsiComment)){
             previous = previous.getPrevSibling();
         }
 
