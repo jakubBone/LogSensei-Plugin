@@ -1,21 +1,21 @@
 package com.jakubbone.logsensei.quickfix;
 
+import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_DEBUG;
+import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
+
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.util.IntentionFamilyName;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiBlockStatement;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiReturnStatement;
 import com.intellij.psi.PsiStatement;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,10 +52,11 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
 
         // Create log statement
         String logStatementText = String.format(
-                "log.debug(\"[%s] Early return\");",
+                LOG_PATTERN_DEBUG,
                 methodName
         );
 
+        // Add Lombok annotation
         addLog4jAnnotationAndImports(project, containingClass);
 
         // Create log statement
@@ -78,20 +79,5 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
             PsiBlockStatement newBlock = (PsiBlockStatement) factory.createStatementFromText(blockText, parent);
             returnStatement.replace(newBlock);
         }
-    }
-
-    private void addLog4jAnnotationAndImports(@NotNull Project project, @NotNull PsiClass psiClass) {
-        PsiModifierList modifierList = psiClass.getModifierList();
-        if (modifierList == null || modifierList.hasAnnotation(lombok_log4J_annotation)) {
-            return;
-        }
-
-        // Add annotation
-        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-        PsiAnnotation annotation = factory.createAnnotationFromText("@" + lombok_log4J_annotation, psiClass);
-        modifierList.addBefore(annotation, modifierList.getFirstChild());
-
-        // Add imports and shorten class names
-        JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiClass.getContainingFile());
     }
 }
