@@ -45,6 +45,9 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
 
                 }
 
+                if (isLastStatementLog(body)){
+
+                }
 
             }
         };
@@ -66,4 +69,19 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
         return false;
     }
 
+    private boolean isLastStatementLog(PsiCodeBlock methodBody){
+        PsiStatement[] statements = methodBody.getStatements();
+        if(statements.length == 0){
+            return true;
+        }
+        PsiStatement lastStmt = statements[statements.length - 1];
+
+        String text = lastStmt.getText();
+        if(text.contains("log.") ||
+                text.contains("logger.") ||
+                text.contains("System.out.print")){
+            return true;
+        }
+        return false;
+    }
 }
