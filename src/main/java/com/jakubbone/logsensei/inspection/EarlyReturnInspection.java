@@ -51,7 +51,7 @@ public class EarlyReturnInspection extends AbstractBaseJavaLocalInspectionTool {
 
                 holder.registerProblem(
                         statement.getFirstChild(),
-                        "LogSensei: Early return without logging",
+                        "LogSensei: Early return missing log",
                         ProblemHighlightType.WEAK_WARNING,
                         new EarlyReturnLogQuickFix()
                 );

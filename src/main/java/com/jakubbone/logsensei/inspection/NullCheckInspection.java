@@ -35,7 +35,7 @@ public class NullCheckInspection extends AbstractBaseJavaLocalInspectionTool {
                         String variableName = extractVariableName(condition);
 
                         holder.registerProblem(condition.getFirstChild(), // Highlight
-                                "LogSensei: Null check without warning log"
+                                "LogSensei: Null check without WARN log"
                                 , ProblemHighlightType.WEAK_WARNING,
                                 new NullCheckLogQuickFix(variableName)
                         );

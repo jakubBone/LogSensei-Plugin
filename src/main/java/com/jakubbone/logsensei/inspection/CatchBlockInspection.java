@@ -22,7 +22,7 @@ public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
 
                 if(isWithoutLogger(catchBlock)){
                     holder.registerProblem(section.getFirstChild(), // Highlight
-                            "LogSensei: Catch block without error logging",
+                            "LogSensei: Catch block missing ERROR log",
                             ProblemHighlightType.WEAK_WARNING,
                             new CatchBlockLogQuickFix());
                 }

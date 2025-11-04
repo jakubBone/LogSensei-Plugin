@@ -38,28 +38,28 @@
                 implementationClass="com.jakubbone.logsensei.inspection.CatchBlockInspection"/>
         <localInspection
                 language="JAVA"
-                displayName="LogSensei: null check without error logging"
+                displayName="LogSensei: null check missing ERROR log"
                 groupName="LogSensei"
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.NullCheckInspection"/>
         <localInspection
                 language="JAVA"
-                displayName="LogSensei: high-frequency logging in loop"
+                displayName="LogSensei: high-frequency log in loop"
                 groupName="LogSensei"
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.LoopInspection"/>
         <localInspection
                 language="JAVA"
-                displayName="LogSensei: early return logging"
+                displayName="LogSensei: early return log"
                 groupName="LogSensei"
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.EarlyReturnInspection"/>
         <localInspection
                 language="JAVA"
-                displayName="LogSensei: service public method without logging"
+                displayName="LogSensei: service method missing log"
                 groupName="LogSensei"
                 enabledByDefault="true"
                 level="WARNING"

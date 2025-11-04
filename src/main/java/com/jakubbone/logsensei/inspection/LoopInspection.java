@@ -86,7 +86,7 @@ public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
             PsiElement loopKeyword = statement.getFirstChild();
 
             holder.registerProblem(loopKeyword,
-                    "LogSensei: High-frequency logging detected in loop. Consider using DEBUG level.",
+                    "LogSensei: High-frequency logs detected in loop. Consider using DEBUG level.",
                     ProblemHighlightType.WEAK_WARNING,
                     new LoopLogQuickFix(problematicLogs)
             );

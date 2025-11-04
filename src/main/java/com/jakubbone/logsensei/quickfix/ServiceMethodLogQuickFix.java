@@ -24,7 +24,7 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
 
     @Override
     public @IntentionFamilyName @NotNull String getFamilyName() {
-        return "Add INFO log to public method";
+        return "Add INFO log to service method";
     }
 
     @Override
