@@ -3,6 +3,7 @@ package com.jakubbone.logsensei.inspection;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.SERVICE_ANNOTATION;
 
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiClass;
@@ -41,13 +42,21 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
                     return;
                 }
 
-                if(hasEntryLog(body)){
-                    return;
+                boolean hasEntry = hasEntryLog(body);
+                boolean hasExit = hasExitLog(body);
+
+                String description;
+                if (!hasEntry && !hasExit) {
+                    description = "LogSensei: Service method missing entry and exit logs";
+                } else if (!hasEntry) {
+                    description = "LogSensei: Service method missing entry log";
+                } else {
+                    description = "LogSensei: Service method missing exit log";
                 }
 
-                if (hasExitLog(body)){
-                    return;
-                }
+                holder.registerProblem(method.getNameIdentifier(),
+                        description,
+                        ProblemHighlightType.WEAK_WARNING);
             }
         };
     }
