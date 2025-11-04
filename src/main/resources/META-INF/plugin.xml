@@ -57,6 +57,13 @@
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.EarlyReturnInspection"/>
+        <localInspection
+                language="JAVA"
+                displayName="LogSensei: service public method without logging"
+                groupName="LogSensei"
+                enabledByDefault="true"
+                level="WARNING"
+                implementationClass="com.jakubbone.logsensei.inspection.ServiceMethodInspection"/>
     </extensions>
 
     <actions>

@@ -9,6 +9,7 @@ import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiStatement;
@@ -54,7 +55,12 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
                     description = "LogSensei: Service method missing exit log";
                 }
 
-                holder.registerProblem(method.getNameIdentifier(),
+                PsiIdentifier nameIdentifier = method.getNameIdentifier();
+                if (nameIdentifier == null) {
+                    return;
+                }
+
+                holder.registerProblem(nameIdentifier,
                         description,
                         ProblemHighlightType.WEAK_WARNING);
             }
