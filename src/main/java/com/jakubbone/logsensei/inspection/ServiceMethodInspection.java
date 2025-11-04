@@ -14,6 +14,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jakubbone.logsensei.quickfix.ServiceMethodLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool {
@@ -30,16 +31,16 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
                 }
 
                 PsiModifierList modifierList = containingClass.getModifierList();
-                if(modifierList != null && !modifierList.hasAnnotation(SERVICE_ANNOTATION)){
+                if (modifierList != null && !modifierList.hasAnnotation(SERVICE_ANNOTATION)) {
                     return;
                 }
 
-                if(!method.hasModifierProperty("public")){
+                if (!method.hasModifierProperty("public")) {
                     return;
                 }
 
                 PsiCodeBlock body = method.getBody();
-                if(body == null){
+                if (body == null) {
                     return;
                 }
 
@@ -59,10 +60,12 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
                 if (nameIdentifier == null) {
                     return;
                 }
-
-                holder.registerProblem(nameIdentifier,
-                        description,
-                        ProblemHighlightType.WEAK_WARNING);
+                if (!hasEntry || !hasExit) {
+                    holder.registerProblem(nameIdentifier,
+                            description,
+                            ProblemHighlightType.WEAK_WARNING,
+                            new ServiceMethodLogQuickFix(hasEntry, hasExit));
+                }
             }
         };
     }
