@@ -1,9 +1,6 @@
 package com.jakubbone.logsensei.quickfix;
 
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_DEBUG;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_SERVICE_ENTRY_INFO;
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_SERVICE_EXIT_INFO;
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_SERVICE_INFO;
 import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
 
 import com.intellij.codeInspection.LocalQuickFix;
@@ -17,6 +14,7 @@ import com.intellij.psi.PsiElement;
 
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiMethod;
+
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
