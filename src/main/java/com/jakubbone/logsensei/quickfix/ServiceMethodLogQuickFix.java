@@ -3,6 +3,8 @@ package com.jakubbone.logsensei.quickfix;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_SERVICE_ENTRY_INFO;
 import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
 
+import java.util.Collection;
+
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.util.IntentionFamilyName;
@@ -15,6 +17,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiMethod;
 
+import com.intellij.psi.PsiReturnStatement;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -93,6 +96,14 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
     }
 
     private void addExitLog(Project project, PsiMethod method){
+        String methodName = method.getName();
+        PsiCodeBlock body = method.getBody();
+        if (body == null) {
+            return;
+        }
+
+        Collection<PsiReturnStatement> returns =
+                PsiTreeUtil.findChildrenOfAnyType(method, PsiReturnStatement.class);
 
     }
 }
