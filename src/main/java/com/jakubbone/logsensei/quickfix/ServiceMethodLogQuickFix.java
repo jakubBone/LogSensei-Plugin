@@ -108,8 +108,14 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
 
         if(returns.isEmpty()){
             addLogAtEnd(project, method);
+            return;
         }
 
+        for(PsiReturnStatement returnStmt: returns){
+            if(isLogBeforeReturn(returnStmt)){
+              // TODO: add log before return
+            }
+        }
     }
 
     private void addLogAtEnd(Project project, PsiMethod method){
@@ -126,5 +132,9 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
         if(block != null) {
             block.add(logStatement);
         }
+    }
+
+    private boolean isLogBeforeReturn(PsiReturnStatement returnStmt){
+        return false;
     }
 }
