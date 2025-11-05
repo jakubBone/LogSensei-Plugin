@@ -1,6 +1,7 @@
 package com.jakubbone.logsensei.quickfix;
 
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_SERVICE_ENTRY_INFO;
+import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_SERVICE_EXIT_INFO;
 import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
 
 import java.util.Collection;
@@ -112,6 +113,18 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
     }
 
     private void addLogAtEnd(Project project, PsiMethod method){
+        // Create log statement
+        String logStatementText = String.format(
+                LOG_PATTERN_SERVICE_EXIT_INFO,
+                method.getName()
+        );
 
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        PsiStatement logStatement = factory.createStatementFromText(logStatementText, method);
+
+        PsiCodeBlock block = method.getBody();
+        if(block != null) {
+            block.add(logStatement);
+        }
     }
 }
