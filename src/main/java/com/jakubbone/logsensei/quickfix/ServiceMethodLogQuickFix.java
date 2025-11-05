@@ -105,5 +105,13 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
         Collection<PsiReturnStatement> returns =
                 PsiTreeUtil.findChildrenOfAnyType(method, PsiReturnStatement.class);
 
+        if(returns.isEmpty()){
+            addLogAtEnd(project, method);
+        }
+
+    }
+
+    private void addLogAtEnd(Project project, PsiMethod method){
+
     }
 }
