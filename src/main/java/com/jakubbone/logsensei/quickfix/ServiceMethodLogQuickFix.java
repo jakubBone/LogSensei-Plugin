@@ -119,6 +119,7 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
                         LOG_PATTERN_SERVICE_EXIT_INFO,
                         method.getName()
                 );
+                addLogBeforeReturn(project, logStatementText, returnStmt);
 
             }
         }
