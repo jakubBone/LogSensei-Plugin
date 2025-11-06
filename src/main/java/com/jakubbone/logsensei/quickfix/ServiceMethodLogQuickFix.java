@@ -11,8 +11,10 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.util.IntentionFamilyName;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiBlockStatement;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 
 import com.intellij.psi.PsiElementFactory;
@@ -20,6 +22,7 @@ import com.intellij.psi.PsiMethod;
 
 import com.intellij.psi.PsiReturnStatement;
 import com.intellij.psi.PsiStatement;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,7 +78,7 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
     private void addEntryLog(Project project, PsiMethod method){
         PsiCodeBlock body = method.getBody();
         if(body == null){
-            return;;
+            return;
         }
 
         // Create log statement
@@ -97,7 +100,6 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
     }
 
     private void addExitLog(Project project, PsiMethod method){
-        String methodName = method.getName();
         PsiCodeBlock body = method.getBody();
         if (body == null) {
             return;
@@ -112,8 +114,12 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
         }
 
         for(PsiReturnStatement returnStmt: returns){
-            if(isLogBeforeReturn(returnStmt)){
-              // TODO: add log before return
+            if(!hasLogBeforeReturn(returnStmt)){
+                String logStatementText = String.format(
+                        LOG_PATTERN_SERVICE_EXIT_INFO,
+                        method.getName()
+                );
+
             }
         }
     }
@@ -134,7 +140,46 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
         }
     }
 
-    private boolean isLogBeforeReturn(PsiReturnStatement returnStmt){
+    private boolean hasLogBeforeReturn(PsiReturnStatement returnStmt){
+        PsiElement previous = returnStmt.getPrevSibling();
+
+        if((previous instanceof PsiWhiteSpace || previous instanceof PsiComment)){
+            previous = previous.getPrevSibling();
+        }
+
+        if(previous instanceof PsiStatement){
+            String text = previous.getText();
+            return text.contains("log.") ||
+                    text.contains("logger.") ||
+                    text.contains("System.out.print");
+        }
         return false;
     }
+
+    private void addLogBeforeReturn(Project project, String logStatementText, PsiReturnStatement returnStmt){
+        PsiElementFactory factory =  JavaPsiFacade.getElementFactory(project);
+        PsiStatement logStatement = factory.createStatementFromText(logStatementText, returnStmt);
+
+        PsiElement parent = returnStmt.getParent();
+
+        if(parent instanceof PsiCodeBlock){
+            parent.add(logStatement);
+        } else {
+            wrapInBLock(project, logStatement, returnStmt);
+        }
+
+    }
+
+    private void wrapInBLock(Project project, PsiStatement logStmt, PsiReturnStatement returnStmt){
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        String blockText = String.format(
+                "{ %s %s }",
+                logStmt.getText(),
+                returnStmt.getText()
+        );
+
+        PsiBlockStatement newBlock = (PsiBlockStatement) factory.createStatementFromText(blockText, returnStmt);
+
+        returnStmt.replace(newBlock);
+    };
 }
