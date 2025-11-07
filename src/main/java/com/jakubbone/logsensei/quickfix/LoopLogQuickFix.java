@@ -16,7 +16,6 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.jakubbone.logsensei.utils.LogEducationNotifier;
 import org.jetbrains.annotations.NotNull;
 
 public class LoopLogQuickFix implements LocalQuickFix {
@@ -41,7 +40,7 @@ public class LoopLogQuickFix implements LocalQuickFix {
         }
 
         PsiClass containingClass = PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
-        if (containingClass == null) { // Loop
+        if (containingClass == null) {
             return;
         }
 

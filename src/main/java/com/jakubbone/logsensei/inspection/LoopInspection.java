@@ -103,11 +103,8 @@ public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
 
                 String methodCall = expression.getText();
 
-                if (methodCall.startsWith("log.info") ||
-                        methodCall.startsWith("log.warn") ||
-                        methodCall.startsWith("log.error") ||
-                        methodCall.startsWith("logger.info") ||
-                        methodCall.startsWith("logger.warn")) {
+                if (methodCall.contains("log.info") ||
+                        methodCall.contains("logger.info")){
                     problematicLogs.add(expression);
                 }
             }
