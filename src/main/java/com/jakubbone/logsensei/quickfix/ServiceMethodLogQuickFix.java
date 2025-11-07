@@ -1,5 +1,6 @@
 package com.jakubbone.logsensei.quickfix;
 
+import static com.jakubbone.logsensei.utils.LogEducationNotifier.showInfoLevelEducation;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_SERVICE_ENTRY_INFO;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_SERVICE_EXIT_INFO;
 import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
@@ -24,6 +25,7 @@ import com.intellij.psi.PsiReturnStatement;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jakubbone.logsensei.utils.LogEducationNotifier;
 import org.jetbrains.annotations.NotNull;
 
 public class ServiceMethodLogQuickFix implements LocalQuickFix {
@@ -72,6 +74,7 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
         }
 
         addLog4jAnnotationAndImports(project, containingClass);
+        showInfoLevelEducation(project);
 
     }
 

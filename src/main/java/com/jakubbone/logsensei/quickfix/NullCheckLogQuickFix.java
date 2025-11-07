@@ -1,5 +1,6 @@
 package com.jakubbone.logsensei.quickfix;
 
+import static com.jakubbone.logsensei.utils.LogEducationNotifier.showWarnLevelEducation;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_WARN;
 import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
 
@@ -9,6 +10,7 @@ import com.intellij.codeInspection.util.IntentionFamilyName;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jakubbone.logsensei.utils.LogEducationNotifier;
 import org.jetbrains.annotations.NotNull;
 
 public class NullCheckLogQuickFix implements LocalQuickFix {
@@ -82,5 +84,7 @@ public class NullCheckLogQuickFix implements LocalQuickFix {
             PsiBlockStatement newBlock = (PsiBlockStatement) factory.createStatementFromText(blockText, ifStatement);
             thenBranch.replace(newBlock);
         }
+
+        showWarnLevelEducation(project);
     }
 }

@@ -1,5 +1,6 @@
 package com.jakubbone.logsensei.quickfix;
 
+import static com.jakubbone.logsensei.utils.LogEducationNotifier.showDebugLevelEducation;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_DEBUG;
 import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
 
@@ -79,5 +80,7 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
             PsiBlockStatement newBlock = (PsiBlockStatement) factory.createStatementFromText(blockText, parent);
             returnStatement.replace(newBlock);
         }
+
+        showDebugLevelEducation(project);
     }
 }

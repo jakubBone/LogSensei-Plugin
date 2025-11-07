@@ -1,5 +1,6 @@
 package com.jakubbone.logsensei.quickfix;
 
+import static com.jakubbone.logsensei.utils.LogEducationNotifier.showDebugLevelEducation;
 import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jakubbone.logsensei.utils.LogEducationNotifier;
 import org.jetbrains.annotations.NotNull;
 
 public class LoopLogQuickFix implements LocalQuickFix {
@@ -52,6 +54,8 @@ public class LoopLogQuickFix implements LocalQuickFix {
             }
             changeLogLevelToDebug(project, logCall);
         }
+
+        showDebugLevelEducation(project);
     }
 
     private void changeLogLevelToDebug(@NotNull Project project, @NotNull PsiMethodCallExpression logCall) {

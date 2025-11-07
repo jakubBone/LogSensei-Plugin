@@ -1,5 +1,6 @@
 package com.jakubbone.logsensei.quickfix;
 
+import static com.jakubbone.logsensei.utils.LogEducationNotifier.showErrorLevelEducation;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_ERROR;
 import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
 
@@ -71,5 +72,6 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
         PsiCodeBlock codeBlock = catchSection.getCatchBlock();
         codeBlock.add(logStatement);
 
+        showErrorLevelEducation(project);
     }
 }
