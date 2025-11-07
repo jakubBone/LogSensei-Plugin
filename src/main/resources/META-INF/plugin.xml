@@ -64,6 +64,9 @@
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.ServiceMethodInspection"/>
+        <notificationGroup
+                id="LogSensei"
+                displayType="BALLOON"/>
     </extensions>
 
     <actions>
