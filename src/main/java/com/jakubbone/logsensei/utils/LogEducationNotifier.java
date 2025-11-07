@@ -4,7 +4,7 @@ import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
 
-public class LogsEducation {
+public class LogEducationNotifier {
 
     public static void showErrorLevelEducation(Project project) {
         NotificationGroupManager.getInstance()
