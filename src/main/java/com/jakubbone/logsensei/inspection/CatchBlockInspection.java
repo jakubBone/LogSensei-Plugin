@@ -18,35 +18,35 @@ public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
                 super.visitCatchSection(section);
 
                 PsiCodeBlock catchBlock = section.getCatchBlock();
-                if(catchBlock == null) return;
+                if (catchBlock == null) return;
 
-                if(isWithoutLogger(catchBlock)){
+                if (isWithoutLogger(catchBlock)) {
                     holder.registerProblem(section.getFirstChild(), // Highlight
                             "LogSensei: Catch block missing ERROR log",
                             ProblemHighlightType.WEAK_WARNING,
                             new CatchBlockLogQuickFix());
                 }
             }
-
-            public boolean isWithoutLogger(PsiCodeBlock block){
-                PsiStatement[] statements = block.getStatements();
-
-                if(statements.length == 0){
-                    return true;
-                }
-
-                for(PsiStatement stmt: statements){
-                    String text = stmt.getText();
-                    if(text.contains("log.error") ||
-                            text.contains("log.warn") ||
-                            text.contains("logger.error") ||
-                            text.contains("System.out.print") ||
-                            text.contains("printStackTrace")){
-                        return false;
-                    }
-                }
-                return true;
-            }
         };
+    }
+
+    public boolean isWithoutLogger(PsiCodeBlock block){
+        PsiStatement[] statements = block.getStatements();
+
+        if(statements.length == 0){
+            return true;
+        }
+
+        for(PsiStatement stmt: statements){
+            String text = stmt.getText();
+            if(text.contains("log.error") ||
+                    text.contains("log.warn") ||
+                    text.contains("logger.error") ||
+                    text.contains("System.out.print") ||
+                    text.contains("printStackTrace")){
+                return false;
+            }
+        }
+        return true;
     }
 }
