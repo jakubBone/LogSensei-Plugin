@@ -1,5 +1,8 @@
 package com.jakubbone.logsensei.inspection;
 
+
+import static com.jakubbone.logsensei.utils.LogDetectionUtils.hasLogInBlock;
+
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -20,7 +23,8 @@ public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
                 PsiCodeBlock catchBlock = section.getCatchBlock();
                 if (catchBlock == null) return;
 
-                if (isWithoutLogger(catchBlock)) {
+
+                if (hasLogInBlock(catchBlock)) {
                     holder.registerProblem(section.getFirstChild(), // Highlight
                             "LogSensei: Catch block missing ERROR log",
                             ProblemHighlightType.WEAK_WARNING,
@@ -28,25 +32,5 @@ public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
                 }
             }
         };
-    }
-
-    public boolean isWithoutLogger(PsiCodeBlock block){
-        PsiStatement[] statements = block.getStatements();
-
-        if(statements.length == 0){
-            return true;
-        }
-
-        for(PsiStatement stmt: statements){
-            String text = stmt.getText();
-            if(text.contains("log.error") ||
-                    text.contains("log.warn") ||
-                    text.contains("logger.error") ||
-                    text.contains("System.out.print") ||
-                    text.contains("printStackTrace")){
-                return false;
-            }
-        }
-        return true;
     }
 }
