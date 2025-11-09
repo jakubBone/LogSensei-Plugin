@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
 
+    private static final String[] INFO_LOG_PATTERNS = {"log.info", "logger.info"};
+
     @Override
     public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
         return new JavaElementVisitor() {
@@ -29,40 +31,36 @@ public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
             @Override
             public void visitForStatement(@NotNull PsiForStatement statement) {
                 super.visitForStatement(statement);
-                checkLoopForHighFrequencyLogging(statement, holder);
+                checkLoop(statement, holder);
             }
 
             @Override
             public void visitForeachStatement(@NotNull PsiForeachStatement statement) {
                 super.visitForeachStatement(statement);
-                checkLoopForHighFrequencyLogging(statement, holder);
+                checkLoop(statement, holder);
             }
 
             @Override
             public void visitWhileStatement(@NotNull PsiWhileStatement statement) {
                 super.visitWhileStatement(statement);
-                checkLoopForHighFrequencyLogging(statement, holder);
+                checkLoop(statement, holder);
 
             }
 
             @Override
             public void visitDoWhileStatement(@NotNull PsiDoWhileStatement statement) {
                 super.visitDoWhileStatement(statement);
-                checkLoopForHighFrequencyLogging(statement, holder);
+                checkLoop(statement, holder);
             }
         };
     }
 
-    private void checkLoopForHighFrequencyLogging(
-            @NotNull PsiLoopStatement statement,
-            @NotNull ProblemsHolder holder) {
-
-        PsiStatement loopBody = statement.getBody();
-        if (loopBody == null) {
+    private void checkLoop(@NotNull PsiLoopStatement statement, @NotNull ProblemsHolder holder) {
+        if (statement.getBody() == null) {
             return;
         }
 
-        List<PsiMethodCallExpression> problematicLogs = findProblematicLogCalls(statement);
+        List<PsiMethodCallExpression> problematicLogs = findInfoLogsInLoop(statement);
         if (problematicLogs.isEmpty()) {
             return;
         }
@@ -75,7 +73,7 @@ public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
         );
     }
 
-    private List<PsiMethodCallExpression> findProblematicLogCalls(PsiStatement statement){
+    private List<PsiMethodCallExpression> findInfoLogsInLoop(PsiStatement statement){
         List<PsiMethodCallExpression> problematicLogs = new ArrayList<>();
 
         statement.accept(new JavaRecursiveElementVisitor() {
@@ -84,8 +82,11 @@ public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
                 super.visitMethodCallExpression(expression);
 
                 String methodCall = expression.getText();
-                if (methodCall.contains("log.info") || methodCall.contains("logger.info")){
-                    problematicLogs.add(expression);
+                for (String pattern : INFO_LOG_PATTERNS) {
+                    if (methodCall.contains(pattern)) {
+                        problematicLogs.add(expression);
+                        break;
+                    }
                 }
             }
         });

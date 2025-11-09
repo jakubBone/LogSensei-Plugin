@@ -57,10 +57,6 @@ public class EarlyReturnInspection extends AbstractBaseJavaLocalInspectionTool {
 
     private boolean isLastStatement(PsiReturnStatement returnStmt, PsiCodeBlock methodBody){
         PsiStatement[] statements = methodBody.getStatements();
-        if(statements.length == 0){
-            return true;
-        }
-        PsiStatement lastStmt = statements[statements.length - 1];
-        return returnStmt.equals(lastStmt);
+        return statements.length > 0 && returnStmt.equals(statements[statements.length - 1]);
     }
 }
