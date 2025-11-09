@@ -21,22 +21,6 @@ import com.jakubbone.logsensei.quickfix.LoopLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
-    /*
-    * PsiForStatement          // for(int i = 0; i < 10; i++)
-      ├── PsiCodeBlock         // {}
-          └── PsiStatement[]   // all instruction in the loop
-
-      PsiWhileStatement        // while
-      ├── PsiExpression        // condition
-      └── PsiStatement         // body (block or single statement)
-
-      PsiDoWhileStatement      // do {} while (condition)
-
-      PsiForeachStatement      // for(String item : list)
-      ├── PsiParameter         // item
-      ├── PsiExpression        // list
-      └── PsiStatement         // body
-    */
 
     @Override
     public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
@@ -66,8 +50,6 @@ public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
                 super.visitDoWhileStatement(statement);
                 checkLoopForHighFrequencyLogging(statement, holder);
             }
-
-
         };
     }
 
@@ -81,16 +63,16 @@ public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
         }
 
         List<PsiMethodCallExpression> problematicLogs = findProblematicLogCalls(statement);
-
-        if (!problematicLogs.isEmpty()) {
-            PsiElement loopKeyword = statement.getFirstChild();
-
-            holder.registerProblem(loopKeyword,
-                    "LogSensei: High-frequency logs detected in loop. Consider using DEBUG level.",
-                    ProblemHighlightType.WEAK_WARNING,
-                    new LoopLogQuickFix(problematicLogs)
-            );
+        if (problematicLogs.isEmpty()) {
+            return;
         }
+
+        PsiElement loopKeyword = statement.getFirstChild();
+        holder.registerProblem(loopKeyword,
+                "LogSensei: High-frequency logs detected in loop. Consider using DEBUG level.",
+                ProblemHighlightType.WEAK_WARNING,
+                new LoopLogQuickFix(problematicLogs)
+        );
     }
 
     private List<PsiMethodCallExpression> findProblematicLogCalls(PsiStatement statement){
@@ -102,9 +84,7 @@ public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
                 super.visitMethodCallExpression(expression);
 
                 String methodCall = expression.getText();
-
-                if (methodCall.contains("log.info") ||
-                        methodCall.contains("logger.info")){
+                if (methodCall.contains("log.info") || methodCall.contains("logger.info")){
                     problematicLogs.add(expression);
                 }
             }

@@ -10,34 +10,28 @@ public class LogDetectionUtils {
 
     public static boolean hasLogBeforeStatement(PsiElement statement){
         PsiElement previous = statement.getPrevSibling();
-
         while (previous instanceof PsiWhiteSpace || previous instanceof PsiComment) {
             previous = previous.getPrevSibling();
         }
 
         if (previous instanceof PsiStatement) {
-            return hasLogStatement(previous.getText());
+            return containsLogCall(previous.getText());
         }
         return false;
     }
 
     public static boolean hasLogInBlock(PsiCodeBlock block){
         PsiStatement[] statements = block.getStatements();
-
-        if(statements.length == 0){
-            return true;
-        }
-
         for(PsiStatement stmt: statements){
             String text = stmt.getText();
-            if(hasLogStatement(text)){
-                return false;
+            if(containsLogCall(text)){
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    public static boolean hasLogStatement(String statementText) {
+    public static boolean containsLogCall(String statementText) {
         return statementText.contains("log.error") ||
                 statementText.contains("log.warn") ||
                 statementText.contains("log.info") ||

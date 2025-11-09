@@ -1,6 +1,5 @@
 package com.jakubbone.logsensei.inspection;
 
-
 import static com.jakubbone.logsensei.utils.LogDetectionUtils.hasLogInBlock;
 
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
@@ -21,15 +20,18 @@ public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
                 super.visitCatchSection(section);
 
                 PsiCodeBlock catchBlock = section.getCatchBlock();
-                if (catchBlock == null) return;
-
+                if (catchBlock == null){
+                    return;
+                }
 
                 if (hasLogInBlock(catchBlock)) {
-                    holder.registerProblem(section.getFirstChild(), // Highlight
-                            "LogSensei: Catch block missing ERROR log",
-                            ProblemHighlightType.WEAK_WARNING,
-                            new CatchBlockLogQuickFix());
+                    return;
                 }
+
+                holder.registerProblem(section.getFirstChild(), // Highlight
+                        "LogSensei: Catch block missing ERROR log",
+                        ProblemHighlightType.WEAK_WARNING,
+                        new CatchBlockLogQuickFix());
             }
         };
     }
