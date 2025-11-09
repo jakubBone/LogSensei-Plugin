@@ -16,7 +16,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.jakubbone.logsensei.quickfix.EarlyReturnLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
-public class EarlyReturnInspection extends AbstractBaseJavaLocalInspectionTool {
+public class EarlyReturnInspection extends BaseLogInspection {
 
     @Override
     public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
@@ -44,13 +44,11 @@ public class EarlyReturnInspection extends AbstractBaseJavaLocalInspectionTool {
                     return;
                 }
 
-                holder.registerProblem(
+                registerLogProblem(holder,
                         statement.getFirstChild(),
-                        "LogSensei: Early return missing log",
-                        ProblemHighlightType.WEAK_WARNING,
+                        "Early return missing log",
                         new EarlyReturnLogQuickFix()
                 );
-
             }
         };
     }

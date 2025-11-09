@@ -20,7 +20,7 @@ import com.intellij.psi.PsiWhileStatement;
 import com.jakubbone.logsensei.quickfix.LoopLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
-public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
+public class LoopInspection extends BaseLogInspection {
 
     private static final String[] INFO_LOG_PATTERNS = {"log.info", "logger.info"};
 
@@ -65,10 +65,10 @@ public class LoopInspection extends AbstractBaseJavaLocalInspectionTool {
             return;
         }
 
-        PsiElement loopKeyword = statement.getFirstChild();
-        holder.registerProblem(loopKeyword,
-                "LogSensei: High-frequency logs detected in loop. Consider using DEBUG level.",
-                ProblemHighlightType.WEAK_WARNING,
+        registerLogProblem(
+                holder,
+                statement.getFirstChild(),
+                "High-frequency logs detected in loop. Consider using DEBUG level.",
                 new LoopLogQuickFix(problematicLogs)
         );
     }

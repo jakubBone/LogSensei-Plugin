@@ -10,7 +10,7 @@ import com.intellij.psi.*;
 import com.jakubbone.logsensei.quickfix.CatchBlockLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
-public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
+public class CatchBlockInspection extends BaseLogInspection {
 
     @Override
     public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
@@ -28,10 +28,12 @@ public class CatchBlockInspection extends AbstractBaseJavaLocalInspectionTool {
                     return;
                 }
 
-                holder.registerProblem(section.getFirstChild(), // Highlight
-                        "LogSensei: Catch block missing ERROR log",
-                        ProblemHighlightType.WEAK_WARNING,
-                        new CatchBlockLogQuickFix());
+                registerLogProblem(
+                        holder,
+                        section.getFirstChild(),
+                        "Catch block missing ERROR log",
+                        new CatchBlockLogQuickFix()
+                );
             }
         };
     }

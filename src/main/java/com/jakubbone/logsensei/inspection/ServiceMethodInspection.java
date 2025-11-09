@@ -18,7 +18,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.jakubbone.logsensei.quickfix.ServiceMethodLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
-public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool {
+public class ServiceMethodInspection extends BaseLogInspection {
     @Override
     public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
         return new JavaElementVisitor() {
@@ -26,17 +26,7 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
             public void visitMethod(@NotNull PsiMethod method) {
                 super.visitMethod(method);
 
-                PsiClass containingClass = PsiTreeUtil.getParentOfType(method, PsiClass.class);
-                if (containingClass == null) {
-                    return;
-                }
-
-                PsiModifierList modifierList = containingClass.getModifierList();
-                if (modifierList == null && !modifierList.hasAnnotation(SERVICE_ANNOTATION)) {
-                    return;
-                }
-
-                if (!method.hasModifierProperty("public")) {
+                if (!isPublicServiceMethod(method)) {
                     return;
                 }
 
@@ -50,9 +40,10 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
                     return;
                 }
 
-                boolean hasEntry = hasEntryLog(body);
-                boolean hasExit = hasExitLog(body);
-                if (hasEntry && hasExit){
+                boolean hasEntry = hasLogAtPosition(body, 0);
+                boolean hasExit = hasLogAtPosition(body, body.getStatements().length - 1);
+
+                if (hasEntry && hasExit) {
                     return;
                 }
 
@@ -65,39 +56,42 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
                     description = "LogSensei: Service method missing exit log";
                 }
 
-                holder.registerProblem(nameIdentifier,
-                        description,
-                        ProblemHighlightType.WEAK_WARNING,
-                        new ServiceMethodLogQuickFix(hasEntry, hasExit));
+                registerLogProblem(
+                        holder,
+                        nameIdentifier,
+                        buildDescription(hasEntry, hasExit),
+                        new ServiceMethodLogQuickFix(hasEntry, hasExit)
+                );
             }
         };
     }
 
-    private boolean hasEntryLog(PsiCodeBlock methodBody){
-        PsiStatement[] statements = methodBody.getStatements();
-        if(statements.length == 0){
+    private boolean isPublicServiceMethod(@NotNull PsiMethod method) {
+        if (!method.hasModifierProperty("public")) {
             return false;
         }
-        PsiStatement firstStmt = statements[0];
 
-        String text = firstStmt.getText();
-        if(containsLogCall(text)){
-            return true;
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(method, PsiClass.class);
+        if (containingClass == null) {
+            return false;
         }
-        return false;
+
+        PsiModifierList modifierList = containingClass.getModifierList();
+        return modifierList != null && modifierList.hasAnnotation(SERVICE_ANNOTATION);
     }
 
-    private boolean hasExitLog(PsiCodeBlock methodBody){
-        PsiStatement[] statements = methodBody.getStatements();
-        if(statements.length == 0){
+    private boolean hasLogAtPosition(PsiCodeBlock body, int position) {
+        PsiStatement[] statements = body.getStatements();
+        if (position < 0 || position >= statements.length) {
             return false;
         }
-        PsiStatement lastStmt = statements[statements.length - 1];
+        return containsLogCall(statements[position].getText());
+    }
 
-        String text = lastStmt.getText();
-        if(containsLogCall(text)){
-            return true;
+    private String buildDescription(boolean hasEntry, boolean hasExit) {
+        if (!hasEntry && !hasExit) {
+            return "Service method missing entry and exit logs";
         }
-        return false;
+        return hasEntry ? "Service method missing exit log" : "Service method missing entry log";
     }
 }
