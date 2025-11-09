@@ -2,8 +2,6 @@ package com.jakubbone.logsensei.inspection;
 
 import static com.jakubbone.logsensei.utils.LogDetectionUtils.hasLogBeforeStatement;
 
-import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiCodeBlock;

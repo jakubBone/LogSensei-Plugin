@@ -3,8 +3,6 @@ package com.jakubbone.logsensei.inspection;
 import static com.jakubbone.logsensei.utils.LogDetectionUtils.containsLogCall;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.SERVICE_ANNOTATION;
 
-import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiClass;
