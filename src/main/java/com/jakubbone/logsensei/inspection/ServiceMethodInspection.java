@@ -1,5 +1,6 @@
 package com.jakubbone.logsensei.inspection;
 
+import static com.jakubbone.logsensei.utils.LogDetectionUtils.containsLogCall;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.SERVICE_ANNOTATION;
 
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
@@ -31,7 +32,7 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
                 }
 
                 PsiModifierList modifierList = containingClass.getModifierList();
-                if (modifierList != null && !modifierList.hasAnnotation(SERVICE_ANNOTATION)) {
+                if (modifierList == null && !modifierList.hasAnnotation(SERVICE_ANNOTATION)) {
                     return;
                 }
 
@@ -44,8 +45,16 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
                     return;
                 }
 
+                PsiIdentifier nameIdentifier = method.getNameIdentifier();
+                if (nameIdentifier == null) {
+                    return;
+                }
+
                 boolean hasEntry = hasEntryLog(body);
                 boolean hasExit = hasExitLog(body);
+                if (hasEntry && hasExit){
+                    return;
+                }
 
                 String description;
                 if (!hasEntry && !hasExit) {
@@ -56,16 +65,10 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
                     description = "LogSensei: Service method missing exit log";
                 }
 
-                PsiIdentifier nameIdentifier = method.getNameIdentifier();
-                if (nameIdentifier == null) {
-                    return;
-                }
-                if (!hasEntry || !hasExit) {
-                    holder.registerProblem(nameIdentifier,
-                            description,
-                            ProblemHighlightType.WEAK_WARNING,
-                            new ServiceMethodLogQuickFix(hasEntry, hasExit));
-                }
+                holder.registerProblem(nameIdentifier,
+                        description,
+                        ProblemHighlightType.WEAK_WARNING,
+                        new ServiceMethodLogQuickFix(hasEntry, hasExit));
             }
         };
     }
@@ -73,14 +76,12 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
     private boolean hasEntryLog(PsiCodeBlock methodBody){
         PsiStatement[] statements = methodBody.getStatements();
         if(statements.length == 0){
-            return true;
+            return false;
         }
         PsiStatement firstStmt = statements[0];
 
         String text = firstStmt.getText();
-        if(text.contains("log.") ||
-                text.contains("logger.") ||
-                text.contains("System.out.print")){
+        if(containsLogCall(text)){
             return true;
         }
         return false;
@@ -89,14 +90,12 @@ public class ServiceMethodInspection extends AbstractBaseJavaLocalInspectionTool
     private boolean hasExitLog(PsiCodeBlock methodBody){
         PsiStatement[] statements = methodBody.getStatements();
         if(statements.length == 0){
-            return true;
+            return false;
         }
         PsiStatement lastStmt = statements[statements.length - 1];
 
         String text = lastStmt.getText();
-        if(text.contains("log.") ||
-                text.contains("logger.") ||
-                text.contains("System.out.print")){
+        if(containsLogCall(text)){
             return true;
         }
         return false;
