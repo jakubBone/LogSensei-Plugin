@@ -44,7 +44,6 @@ public class LoopLogQuickFix implements LocalQuickFix {
             return;
         }
 
-        // Add Lombok annotation
         addLog4jAnnotationAndImports(project, containingClass);
 
         for(PsiMethodCallExpression logCall: problematicLogs){
@@ -53,7 +52,6 @@ public class LoopLogQuickFix implements LocalQuickFix {
             }
             changeLogLevelToDebug(project, logCall);
         }
-
         showDebugLevelEducation(project);
     }
 

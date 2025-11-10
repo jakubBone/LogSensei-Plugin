@@ -51,16 +51,13 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
 
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
 
-        // Create log statement
         String logStatementText = String.format(
                 LOG_PATTERN_DEBUG,
                 methodName
         );
 
-        // Add Lombok annotation
         addLog4jAnnotationAndImports(project, containingClass);
 
-        // Create log statement
         PsiStatement logStatement = factory.createStatementFromText(logStatementText, returnStatement);
 
         PsiElement parent = returnStatement.getParent();

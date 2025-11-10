@@ -26,26 +26,23 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-        // 1. Get the element that was highlighted (the 'catch' keyword)
         PsiElement catchKeyword = descriptor.getPsiElement();
 
-        // 2. Find the parent PsiCatchSection from the keyword
         PsiCatchSection catchSection = PsiTreeUtil.getParentOfType(catchKeyword, PsiCatchSection.class);
         if(catchSection == null){
             return;
         }
 
-        // 3. Find the class containing catch section to add the annotation
         PsiClass containingClass = PsiTreeUtil.getParentOfType(catchSection, PsiClass.class);
         if (containingClass == null) {
             return;
         }
 
-        // 4. Find the method catch section to log.error(" ");
         PsiMethod containingMethod = PsiTreeUtil.getParentOfType(catchSection, PsiMethod.class, false);
         if (containingMethod == null) {
             return;
         }
+
         String methodName = containingMethod.getName();
 
         PsiParameter exceptionParameter = catchSection.getParameter();
@@ -54,10 +51,8 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
         }
         String exceptionName = exceptionParameter.getName();
 
-        // Add Lombok annotation
         addLog4jAnnotationAndImports(project, containingClass);
 
-        // Create the log statement
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
 
         String logStatementText = String.format(
@@ -68,7 +63,6 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
 
         PsiStatement logStatement = factory.createStatementFromText(logStatementText, catchSection);
 
-        // Add the statement to the catch block
         PsiCodeBlock codeBlock = catchSection.getCatchBlock();
         codeBlock.add(logStatement);
 

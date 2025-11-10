@@ -25,7 +25,6 @@ import com.intellij.psi.PsiReturnStatement;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.jakubbone.logsensei.utils.LogEducationNotifier;
 import org.jetbrains.annotations.NotNull;
 
 public class ServiceMethodLogQuickFix implements LocalQuickFix {
@@ -65,6 +64,8 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
             return;
         }
 
+        addLog4jAnnotationAndImports(project, containingClass);
+
         if(needsEntryLog){
             addEntryLog(project, psiMethod);
         }
@@ -73,9 +74,7 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
             addExitLog(project, psiMethod);
         }
 
-        addLog4jAnnotationAndImports(project, containingClass);
         showInfoLevelEducation(project);
-
     }
 
     private void addEntryLog(Project project, PsiMethod method){
@@ -84,7 +83,6 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
             return;
         }
 
-        // Create log statement
         String logStatementText = String.format(
                 LOG_PATTERN_SERVICE_ENTRY_INFO,
                 method.getName()
@@ -123,13 +121,11 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
                         method.getName()
                 );
                 addLogBeforeReturn(project, logStatementText, returnStmt);
-
             }
         }
     }
 
     private void addLogAtEnd(Project project, PsiMethod method){
-        // Create log statement
         String logStatementText = String.format(
                 LOG_PATTERN_SERVICE_EXIT_INFO,
                 method.getName()
@@ -171,7 +167,6 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
         } else {
             wrapInBLock(project, logStatement, returnStmt);
         }
-
     }
 
     private void wrapInBLock(Project project, PsiStatement logStmt, PsiReturnStatement returnStmt){
@@ -181,7 +176,6 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
                 logStmt.getText(),
                 returnStmt.getText()
         );
-
         PsiBlockStatement newBlock = (PsiBlockStatement) factory.createStatementFromText(blockText, returnStmt);
 
         returnStmt.replace(newBlock);
