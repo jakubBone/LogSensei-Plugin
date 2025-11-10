@@ -1,7 +1,8 @@
 package com.jakubbone.logsensei.quickfix;
 
+import static com.jakubbone.logsensei.utils.LogStatementFactory.createErrorLog;
 import static com.jakubbone.logsensei.utils.LogEducationNotifier.showErrorLevelEducation;
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_ERROR;
+
 import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
 
 import com.intellij.codeInspection.LocalQuickFix;
@@ -43,28 +44,31 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
             return;
         }
 
-        String methodName = containingMethod.getName();
 
         PsiParameter exceptionParameter = catchSection.getParameter();
         if(exceptionParameter == null){
             return;
         }
-        String exceptionName = exceptionParameter.getName();
 
         addLog4jAnnotationAndImports(project, containingClass);
 
-        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-
-        String logStatementText = String.format(
-                LOG_PATTERN_ERROR,
-                methodName,
-                exceptionName
-        );
-
-        PsiStatement logStatement = factory.createStatementFromText(logStatementText, catchSection);
+        PsiStatement logStmt = createErrorLog(
+                project,
+                containingMethod.getName(),
+                exceptionParameter.getName(),
+                catchSection);
 
         PsiCodeBlock codeBlock = catchSection.getCatchBlock();
-        codeBlock.add(logStatement);
+        if(codeBlock == null){
+            return;
+        }
+
+        PsiStatement [] statements = codeBlock.getStatements();
+        if (statements.length > 0) {
+            codeBlock.addBefore(logStmt, statements[0]);
+        } else {
+            codeBlock.add(logStmt);
+        }
 
         showErrorLevelEducation(project);
     }

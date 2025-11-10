@@ -7,6 +7,10 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Base class for all LogSensei inspections.
+ * Provides common problem registration with consistent "LogSensei:" prefix.
+ */
 public abstract class BaseLogInspection extends AbstractBaseJavaLocalInspectionTool {
     protected void registerLogProblem(
             @NotNull ProblemsHolder holder,
