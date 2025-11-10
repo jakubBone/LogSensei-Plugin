@@ -10,7 +10,7 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import org.jetbrains.annotations.NotNull;
 
 public class LogSenseiUtils {
-    private static final String LOMBOK_LOG4J2 = "lombok.extern.log4j.Log4j2";
+    private static final String LOMBOK_LOG4J2 = "Log4j2";
 
     public static void addLog4jAnnotationAndImports(@NotNull Project project, @NotNull PsiClass psiClass){
         PsiModifierList modifierList = psiClass.getModifierList();

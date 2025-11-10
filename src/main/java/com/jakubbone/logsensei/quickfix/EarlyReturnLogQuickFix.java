@@ -17,6 +17,7 @@ import com.intellij.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
+
 public class EarlyReturnLogQuickFix implements LocalQuickFix {
 
     @Override

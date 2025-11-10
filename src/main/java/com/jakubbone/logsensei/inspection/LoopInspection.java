@@ -3,13 +3,10 @@ package com.jakubbone.logsensei.inspection;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiDoWhileStatement;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiForStatement;
 import com.intellij.psi.PsiForeachStatement;
