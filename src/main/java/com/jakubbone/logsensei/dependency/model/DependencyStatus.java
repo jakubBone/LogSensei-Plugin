@@ -6,9 +6,9 @@ import lombok.Getter;
 public class DependencyStatus {
     private boolean hasLombok;
     private LoggingLibrary detectedLoggingLibrary;
-    private boolean buildSystem;
+    private BuildSystem buildSystem;
 
-    public DependencyStatus(boolean hasLombok, LoggingLibrary detectedLoggingLibrary, boolean buildSystem) {
+    public DependencyStatus(boolean hasLombok, LoggingLibrary detectedLoggingLibrary, BuildSystem buildSystem) {
         this.hasLombok = hasLombok;
         this.detectedLoggingLibrary = detectedLoggingLibrary;
         this.buildSystem = buildSystem;
