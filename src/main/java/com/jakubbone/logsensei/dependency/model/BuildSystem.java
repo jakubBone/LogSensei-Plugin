@@ -1,11 +1,11 @@
-package com.jakubbone.logsensei.dependency;
+package com.jakubbone.logsensei.dependency.model;
 
 import lombok.Getter;
 
 @Getter
 public enum BuildSystem {
     MAVEN("Maven", "pom.xml"),
-    GRADLE_GROOVE("Gradle (Groovy)", "build.gradle"),
+    GRADLE_GROOVY("Gradle (Groovy)", "build.gradle"),
     GRADLE_KOTLIN("Gradle (Kotlin)", "build.gradle.kts"),
     UNKNOWN("Unknown", null);
 
@@ -22,6 +22,6 @@ public enum BuildSystem {
     }
 
     public boolean isGradle(){
-        return this == GRADLE_GROOVE || this == GRADLE_KOTLIN;
+        return this == GRADLE_GROOVY || this == GRADLE_KOTLIN;
     }
 }

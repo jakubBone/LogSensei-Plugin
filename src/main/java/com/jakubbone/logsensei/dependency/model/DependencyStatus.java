@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei.dependency;
+package com.jakubbone.logsensei.dependency.model;
 
 import lombok.Getter;
 

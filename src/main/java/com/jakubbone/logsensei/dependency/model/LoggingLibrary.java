@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei.dependency;
+package com.jakubbone.logsensei.dependency.model;
 
 public enum LoggingLibrary {
     LOG4J2("Log4j2", "org.apache.logging.log4j.Logger"),
