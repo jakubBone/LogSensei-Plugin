@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiWhiteSpace;
 
-public class LogDetectionUtils {
+public class LogDetector {
 
     public static boolean hasLogBeforeStatement(PsiElement statement){
         PsiElement previous = statement.getPrevSibling();

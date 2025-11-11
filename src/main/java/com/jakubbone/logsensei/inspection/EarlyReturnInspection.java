@@ -1,6 +1,6 @@
 package com.jakubbone.logsensei.inspection;
 
-import static com.jakubbone.logsensei.utils.LogDetectionUtils.hasLogBeforeStatement;
+import static com.jakubbone.logsensei.utils.LogDetector.hasLogBeforeStatement;
 
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;

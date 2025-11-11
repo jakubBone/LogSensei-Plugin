@@ -1,6 +1,6 @@
 package com.jakubbone.logsensei.inspection;
 
-import static com.jakubbone.logsensei.utils.LogDetectionUtils.hasLogInBlock;
+import static com.jakubbone.logsensei.utils.LogDetector.hasLogInBlock;
 
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.*;

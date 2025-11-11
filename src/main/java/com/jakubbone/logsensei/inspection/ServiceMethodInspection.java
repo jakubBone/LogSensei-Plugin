@@ -1,6 +1,6 @@
 package com.jakubbone.logsensei.inspection;
 
-import static com.jakubbone.logsensei.utils.LogDetectionUtils.containsLogCall;
+import static com.jakubbone.logsensei.utils.LogDetector.containsLogCall;
 import static com.jakubbone.logsensei.utils.LogSenseiConstants.SERVICE_ANNOTATION;
 
 import com.intellij.codeInspection.ProblemsHolder;
