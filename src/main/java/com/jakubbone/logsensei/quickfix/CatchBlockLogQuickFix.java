@@ -11,6 +11,8 @@ import com.intellij.codeInspection.util.IntentionFamilyName;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jakubbone.logsensei.dependency.model.DependencyDetector;
+import com.jakubbone.logsensei.dependency.model.DependencyStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -27,8 +29,36 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-        PsiElement catchKeyword = descriptor.getPsiElement();
 
+        DependencyStatus status = DependencyDetector.detect(project);
+
+        if(!status.hasLoggingLibrary()){
+            boolean shouldAdd = askUserToAddLoggingLibrary(project, status);
+            if (!shouldAdd) {
+                return;
+            }
+        }
+
+        if(!status.hasLombok()){
+            boolean shouldAdd = askUserToAddLombok(project, status);
+        }
+
+        PsiElement catchKeyword = descriptor.getPsiElement();
+        addLog(project, catchKeyword);
+
+        showErrorLevelEducation(project);
+    }
+
+    private boolean askUserToAddLoggingLibrary(Project project, DependencyStatus status){
+        return false;
+    }
+
+    private boolean askUserToAddLombok(Project project, DependencyStatus status){
+        return false;
+    }
+
+
+    private void addLog(Project project, PsiElement catchKeyword){
         PsiCatchSection catchSection = PsiTreeUtil.getParentOfType(catchKeyword, PsiCatchSection.class);
         if(catchSection == null){
             return;
@@ -69,7 +99,5 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
         } else {
             codeBlock.add(logStmt);
         }
-
-        showErrorLevelEducation(project);
     }
 }

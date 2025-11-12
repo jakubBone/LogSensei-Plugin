@@ -15,7 +15,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 
 public class DependencyDetector {
 
-    public static DependencyStatus detectDependency(Project project){
+    public static DependencyStatus detect(Project project){
         BuildSystem buildSystem = detectBuildSystem(project);
 
         boolean hasLombok = false;

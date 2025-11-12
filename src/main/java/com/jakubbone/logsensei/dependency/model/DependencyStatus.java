@@ -14,11 +14,15 @@ public class DependencyStatus {
         this.buildSystem = buildSystem;
     }
 
+    public boolean hasLombok(){
+        return hasLombok;
+    }
+
     public boolean hasLoggingLibrary() {
         return detectedLoggingLibrary != LoggingLibrary.NONE;
     }
 
-    public boolean isFullConfigured(){
+    public boolean isFullyConfigured(){
         return hasLombok && hasLoggingLibrary();
     }
 
