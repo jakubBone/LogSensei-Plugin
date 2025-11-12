@@ -21,6 +21,7 @@ public class DependencyDetector {
         boolean hasLombok = false;
         LoggingLibrary loggingLibrary = LoggingLibrary.NONE;
 
+        // Check build files for explicit dependencies
         if(buildSystem.isMaven() || buildSystem.isGradle()){
             VirtualFile buildFile = project.getProjectFile().findChild(buildSystem.getBuildFile());
             if(buildFile != null){
@@ -30,6 +31,7 @@ public class DependencyDetector {
             }
         }
 
+        // Check dependencies
         if(!hasLombok || loggingLibrary == LoggingLibrary.NONE) {
             Module [] modules = ModuleManager.getInstance(project).getModules();
             for(Module module: modules){
@@ -48,7 +50,7 @@ public class DependencyDetector {
                                 if (libraryName.contains("log4j")) {
                                     loggingLibrary = LoggingLibrary.LOG4J2;
                                 } else if (libraryName.contains("slf4j") || libraryName.contains("logback")) {
-                                    loggingLibrary = LoggingLibrary.LOG4J2;
+                                    loggingLibrary = LoggingLibrary.SLF4J_LOGBACK;
                                 }
                             }
                         }
@@ -63,8 +65,13 @@ public class DependencyDetector {
         if(content.contains("log4j-core")){
             return LoggingLibrary.LOG4J2;
         }
+
         if(content.contains("slf4j") || content.contains("logback")){
-            return LoggingLibrary.LOGBACK;
+            return LoggingLibrary.SLF4J_LOGBACK;
+        }
+
+        if(content.contains("spring-boot-starter")){
+            return LoggingLibrary.SLF4J_LOGBACK;
         }
         return LoggingLibrary.NONE;
     }
