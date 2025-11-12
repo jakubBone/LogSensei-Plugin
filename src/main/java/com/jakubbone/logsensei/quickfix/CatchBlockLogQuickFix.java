@@ -29,34 +29,11 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-
-        DependencyStatus status = DependencyDetector.detect(project);
-
-        if(!status.hasLoggingLibrary()){
-            boolean shouldAdd = askUserToAddLoggingLibrary(project, status);
-            if (!shouldAdd) {
-                return;
-            }
-        }
-
-        if(!status.hasLombok()){
-            boolean shouldAdd = askUserToAddLombok(project, status);
-        }
-
         PsiElement catchKeyword = descriptor.getPsiElement();
         addLog(project, catchKeyword);
 
         showErrorLevelEducation(project);
     }
-
-    private boolean askUserToAddLoggingLibrary(Project project, DependencyStatus status){
-        return false;
-    }
-
-    private boolean askUserToAddLombok(Project project, DependencyStatus status){
-        return false;
-    }
-
 
     private void addLog(Project project, PsiElement catchKeyword){
         PsiCatchSection catchSection = PsiTreeUtil.getParentOfType(catchKeyword, PsiCatchSection.class);
