@@ -10,6 +10,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Basic project structure
 - Migration `build.gradle.kts` → `build.gradle`
 
+## [0.3.1] - 2025-11-12
+### Added
+
+**New feature:** Detection and implementation missing dependency system 
+
+- **Models**:
+  - `BuildSystem` – describes building tool (Maven or Gradle) 
+  - `DependencyStatus ` – describes library availability 
+  - `LoggingLibrary ` – describes logging libraries details
+  - `DependencyDetector` – detects missing libraries dependencies
+  
+- **BuildSystemDetector**: detects Maven or Gradle
+- **DependencyManager**: manages dependencies addition
+
+
+**New feature:** Statement operations 
+
+- **PsiStatementUtils**: Adds a log statement before the target statement
+- **LogDetector**: Detect specigic log calls 
+
+
 ## [0.3.0] - 2025-11-09
 ### Added
 
