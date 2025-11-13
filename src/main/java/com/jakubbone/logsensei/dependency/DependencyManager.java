@@ -27,6 +27,7 @@ public class DependencyManager {
             writeFile(project, buildFile, modifiedContent);
 
             return true;
+
         } catch (IOException e){
             return false;
         }
