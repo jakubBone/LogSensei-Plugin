@@ -1,5 +1,6 @@
 package com.jakubbone.logsensei.quickfix;
 
+import static com.jakubbone.logsensei.utils.LogSenseiUtils.addAnnotationAndImports;
 import static com.jakubbone.logsensei.utils.LogStatementFactory.createErrorLog;
 import static com.jakubbone.logsensei.utils.LogEducationNotifier.showErrorLevelEducation;
 
@@ -36,24 +37,29 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
         DependencyStatus status = DependencyDetector.detect(project);
 
+        LoggingLibrary selectedLibrary;
+
         if(!status.hasLoggingLibrary()){
-            boolean shouldAdd = askUserForAddLoggingLibrary(project, status);
-            if(!shouldAdd){
+            selectedLibrary = askUserForAddLoggingLibrary(project, status);
+            if(selectedLibrary == null){
                 return;
             }
+        } else {
+            selectedLibrary = status.getDetectedLoggingLibrary();
         }
+
 
         if(!status.hasLombok()){
             askUserForAddLombok(project, status);
         }
 
         PsiElement catchKeyword = descriptor.getPsiElement();
-        addLog(project, catchKeyword);
+        addLog(project, catchKeyword, selectedLibrary);
 
         showErrorLevelEducation(project);
     }
 
-    private boolean askUserForAddLoggingLibrary(Project project, DependencyStatus status) {
+    private LoggingLibrary askUserForAddLoggingLibrary(Project project, DependencyStatus status) {
         BuildSystem buildSystem = status.getBuildSystem();
 
         if (buildSystem == BuildSystem.UNKNOWN) {
@@ -62,7 +68,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
                     "Cannot detect build system (Maven/Gradle).\nPlease add logging library manually.",
                     "Build System Not Detected"
             );
-            return false;
+            return null;
         }
 
         int choice = Messages.showDialog(
@@ -76,7 +82,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
         );
 
         if (choice == 3) {
-            return false;
+            return null;
         }
 
         LoggingLibrary lib = switch (choice) {
@@ -88,7 +94,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
         boolean success = DependencyManager.addDependencies(
                 project,
                 buildSystem,
-                false, // No Lombok
+                false, // No Lombok yet
                 lib
         );
 
@@ -100,14 +106,14 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
                             (buildSystem.isMaven() ? "Maven → Reload Project" : "Gradle → Sync Project"),
                     "Success"
             );
-            return true;
+            return lib;
         } else {
             Messages.showErrorDialog(
                     project,
                     "Failed to add dependencies.\nPlease add them manually.",
                     "Error"
             );
-            return false;
+            return null;
         }
     }
 
@@ -139,7 +145,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
     }
 
 
-    private void addLog(Project project, PsiElement catchKeyword){
+    private void addLog(Project project, PsiElement catchKeyword, LoggingLibrary selectedLibrary){
         PsiCatchSection catchSection = PsiTreeUtil.getParentOfType(catchKeyword, PsiCatchSection.class);
         if(catchSection == null){
             return;
@@ -161,7 +167,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
             return;
         }
 
-        addLog4jAnnotationAndImports(project, containingClass);
+        addAnnotationAndImports(project, containingClass, selectedLibrary);
 
         PsiStatement logStmt = createErrorLog(
                 project,
