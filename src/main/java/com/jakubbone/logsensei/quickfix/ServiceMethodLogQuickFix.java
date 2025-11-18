@@ -1,9 +1,10 @@
 package com.jakubbone.logsensei.quickfix;
 
+import static com.jakubbone.logsensei.utils.LogSenseiUtils.implementLoggingSolution;
 import static com.jakubbone.logsensei.utils.LogStatementFactory.createEntryLog;
 import static com.jakubbone.logsensei.utils.LogEducationNotifier.showInfoLevelEducation;
-import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
 import static com.jakubbone.logsensei.utils.PsiStatementUtils.addLogBeforeStatement;
+import static com.jakubbone.logsensei.utils.UserInteractionService.askUserForLibraryAndAnnotation;
 
 import java.util.Collection;
 
@@ -22,6 +23,7 @@ import com.intellij.psi.PsiReturnStatement;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 import com.jakubbone.logsensei.utils.LogStatementFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +49,12 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor problemDescriptor) {
+
+        LoggingLibrary selectedLibrary = askUserForLibraryAndAnnotation(project);
+        if(selectedLibrary == null){
+            return;
+        }
+
         PsiElement psiElement = problemDescriptor.getPsiElement();
         if(psiElement == null){
             return;
@@ -62,7 +70,7 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
             return;
         }
 
-        addLog4jAnnotationAndImports(project, containingClass);
+        implementLoggingSolution(project, containingClass, selectedLibrary);
 
         if(needsEntryLog){
             addEntryLog(project, psiMethod);

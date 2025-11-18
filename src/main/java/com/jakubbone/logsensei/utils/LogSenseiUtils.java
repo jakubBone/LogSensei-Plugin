@@ -92,6 +92,5 @@ public class LogSenseiUtils {
     }
 
     public static void addLog4jAnnotationAndImports(Project project, PsiClass containingClass){
-        // TODO: JAVA_UTIL_LOGGER: do not implement Lombok
     };
 }

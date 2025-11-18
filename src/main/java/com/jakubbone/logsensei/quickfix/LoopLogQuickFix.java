@@ -1,7 +1,8 @@
 package com.jakubbone.logsensei.quickfix;
 
 import static com.jakubbone.logsensei.utils.LogEducationNotifier.showDebugLevelEducation;
-import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
+import static com.jakubbone.logsensei.utils.LogSenseiUtils.implementLoggingSolution;
+import static com.jakubbone.logsensei.utils.UserInteractionService.askUserForLibraryAndAnnotation;
 import java.util.List;
 
 import com.intellij.codeInspection.LocalQuickFix;
@@ -16,6 +17,7 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 import org.jetbrains.annotations.NotNull;
 
 public class LoopLogQuickFix implements LocalQuickFix {
@@ -34,7 +36,13 @@ public class LoopLogQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor problemDescriptor) {
-        PsiElement psiElement = problemDescriptor.getPsiElement(); // loop
+
+        LoggingLibrary selectedLibrary = askUserForLibraryAndAnnotation(project);
+        if(selectedLibrary == null){
+            return;
+        }
+
+        PsiElement psiElement = problemDescriptor.getPsiElement();
         if (psiElement == null) {
             return;
         }
@@ -44,7 +52,7 @@ public class LoopLogQuickFix implements LocalQuickFix {
             return;
         }
 
-        addLog4jAnnotationAndImports(project, containingClass);
+        implementLoggingSolution(project, containingClass, selectedLibrary);
 
         for(PsiMethodCallExpression logCall: problematicLogs){
             if(!logCall.isValid()){
