@@ -69,7 +69,7 @@ public class LogSenseiUtils {
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
 
         String loggerFieldText = String.format(
-                "private static final %s logger = %s.getLogger(%s.class.getName());",
+                "private static final %s log = %s.getLogger(%s.class.getName());",
                 JUL_LOGGER_FQN,
                 JUL_LOGGER_FQN,
                 className
@@ -92,6 +92,6 @@ public class LogSenseiUtils {
     }
 
     public static void addLog4jAnnotationAndImports(Project project, PsiClass containingClass){
-        //
+        // TODO: JAVA_UTIL_LOGGER: do not implement Lombok
     };
 }

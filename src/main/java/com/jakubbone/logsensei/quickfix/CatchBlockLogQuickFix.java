@@ -46,7 +46,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
         }
 
 
-        if(!status.hasLombok()){
+        if(selectedLibrary.usesLombokAnnotation() && !status.hasLombok()){
             askUserForAddLombok(project, status);
         }
 

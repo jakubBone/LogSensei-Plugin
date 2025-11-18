@@ -1,7 +1,6 @@
 package com.jakubbone.logsensei.inspection;
 
 import static com.jakubbone.logsensei.utils.LogDetector.containsLogCall;
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.SERVICE_ANNOTATION;
 
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
@@ -17,6 +16,9 @@ import com.jakubbone.logsensei.quickfix.ServiceMethodLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 public class ServiceMethodInspection extends BaseLogInspection {
+
+    public final String serviceAnnotation = "org.springframework.stereotype.Service";
+
     @Override
     public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
         return new JavaElementVisitor() {
@@ -75,7 +77,7 @@ public class ServiceMethodInspection extends BaseLogInspection {
         }
 
         PsiModifierList modifierList = containingClass.getModifierList();
-        return modifierList != null && modifierList.hasAnnotation(SERVICE_ANNOTATION);
+        return modifierList != null && modifierList.hasAnnotation(serviceAnnotation);
     }
 
     private boolean hasLogAtPosition(PsiCodeBlock body, int position) {

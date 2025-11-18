@@ -1,11 +1,5 @@
 package com.jakubbone.logsensei.utils;
 
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_DEBUG;
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_ERROR;
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_SERVICE_ENTRY_INFO;
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_SERVICE_EXIT_INFO;
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_WARN;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
@@ -15,13 +9,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class LogStatementFactory {
 
+    public static final String errorPattern = "log.error(\"[{}] An exception occurred.\", \"%s\", e);";
+    public static final String debugPattern = "log.debug(\"[%s] Early return\");";
+    public static final String warnPattern = "log.warn(\"[%s] Variable '%s' is null\", \"%s\");";
+    public static final String infoEntryPattern = "log.info(\"[%s] Operation started\");";
+    public static final String exitInfoPattern = "log.info(\"[%s] Operation finished\");";
+
     public static PsiStatement createErrorLog(
             @NotNull Project project,
             @NotNull String methodName,
             @NotNull String exceptionName,
             @NotNull PsiElement context) {
 
-        String logText = String.format(LOG_PATTERN_ERROR, methodName, exceptionName);
+        String logText = String.format(errorPattern, methodName, exceptionName);
         return createStatement(project, logText, context);
     }
 
@@ -30,7 +30,7 @@ public class LogStatementFactory {
             @NotNull String methodName,
             @NotNull PsiElement context) {
 
-        String logText = String.format(LOG_PATTERN_DEBUG, methodName);
+        String logText = String.format(debugPattern, methodName);
         return createStatement(project, logText, context);
     }
 
@@ -40,7 +40,7 @@ public class LogStatementFactory {
             @NotNull String variableName,
             @NotNull PsiElement context) {
 
-        String logText = String.format(LOG_PATTERN_WARN, methodName, variableName, variableName);
+        String logText = String.format(warnPattern, methodName, variableName, variableName);
         return createStatement(project, logText, context);
     }
 
@@ -49,7 +49,7 @@ public class LogStatementFactory {
             @NotNull String methodName,
             @NotNull PsiElement context) {
 
-        String logText = String.format(LOG_PATTERN_SERVICE_ENTRY_INFO, methodName);
+        String logText = String.format(infoEntryPattern, methodName);
         return createStatement(project, logText, context);
     }
 
@@ -58,7 +58,7 @@ public class LogStatementFactory {
             @NotNull String methodName,
             @NotNull PsiElement context) {
 
-        String logText = String.format(LOG_PATTERN_SERVICE_EXIT_INFO, methodName);
+        String logText = String.format(exitInfoPattern, methodName);
         return createStatement(project, logText, context);
     }
 

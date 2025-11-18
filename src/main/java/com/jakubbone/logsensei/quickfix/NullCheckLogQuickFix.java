@@ -1,7 +1,7 @@
 package com.jakubbone.logsensei.quickfix;
 
 import static com.jakubbone.logsensei.utils.LogEducationNotifier.showWarnLevelEducation;
-import static com.jakubbone.logsensei.utils.LogSenseiConstants.LOG_PATTERN_WARN;
+
 import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
 
 import com.intellij.codeInspection.LocalQuickFix;
@@ -50,8 +50,9 @@ public class NullCheckLogQuickFix implements LocalQuickFix {
         // Create the log statement
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
 
+        // TODO: change TEMPORARY
         String logStatementText = String.format(
-                LOG_PATTERN_WARN,
+                "TEMPORARY",
                 methodName,
                 variableName,
                 variableName
