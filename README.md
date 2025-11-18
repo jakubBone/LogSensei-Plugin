@@ -1,5 +1,7 @@
 # 🚀 LogSensei - IntelliJ IDEA Plugin (Work in Progress)
 
+![](src/main/resources/image/logo.png)
+
 **LogSensei** is an IntelliJ IDEA plugin that detects missing or insufficient logging in Java code and provides context-aware Quick Fixes.  
 I am developing this project to strengthen my skills in **IntelliJ Platform SDK**, **PSI/AST analysis**, and **JVM developer tooling**.
 
