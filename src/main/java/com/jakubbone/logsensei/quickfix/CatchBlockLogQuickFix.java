@@ -11,8 +11,6 @@ import com.intellij.codeInspection.util.IntentionFamilyName;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.jakubbone.logsensei.dependency.model.DependencyDetector;
-import com.jakubbone.logsensei.dependency.model.DependencyStatus;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 import org.jetbrains.annotations.NotNull;
 
