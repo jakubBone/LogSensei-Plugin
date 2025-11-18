@@ -1,169 +1,83 @@
-# LogSensei Plugin
+# 🚀 LogSensei - IntelliJ IDEA Plugin (Work in Progress)
 
-### IntelliJ plugin (Java) that helps beginners add the right logs in the right places. 
-
-## Goal
-
-- Help beginner Java developers add the right logs in the right places.
-
-- Faster debugging and clearer code flow.
-
-## MVP scope
+**LogSensei** is an IntelliJ IDEA plugin that detects missing or insufficient logging in Java code and provides context-aware Quick Fixes.  
+I am developing this project to strengthen my skills in **IntelliJ Platform SDK**, **PSI/AST analysis**, and **JVM developer tooling**.
 
 
-### * Tech
+## 🔍 What the plugin does
 
-Language: Java (plugin written in Java)
+### ✔️ PSI-based inspections
+The plugin analyzes Java code and detects missing logs in:
 
-IDE Platform: IntelliJ Platform SDK (inspections + quick-fixes)
-
-Logging: Log4J2 + Lombok (@Log4j2)
-
-
-### * Assumptions
-
-- Inspections for: empty/unsafely handled catch, if (x == null), public method entry, @Service methods.
-
-- Quick-fix (Alt+Enter) inserts a ready snippet.
-
-- Auto-add @Log4j2 (or a log field) if missing.
-
-- Short learning tooltips about log levels.
+- empty or poorly handled `catch` blocks  
+- excessive `info` logs inside loops  
+- early-returns missing log statements  
+- `if (x == null)` conditions with missing logs  
+- missing log entry/exit points in public methods inside `@Service` classes  
 
 
-## 1. Error logging in `catch`
+### ✔️ Quick Fixes (Alt+Enter)
+Each inspection provides ready-to-insert logging snippets, such as:
 
-### User Story
+- `log.error(...)`  
+- `log.warn(...)`  
+- `log.info(...)`  
+- `log.debug(...)`  
 
-As a developer, I want to insert a `log.error` snippet into an empty `catch` block with one click.
+Snippets are inserted using safe PSI transformations (`PsiElementFactory`, `JavaCodeStyleManager`).
 
-### System Behavior
+### ✔️ Automatic logger injection
+Depending on the selected logging library, the plugin can:
 
-- Detects empty `catch` blocks or those without a logger call.
-- Highlights the `catch` keyword.
-- Offers an intention ("Quick Fix") "Add error log".
-    - When using the keyboard shortcut (e.g. Alt+Enter)
-        - Automatically adds the `@Log4j2` annotation if missing.
-        - Inserts snippet: `log.error("[{}] An exception occurred.", "methodName", e);`
+- add Lombok annotations (`@Log4j2`, `@Slf4j`)  
+- or generate a `java.util.logging.Logger log` field  
 
-### Acceptance Criteria
+Imports will be automatically shortened and cleaned up.
 
-- **Scenario 1: Happy Path**
-    - **Given:** No `@Log4j2` annotation and an empty `catch` block.
-    - **When:** User hovers over the highlighted place - uses the "Add error log" intention.
-    - **Then:** `@Log4j2` annotation is added and the `log.error` snippet inserted.
-- **Scenario 2: Annotation already exists**
-    - **Given:** Existing `@Log4j2` annotation and empty `catch` block.
-    - **When:** User hovers over the highlighted place - uses the "Add error log" intention.
-    - **Then:** `log.error` snippet is inserted; annotation is not duplicated.
-- **Scenario 3: Negative case**
-    - **Given:** The `catch` block already contains a logger call and `@Log4j2`.
-    - **When:** User opens the file.
-    - **Then:** The `catch` keyword is not highlighted; the intention is unavailable.
+### ✔️ Automatic dependency management
+If required dependencies are missing, LogSensei can update:
 
-## 2. Warning on `null` check
+- `pom.xml`  
+- `build.gradle`  
+- `build.gradle.kts`  
 
-### User Story
+Supported libraries:
 
-As a developer, I want to receive a suggestion to add `log.warn` when checking for `null`.
+- **Log4j2**  
+- **SLF4J + Logback**  
+- **Lombok**  
+- **java.util.logging**
 
-### System Behavior
 
-- Detects conditions like `if (variable == null)`.
-- Highlights the conditional expression.
-- Offers an intention ("Quick Fix") "Add warning log for null check".
-- When using the keyboard shortcut (e.g. Alt+Enter)
-    - Automatically adds the `@Log4j2` annotation if missing.
-    - Inserts snippet: `log.warn("[{}] Variable '{}' was null.", "methodName", "variableName");`
 
-### Acceptance Criteria
+## 🛠️ Technologies & Skills Demonstrated
 
-- **Scenario 1: Happy Path**
-    - **Given:** No `@Log4j2` annotation and block `if (user == null)`.
-    - **When:** User hovers over the highlighted place - uses the "Add warning log for null check" intention.
-    - **Then:** `@Log4j2` annotation is added and the `log.warn` snippet inserted with variable name "user".
-- **Scenario 2: Annotation already exists**
-    - **Given:** Existing `@Log4j2` annotation and block `if (user == null)`.
-    - **When:** User hovers over the highlighted place - uses the "Add warning log for null check" intention.
-    - **Then:** `log.warn` snippet is inserted; annotation is not duplicated.
-- **Scenario 3: Negative case**
-    - **Given:** Block `if (user == null)` already contains a `log.warn` call and `@Log4j2`.
-    - **When:** User opens the file.
-    - **Then:** The `if` condition is not highlighted; the intention is unavailable.
+- **IntelliJ Platform SDK**
+  - PSI traversal and analysis  
+  - `LocalInspectionTool` implementations  
+  - `LocalQuickFix` actions   
+- **Java**  
+- **Maven & Gradle integration**  
+- **Lombok annotation processing**  
+- Clean architecture with modular Quick Fixes and centralized dependency logic  
 
-## 3. Tracing entry into public methods
 
-### User Story
 
-As a developer, I want to receive a suggestion to add `log.debug` at the beginning of public methods.
+## 🎯 Purpose of the project
 
-### System Behavior
+This project is a practical way to develop skills in:
 
-- Detects public methods that do not have a `DEBUG` log in the first line of the body.
-- Highlights the method name.
-- Offers an intention ("Quick Fix") "Add debug log for method entry".
-- When using the keyboard shortcut (e.g. Alt+Enter)
-    - Inserts snippet: `log.debug("[{}] Entering method with parameters: {}", "methodName", params);` (or version without parameters).
+- JVM tooling  
+- IDE plugin development  
+- static code analysis  
+- building tools that improve developer productivity  
 
-### Acceptance Criteria
+LogSensei is intentionally evolving, so I can explore deeper parts of IntelliJ SDK and advanced PSI operations.
 
-- **Scenario 1: Happy Path**
-    - **Given:** Public method without a `DEBUG` log at entry.
-    - **When:** User hovers over the highlighted place - uses the "Add debug log for method entry" intention.
-    - **Then:** `@Log4j2` annotation is added (if missing) and the `log.debug` snippet inserted.
-- **Scenario 2: Annotation already exists**
-    - **Given:** Existing `@Log4j2` annotation and no `DEBUG` in the first line of the body.
-    - **When:** User hovers over the highlighted place - uses the "Add error log" intention.
-    - **Then:** `log.error` snippet is inserted; annotation is not duplicated.
-- **Scenario 2: Negative case**
-    - **Given:** Public method already contains `log.debug` in the first line and `@Log4j2`.
-    - **When:** User opens the file.
-    - **Then:** The method name is not highlighted; the intention is unavailable.
 
-## 4. Logging in services
 
-### User Story
+## 📌 Status
 
-As a developer, I want to receive a suggestion to add `log.info` at the beginning and end of methods in `@Service` classes.
+The plugin is **actively developed**.  
+Core features work, and new inspections, fix strategies, and refactorings are added continuously.
 
-### System Behavior
-
-- Detects public methods in classes with the `@Service` annotation.
-- Highlights the method name if it lacks `INFO` logs at entry and exit.
-- Offers an intention ("Quick Fix") "Add info logs for service method".
-- When using the keyboard shortcut (e.g. Alt+Enter) inserts two snippets:
-    - At the beginning: `log.info("[{}] Starting operation with parameters: {}", "methodName", params);`
-    - Before `return`: `log.info("[{}] Operation finished. Result: {}", "methodName", result);`
-
-### Acceptance Criteria
-
-- **Scenario 1: Happy Path**
-    - **Given:** Method in `@Service` class without `INFO` logs.
-    - **When:** User hovers over the highlighted place - uses the "Add info logs for service method" intention.
-    - **Then:** `@Log4j2` annotation is added (if missing) and `log.info` snippets inserted at the beginning and end of the method.
-- **Scenario 2: Negative case**
-    - **Given:** Method in `@Service` class already contains `INFO` logs at entry and exit and `@Log4j2`.
-    - **When:** User opens the file.
-    - **Then:** The method name is not highlighted; the intention is unavailable.
-
-## 5. Understanding logging levels (Learning mode)
-
-### User Story
-
-As a junior developer, I want to see a tooltip explaining the meaning of the logging level for each suggestion.
-
-### System Behavior
-
-- For each intention ("Quick Fix") to add a log (e.g. "Add error log") additional information is available.
-- When hovering over the suggestion, a tooltip explaining the given logging level is displayed.
-
-### Acceptance Criteria
-
-- **Scenario 1: Tooltip display**
-    - **Given:** Any suggestion to add a log from the plugin is visible in the intention menu.
-    - **When:** User hovers over it with the mouse cursor.
-    - **Then:** A tooltip appears with text explaining the corresponding logging level (`ERROR`, `WARN`, etc.).
-- **Scenario 2: Negative case**
-    - **Given:** The intention menu contains a suggestion from the plugin and another standard IntelliJ suggestion.
-    - **When:** User hovers over the standard IntelliJ suggestion.
-    - **Then:** The plugin's educational tooltip does not appear.
