@@ -62,58 +62,66 @@ public class DependencyManager {
     private static String addMavenDependencies(String content, boolean addLombok, LoggingLibrary loggingLibrary) {
         StringBuilder dependencies = new StringBuilder();
 
+        // Lombok
         if (addLombok) {
             dependencies.append("""
-                    <dependency>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                        <version>1.18.30</version>
-                        <scope>provided</scope>
-                    </dependency>
-                """);
+                <dependency>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok</artifactId>
+                    <version>1.18.30</version>
+                    <scope>provided</scope>
+                </dependency>
+            """);
         }
 
-        if (loggingLibrary.requiresDependency()) {
-            if (loggingLibrary == LoggingLibrary.LOG4J2) {
+        // Log4j2 / SLF4J+Logback
+        if (loggingLibrary != null && loggingLibrary.requiresDependency()) {
+            // Main dependency
+            dependencies.append("""
+                <dependency>
+                    <groupId>%s</groupId>
+                    <artifactId>%s</artifactId>
+                    <version>%s</version>
+                </dependency>
+            """.formatted(
+                    loggingLibrary.getGroupId(),
+                    loggingLibrary.getArtifactId(),
+                    loggingLibrary.getVersion()
+            ));
+
+            // Optional secondary (e.g. log4j-api)
+            if (loggingLibrary.hasSecondaryDependency()) {
                 dependencies.append("""
-                        <dependency>
-                            <groupId>org.apache.logging.log4j</groupId>
-                            <artifactId>log4j-core</artifactId>
-                            <version>2.22.0</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.logging.log4j</groupId>
-                            <artifactId>log4j-api</artifactId>
-                            <version>2.22.0</version>
-                        </dependency>
-                    """);
-            } else if (loggingLibrary == LoggingLibrary.SLF4J_LOGBACK) {
-                dependencies.append("""
-                        <dependency>
-                            <groupId>org.slf4j</groupId>
-                            <artifactId>slf4j-api</artifactId>
-                            <version>2.0.9</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>ch.qos.logback</groupId>
-                            <artifactId>logback-classic</artifactId>
-                            <version>1.4.14</version>
-                        </dependency>
-                    """);
+                    <dependency>
+                        <groupId>%s</groupId>
+                        <artifactId>%s</artifactId>
+                        <version>%s</version>
+                    </dependency>
+                """.formatted(
+                        loggingLibrary.getSecondaryGroupId(),
+                        loggingLibrary.getSecondaryArtifactId(),
+                        loggingLibrary.getSecondaryVersion()
+                ));
             }
         }
 
-        // Find the </dependencies> closing tag and insert before it
         int dependenciesEndIndex = content.lastIndexOf("</dependencies>");
-        return content.substring(0, dependenciesEndIndex) +
+        if (dependenciesEndIndex < 0) {
+            return content + "\n\n<dependencies>\n" +
                     dependencies +
-                    content.substring(dependenciesEndIndex);
+                    "\n</dependencies>\n";
+        }
+
+        return content.substring(0, dependenciesEndIndex) +
+                dependencies +
+                content.substring(dependenciesEndIndex);
     }
 
     private static String addGradleDependencies(String content, boolean addLombok,
                                                 LoggingLibrary loggingLibrary, boolean isKotlin) {
         StringBuilder dependencies = new StringBuilder("\n");
 
+        // Lombok
         if (addLombok) {
             if (isKotlin) {
                 dependencies.append("    compileOnly(\"org.projectlombok:lombok:1.18.30\")\n");
@@ -124,32 +132,43 @@ public class DependencyManager {
             }
         }
 
-        if (loggingLibrary.requiresDependency()) {
-            if (loggingLibrary == LoggingLibrary.LOG4J2) {
+        // Log4j2 / SLF4J+Logback
+        if (loggingLibrary != null && loggingLibrary.requiresDependency()) {
+            // Main dependency
+            String primary = loggingLibrary.getGroupId() + ":" +
+                    loggingLibrary.getArtifactId() + ":" +
+                    loggingLibrary.getVersion();
+
+            if (isKotlin) {
+                dependencies.append("    implementation(\"").append(primary).append("\")\n");
+            } else {
+                dependencies.append("    implementation '").append(primary).append("'\n");
+            }
+
+            // Optional secondary
+            if (loggingLibrary.hasSecondaryDependency()) {
+                String secondary = loggingLibrary.getSecondaryGroupId() + ":" +
+                        loggingLibrary.getSecondaryArtifactId() + ":" +
+                        loggingLibrary.getSecondaryVersion();
+
                 if (isKotlin) {
-                    dependencies.append("    implementation(\"org.apache.logging.log4j:log4j-core:2.22.0\")\n");
-                    dependencies.append("    implementation(\"org.apache.logging.log4j:log4j-api:2.22.0\")\n");
+                    dependencies.append("    implementation(\"").append(secondary).append("\")\n");
                 } else {
-                    dependencies.append("    implementation 'org.apache.logging.log4j:log4j-core:2.22.0'\n");
-                    dependencies.append("    implementation 'org.apache.logging.log4j:log4j-api:2.22.0'\n");
-                }
-            } else if (loggingLibrary == LoggingLibrary.SLF4J_LOGBACK) {
-                if (isKotlin) {
-                    dependencies.append("    implementation(\"org.slf4j:slf4j-api:2.0.9\")\n");
-                    dependencies.append("    implementation(\"ch.qos.logback:logback-classic:1.4.14\")\n");
-                } else {
-                    dependencies.append("    implementation 'org.slf4j:slf4j-api:2.0.9'\n");
-                    dependencies.append("    implementation 'ch.qos.logback:logback-classic:1.4.14'\n");
+                    dependencies.append("    implementation '").append(secondary).append("'\n");
                 }
             }
         }
 
-        // Find dependencies block and add dependencies
         int dependenciesIndex = content.indexOf("dependencies {");
+        if (dependenciesIndex < 0) {
+            return content + "\n\ndependencies {" +
+                    dependencies +
+                    "}\n";
+        }
+
         int blockStart = content.indexOf("{", dependenciesIndex) + 1;
         return content.substring(0, blockStart) +
-                    dependencies +
-                    content.substring(blockStart);
-
+                dependencies +
+                content.substring(blockStart);
     }
 }

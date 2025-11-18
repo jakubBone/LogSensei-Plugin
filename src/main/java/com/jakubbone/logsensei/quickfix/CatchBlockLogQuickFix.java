@@ -1,12 +1,9 @@
 package com.jakubbone.logsensei.quickfix;
 
-import static com.jakubbone.logsensei.utils.LogSenseiUtils.addAnnotationAndImports;
+import static com.jakubbone.logsensei.utils.LogSenseiUtils.implementLoggingSolution;
 import static com.jakubbone.logsensei.utils.LogStatementFactory.createErrorLog;
 import static com.jakubbone.logsensei.utils.LogEducationNotifier.showErrorLevelEducation;
 
-import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
-
-import com.google.protobuf.Message;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.util.IntentionFamilyName;
@@ -167,7 +164,7 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
             return;
         }
 
-        addAnnotationAndImports(project, containingClass, selectedLibrary);
+        implementLoggingSolution(project, containingClass, selectedLibrary);
 
         PsiStatement logStmt = createErrorLog(
                 project,

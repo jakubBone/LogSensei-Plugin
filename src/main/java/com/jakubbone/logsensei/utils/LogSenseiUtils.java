@@ -4,41 +4,47 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 import org.jetbrains.annotations.NotNull;
 
 public class LogSenseiUtils {
-    private static final String LOMBOK_LOG4J2_FQN = "lombok.extern.log4j.Log4j2";
-    private static final String LOMBOK_SLF4J_FQN = "lombok.extern.slf4j.Slf4j";
+    private static final String JUL_LOGGER_FQN = "java.util.logging.Logger";
+
+    public static void implementLoggingSolution(@NotNull Project project,
+                                                @NotNull PsiClass psiClass,
+                                                @NotNull LoggingLibrary library){
+
+        if (library.usesLombokAnnotation()) {
+            addAnnotationAndImports(project, psiClass, library.getLombokAnnotationFqn());
+        } else if (library == LoggingLibrary.JAVA_UTIL_LOGGING) {
+            addJavaUtilLoggerField(project, psiClass);
+        } else {
+            // NONE
+        }
+    }
 
     public static void addAnnotationAndImports(@NotNull Project project,
                                                     @NotNull PsiClass psiClass,
-                                                    @NotNull LoggingLibrary library){
+                                                    @NotNull String annotationFqn) {
+
         PsiModifierList modifierList = psiClass.getModifierList();
-        if(modifierList == null){
+        if (modifierList == null) {
             return;
         }
 
-        if (library == LoggingLibrary.JAVA_UTIL_LOGGING) {
+        if (modifierList.findAnnotation(annotationFqn) != null) {
             return;
         }
 
-        String annotationName = getAnnotationName(library);
-        if (annotationName == null) {
-            return;
-        }
-
-        if (modifierList.findAnnotation(annotationName) != null) {
-            return;
-        }
-
-        PsiElementFactory factory =  JavaPsiFacade.getElementFactory(project);
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
 
         PsiAnnotation annotation = factory.createAnnotationFromText(
-                "@" + annotationName,
+                "@" + annotationFqn,
                 psiClass
         );
 
@@ -46,46 +52,46 @@ public class LogSenseiUtils {
 
         JavaCodeStyleManager.getInstance(project)
                 .shortenClassReferences(annotation);
-
-        // TODO: addJavaApiLoggerField if no outside libs
-        // TODO: make addLog4jAnnotationAndImports abstract for rest of libs
-        // TODO: shorten  @lombok.extern.log4j.Log4j2, to @Log4j2
     }
 
-    private static String getAnnotationName(LoggingLibrary library) {
-        return switch (library) {
-            case LOG4J2 -> LOMBOK_LOG4J2_FQN;
-            case SLF4J_LOGBACK -> LOMBOK_SLF4J_FQN;
-            default -> null; // Not used
-        };
-    }
-
-    public static void addLog4jAnnotationAndImports(@NotNull Project project,
+    private static void addJavaUtilLoggerField(@NotNull Project project,
                                                @NotNull PsiClass psiClass){
 
-        PsiModifierList modifierList = psiClass.getModifierList();
-        if(modifierList == null){
+        if(psiClass.findFieldByName("logger", false) != null){
             return;
         }
 
-        if (modifierList.findAnnotation(LOMBOK_LOG4J2_FQN) != null) {
+        String className = psiClass.getName();
+        if(className == null){
             return;
         }
 
-        PsiElementFactory factory =  JavaPsiFacade.getElementFactory(project);
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
 
-        PsiAnnotation annotation = factory.createAnnotationFromText(
-                "@" + LOMBOK_LOG4J2_FQN,
-                psiClass
+        String loggerFieldText = String.format(
+                "private static final %s logger = %s.getLogger(%s.class.getName());",
+                JUL_LOGGER_FQN,
+                JUL_LOGGER_FQN,
+                className
         );
 
-        modifierList.addBefore(annotation, modifierList.getFirstChild());
+        PsiField loggerField = factory.createFieldFromText(loggerFieldText, psiClass);
 
-        JavaCodeStyleManager.getInstance(project)
-                .shortenClassReferences(annotation);
+        PsiField[] existingFields = psiClass.getFields();
+        if (existingFields.length > 0) {
+            psiClass.addBefore(loggerField, existingFields[0]);
+        } else {
+            PsiElement lBrace = psiClass.getLBrace();
+            if (lBrace != null) {
+                psiClass.addAfter(loggerField, lBrace);
+            }
+        }
 
-        // TODO: addJavaApiLoggerField if no outside libs
-        // TODO: make addLog4jAnnotationAndImports abstract for rest of libs
-        // TODO: shorten  @lombok.extern.log4j.Log4j2, to @Log4j2
+        JavaCodeStyleManager.getInstance(project).
+                shortenClassReferences(psiClass.getContainingFile());
     }
+
+    public static void addLog4jAnnotationAndImports(Project project, PsiClass containingClass){
+        //
+    };
 }
