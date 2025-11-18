@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei.utils;
+package com.jakubbone.logsensei.inspection.detector;
 
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiComment;

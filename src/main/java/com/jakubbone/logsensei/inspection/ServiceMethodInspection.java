@@ -1,6 +1,6 @@
 package com.jakubbone.logsensei.inspection;
 
-import static com.jakubbone.logsensei.utils.LogDetector.containsLogCall;
+import static com.jakubbone.logsensei.inspection.detector.LogDetector.containsLogCall;
 
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;

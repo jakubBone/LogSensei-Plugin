@@ -1,8 +1,8 @@
 package com.jakubbone.logsensei.quickfix;
 
-import static com.jakubbone.logsensei.utils.LogEducationNotifier.showDebugLevelEducation;
-import static com.jakubbone.logsensei.utils.LogSenseiUtils.implementLoggingSolution;
-import static com.jakubbone.logsensei.utils.UserInteractionService.askUserForLibraryAndAnnotation;
+import static com.jakubbone.logsensei.education.LogEducationNotifier.showDebugLevelEducation;
+import static com.jakubbone.logsensei.psi.LogImplementationService.implementLoggingSolution;
+import static com.jakubbone.logsensei.dependency.ui.DependencyDialogService.askUserForLibraryAndAnnotation;
 import java.util.List;
 
 import com.intellij.codeInspection.LocalQuickFix;

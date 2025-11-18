@@ -1,8 +1,8 @@
 package com.jakubbone.logsensei.quickfix;
 
-import static com.jakubbone.logsensei.utils.LogEducationNotifier.showWarnLevelEducation;
+import static com.jakubbone.logsensei.education.LogEducationNotifier.showWarnLevelEducation;
 
-import static com.jakubbone.logsensei.utils.LogSenseiUtils.addLog4jAnnotationAndImports;
+import static com.jakubbone.logsensei.psi.LogImplementationService.addLog4jAnnotationAndImports;
 
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;

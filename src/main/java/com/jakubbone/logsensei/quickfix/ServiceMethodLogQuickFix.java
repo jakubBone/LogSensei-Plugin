@@ -1,10 +1,10 @@
 package com.jakubbone.logsensei.quickfix;
 
-import static com.jakubbone.logsensei.utils.LogSenseiUtils.implementLoggingSolution;
-import static com.jakubbone.logsensei.utils.LogStatementFactory.createEntryLog;
-import static com.jakubbone.logsensei.utils.LogEducationNotifier.showInfoLevelEducation;
-import static com.jakubbone.logsensei.utils.PsiStatementUtils.addLogBeforeStatement;
-import static com.jakubbone.logsensei.utils.UserInteractionService.askUserForLibraryAndAnnotation;
+import static com.jakubbone.logsensei.psi.LogImplementationService.implementLoggingSolution;
+import static com.jakubbone.logsensei.psi.LogStatementFactory.createEntryLog;
+import static com.jakubbone.logsensei.education.LogEducationNotifier.showInfoLevelEducation;
+import static com.jakubbone.logsensei.psi.PsiStatementUtils.addLogBeforeStatement;
+import static com.jakubbone.logsensei.dependency.ui.DependencyDialogService.askUserForLibraryAndAnnotation;
 
 import java.util.Collection;
 
@@ -24,7 +24,7 @@ import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
-import com.jakubbone.logsensei.utils.LogStatementFactory;
+import com.jakubbone.logsensei.psi.LogStatementFactory;
 import org.jetbrains.annotations.NotNull;
 
 public class ServiceMethodLogQuickFix implements LocalQuickFix {

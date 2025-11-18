@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei.utils;
+package com.jakubbone.logsensei.dependency.ui;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
@@ -8,7 +8,7 @@ import com.jakubbone.logsensei.dependency.model.DependencyDetector;
 import com.jakubbone.logsensei.dependency.model.DependencyStatus;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 
-public class UserInteractionService {
+public class DependencyDialogService {
 
     public static LoggingLibrary askUserForLibraryAndAnnotation(Project project){
         DependencyStatus status = DependencyDetector.detect(project);

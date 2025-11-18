@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei.utils;
+package com.jakubbone.logsensei.psi;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -12,7 +12,7 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 import org.jetbrains.annotations.NotNull;
 
-public class LogSenseiUtils {
+public class LogImplementationService {
     private static final String JUL_LOGGER_FQN = "java.util.logging.Logger";
 
     public static void implementLoggingSolution(@NotNull Project project,

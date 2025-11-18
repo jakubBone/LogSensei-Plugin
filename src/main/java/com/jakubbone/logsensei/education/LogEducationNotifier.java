@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei.utils;
+package com.jakubbone.logsensei.education;
 
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;

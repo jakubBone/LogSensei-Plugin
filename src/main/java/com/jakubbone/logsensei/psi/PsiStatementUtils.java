@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei.utils;
+package com.jakubbone.logsensei.psi;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;

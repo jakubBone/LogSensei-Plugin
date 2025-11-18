@@ -1,9 +1,9 @@
 package com.jakubbone.logsensei.quickfix;
 
-import static com.jakubbone.logsensei.utils.LogSenseiUtils.implementLoggingSolution;
-import static com.jakubbone.logsensei.utils.LogStatementFactory.createErrorLog;
-import static com.jakubbone.logsensei.utils.LogEducationNotifier.showErrorLevelEducation;
-import static com.jakubbone.logsensei.utils.UserInteractionService.askUserForLibraryAndAnnotation;
+import static com.jakubbone.logsensei.psi.LogImplementationService.implementLoggingSolution;
+import static com.jakubbone.logsensei.psi.LogStatementFactory.createErrorLog;
+import static com.jakubbone.logsensei.education.LogEducationNotifier.showErrorLevelEducation;
+import static com.jakubbone.logsensei.dependency.ui.DependencyDialogService.askUserForLibraryAndAnnotation;
 
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
