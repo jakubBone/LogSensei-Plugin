@@ -13,14 +13,6 @@ public class NullCheckInspection extends AbstractBaseJavaLocalInspectionTool {
     @Override
     public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
 
-        /*
-        * PsiIfStatement
-            └── PsiBinaryExpression         ← condition (e.g.user == null)
-            ├── PsiReferenceExpression  ← left side: user
-            ├── PsiJavaToken: EQEQ      ← operator: ==
-            └── PsiLiteralExpression    ← right side: null
-        */
-
         return new JavaElementVisitor() {
             @Override
             public void visitIfStatement(@NotNull PsiIfStatement statement) {
