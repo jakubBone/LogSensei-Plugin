@@ -34,16 +34,6 @@ public class LogStatementFactory {
         return createStatement(project, logText, context);
     }
 
-    public static PsiStatement createWarnLog(
-            @NotNull Project project,
-            @NotNull String methodName,
-            @NotNull String variableName,
-            @NotNull PsiElement context) {
-
-        String logText = String.format(warnPattern, methodName, variableName, variableName);
-        return createStatement(project, logText, context);
-    }
-
     public static PsiStatement createEntryLog(
             @NotNull Project project,
             @NotNull String methodName,

@@ -25,18 +25,6 @@ public class LogEducationNotifier {
         );
     }
 
-    public static void showWarnLevelEducation(Project project) {
-        notify(
-                project,
-                "🎓 LogSensei: understanding WARN Level",
-                "WARN should be used for unexpected but handled situations that might indicate problems.<br/>" +
-                        "<br/>\uD83D\uDFE0 <b>Examples</b><br/>" +
-                        "• null values where objects expected<br/>" +
-                        "• deprecated API usage<br/>" +
-                        "• recoverable errors"
-        );
-    }
-
     public static void showInfoLevelEducation(Project project) {
         notify(
                 project,

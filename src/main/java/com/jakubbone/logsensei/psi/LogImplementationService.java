@@ -91,6 +91,4 @@ public class LogImplementationService {
                 shortenClassReferences(psiClass.getContainingFile());
     }
 
-    public static void addLog4jAnnotationAndImports(Project project, PsiClass containingClass){
-    };
 }

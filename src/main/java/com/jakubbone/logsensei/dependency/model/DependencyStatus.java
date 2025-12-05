@@ -22,14 +22,6 @@ public class DependencyStatus {
         return detectedLoggingLibrary != LoggingLibrary.NONE;
     }
 
-    public boolean isFullyConfigured(){
-        return hasLombok && hasLoggingLibrary();
-    }
-
-    public boolean needsConfiguration(){
-        return !hasLombok || !hasLoggingLibrary();
-    }
-
     @Override
     public String toString() {
         return "DependencyStatus{" +
