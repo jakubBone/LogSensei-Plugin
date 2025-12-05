@@ -10,6 +10,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Basic project structure
 - Migration `build.gradle.kts` → `build.gradle`
 
+## [0.4.0] - 2025-12-05
+### Removed
+
+- **Inspection 2**: removed Null check inspection
+- **QuickFix 2**: removed Null check log quick fix
+
+**Rationale**: decided to focus on inspections with more universal applicability
+
+- **Unused utility methods**:
+  - `DependencyStatus.isFullyConfigured()`
+  - `DependencyStatus.needsConfiguration`
+  - `LogStatementFactory.createWarnLog()` 
+  - `LogEducationNotifier.showWarnLevelEducation()` 
+  - `LogImplementationService.addLog4jAnnotationAndImports()` 
+
+
 ## [0.3.1] - 2025-11-12
 ### Added
 
