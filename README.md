@@ -14,7 +14,6 @@ The plugin analyzes Java code and detects missing logs in:
 - empty or poorly handled `catch` blocks  
 - excessive `info` logs inside loops  
 - early-returns missing log statements  
-- `if (x == null)` conditions with missing logs  
 - missing log entry/exit points in public methods inside `@Service` classes  
 
 
@@ -22,7 +21,6 @@ The plugin analyzes Java code and detects missing logs in:
 Each inspection provides ready-to-insert logging snippets, such as:
 
 - `log.error(...)`  
-- `log.warn(...)`  
 - `log.info(...)`  
 - `log.debug(...)`  
 
