@@ -23,7 +23,7 @@ dependencies {
 
         instrumentationTools()
 
-        testFramework TestFrameworkType.Platform.INSTANCE
+        testFramework TestFrameworkType.Plugin.Java.INSTANCE
     }
 
     compileOnly 'org.projectlombok:lombok:1.18.32'
