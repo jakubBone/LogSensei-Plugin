@@ -1,10 +1,9 @@
-package testData.inspection;
 
 public class EmptyCatch {
     public void method() {
         try {
             riskyOperation();
-        } <weak_warning descr="Catch block missing ERROR log">catch </weak_warning> (Exception e)  {
+        } <weak_warning descr="LogSensei: Catch block missing ERROR log">catch</weak_warning> (Exception e)  {
             // Empty block - action expected
         }
     }
