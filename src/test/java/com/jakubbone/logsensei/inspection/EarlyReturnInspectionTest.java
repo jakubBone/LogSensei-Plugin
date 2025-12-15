@@ -28,4 +28,6 @@ public class EarlyReturnInspectionTest extends LightJavaCodeInsightFixtureTestCa
         super.tearDown();
     }
 
+    public void testEarlyReturn() {
+    }
 }
