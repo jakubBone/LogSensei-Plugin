@@ -20,7 +20,7 @@ public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCas
         super.setUp();
         myFixture.enableInspections(CatchBlockInspection.class);
 
-        // add org/slf4j/* to project temp
+        // add org/slf4j/* to test project
         myFixture.copyDirectoryToProject("/stubs", "");
     }
 
