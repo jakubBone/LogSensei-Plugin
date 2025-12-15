@@ -12,7 +12,7 @@ public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCas
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/inspection/catch";
+        return "src/test/testData";
     }
 
     @Override
@@ -20,21 +20,8 @@ public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCas
         super.setUp();
         myFixture.enableInspections(CatchBlockInspection.class);
 
-        myFixture.addFileToProject("org/slf4j/Logger.java", """
-            package org.slf4j;
-            public interface Logger {
-                void error(String msg, Exception e);
-                void info(String msg);
-                void debug(String msg);
-            }
-        """);
-
-        myFixture.addFileToProject("org/slf4j/LoggerFactory.java", """
-            package org.slf4j;
-            public class LoggerFactory {
-                public static Logger getLogger(Class<?> clazz) { return null; }
-            }
-        """);
+        // add org/slf4j/* to project temp
+        myFixture.copyDirectoryToProject("/stubs", "");
     }
 
     @Override
@@ -42,13 +29,12 @@ public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCas
         super.tearDown();
     }
 
-
     public void testEmptyCatchHighlighting() {
-        myFixture.testHighlighting(false, false, true, "EmptyCatch.java");
+        myFixture.testHighlighting(false, false, true, "/inspection/catch_block/EmptyCatch.java");
     }
 
     public void testCatchWithErrorLogHighlighting() {
-        myFixture.testHighlighting(false, false, false, "NonEmptyCatch.java");
+        myFixture.testHighlighting(false, false, false, "/inspection/catch_block/NonEmptyCatch.java");
     }
 }
 
