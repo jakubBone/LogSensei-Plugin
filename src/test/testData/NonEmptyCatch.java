@@ -1,12 +1,12 @@
 
 public class NonEmptyCatch {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CatchWithErrorLog.class);
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(NonEmptyCatch.class);
 
     public void withLog() {
         try {
             riskyOperation();
         } catch (Exception e) {
-            log.error("Error", e);  // Log available - no action
+            log.error("Error", e);  // no action
         }
     }
 
@@ -14,9 +14,17 @@ public class NonEmptyCatch {
         try {
             riskyOperation();
         } catch (Exception e) {
-            System.out.println("");  // sout available - no action
+            System.out.println("");  // no action
         }
     }
 
-    private void riskyOperation() throws Exception {}
+    /*public void withException() {
+        try {
+            riskyOperation();
+        } catch (Exception e) {
+            throw new RuntimeException("IO failed", e); // no action
+        }
+    }*/
+
+    private void riskyOperation()  {}
 }

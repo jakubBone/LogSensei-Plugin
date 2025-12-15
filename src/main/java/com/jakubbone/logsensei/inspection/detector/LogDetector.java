@@ -37,8 +37,7 @@ public class LogDetector {
                 statementText.contains("log.info") ||
                 statementText.contains("log.debug") ||
                 statementText.contains("logger.") ||
-                statementText.contains("System.out.print") ||
-                statementText.contains("printStackTrace");
+                statementText.contains("System.out.print");
     }
 }
 
