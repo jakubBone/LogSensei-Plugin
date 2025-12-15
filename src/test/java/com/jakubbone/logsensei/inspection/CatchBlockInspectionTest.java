@@ -12,7 +12,7 @@ public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCas
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData";
+        return "src/test/testData/inspection/catch";
     }
 
     @Override
@@ -48,7 +48,7 @@ public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCas
     }
 
     public void testCatchWithErrorLogHighlighting() {
-        myFixture.testHighlighting(false, false, false, "CatchWithErrorLog.java");
+        myFixture.testHighlighting(false, false, false, "NonEmptyCatch.java");
     }
 }
 
