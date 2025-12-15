@@ -14,17 +14,9 @@ public class NonEmptyCatch {
         try {
             riskyOperation();
         } catch (Exception e) {
-            System.out.println("");  // no action
+            System.out.println("An error occurred");  // no action
         }
     }
-
-    /*public void withException() {
-        try {
-            riskyOperation();
-        } catch (Exception e) {
-            throw new RuntimeException("IO failed", e); // no action
-        }
-    }*/
 
     private void riskyOperation()  {}
 }
