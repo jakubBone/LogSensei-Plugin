@@ -19,7 +19,7 @@ public class EarlyReturnInspectionTest extends LightJavaCodeInsightFixtureTestCa
     protected void setUp() throws Exception {
         super.setUp();
         myFixture.enableInspections(EarlyReturnInspection.class);
-        myFixture.copyDirectoryToProject("/stub", "")
+        myFixture.copyDirectoryToProject("/stubs", "");
 
     }
 
@@ -29,5 +29,6 @@ public class EarlyReturnInspectionTest extends LightJavaCodeInsightFixtureTestCa
     }
 
     public void testEarlyReturn() {
+        myFixture.testHighlighting(false, false, true, "/inspection/early_return/EarlyReturn.java");
     }
 }
