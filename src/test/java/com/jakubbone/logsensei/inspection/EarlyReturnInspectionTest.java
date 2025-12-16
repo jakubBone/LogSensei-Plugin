@@ -20,7 +20,6 @@ public class EarlyReturnInspectionTest extends LightJavaCodeInsightFixtureTestCa
         super.setUp();
         myFixture.enableInspections(EarlyReturnInspection.class);
         myFixture.copyDirectoryToProject("/stubs", "");
-
     }
 
     @Override
@@ -28,7 +27,11 @@ public class EarlyReturnInspectionTest extends LightJavaCodeInsightFixtureTestCa
         super.tearDown();
     }
 
-    public void testEarlyReturn() {
-        myFixture.testHighlighting(false, false, true, "/inspection/early_return/EarlyReturn.java");
+    public void testHighlighting_whenEmptyEarlyReturn() {
+        myFixture.testHighlighting(false, false, true, "/inspection/early_return/EmptyEarlyReturn.java");
+    }
+
+    public void testHighlighting_whenNonEmptyEarlyReturn() {
+        myFixture.testHighlighting(false, false, false , "/inspection/early_return/NonEmptyEarlyReturn.java");
     }
 }
