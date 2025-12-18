@@ -28,10 +28,17 @@ public class EarlyReturnInspectionTest extends LightJavaCodeInsightFixtureTestCa
     }
 
     public void testHighlighting_whenEmptyEarlyReturn() {
-        myFixture.testHighlighting(false, false, true, "/inspection/early_return/EmptyEarlyReturn.java");
+        myFixture.testHighlighting(
+                false,
+                false,
+                true,
+                "/inspection/early_return/EmptyEarlyReturn.java");
     }
 
     public void testHighlighting_whenNonEmptyEarlyReturn() {
-        myFixture.testHighlighting(false, false, false , "/inspection/early_return/NonEmptyEarlyReturn.java");
+        myFixture.testHighlighting(false,
+                false,
+                false,
+                "/inspection/early_return/NonEmptyEarlyReturn.java");
     }
 }

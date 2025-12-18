@@ -16,14 +16,14 @@ public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCas
     }
 
     @Override
-    public void setUp() throws Exception {
+    protected void setUp() throws Exception {
         super.setUp();
         myFixture.enableInspections(CatchBlockInspection.class);
         myFixture.copyDirectoryToProject("/stubs", "");
     }
 
     @Override
-    public void tearDown() throws Exception {
+    protected void tearDown() throws Exception {
         super.tearDown();
     }
 
