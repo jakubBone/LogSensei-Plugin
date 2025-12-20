@@ -7,6 +7,7 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiDoWhileStatement;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiForStatement;
 import com.intellij.psi.PsiForeachStatement;
@@ -62,12 +63,17 @@ public class LoopInspection extends BaseLogInspection {
             return;
         }
 
-        registerLogProblem(
-                holder,
-                statement.getFirstChild(),
-                "High-frequency logs detected in loop. Consider using DEBUG level.",
-                new LoopLogQuickFix(problematicLogs)
-        );
+        for(PsiMethodCallExpression call: problematicLogs){
+            PsiElement methodCallElement = call.getMethodExpression().getReferenceNameElement();
+            if (methodCallElement != null) {
+                registerLogProblem(
+                        holder,
+                        methodCallElement, // info log
+                        "High-frequency logs detected in loop. Consider using DEBUG level.",
+                        new LoopLogQuickFix(problematicLogs)
+                );
+            }
+        }
     }
 
     private List<PsiMethodCallExpression> findInfoLogsInLoop(PsiStatement statement){

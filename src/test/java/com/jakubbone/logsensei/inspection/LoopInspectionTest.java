@@ -11,7 +11,7 @@ public class LoopInspectionTest extends LightJavaCodeInsightFixtureTestCase {
     }
 
     @Override
-    protected String getBasePath() {
+    protected String getTestDataPath() {
         return "src/test/testData";
     }
 
@@ -19,12 +19,20 @@ public class LoopInspectionTest extends LightJavaCodeInsightFixtureTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         myFixture.enableInspections(LoopInspection.class);
-        myFixture.copyDirectoryToProject("/stubs", "")
+        myFixture.copyDirectoryToProject("/stubs", "");
     }
 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
+    }
+
+    public void testHighlighting_whenInfoLoggingInLoop() {
+        myFixture.testHighlighting(
+                false,
+                false,
+                true,
+                "/inspection/loop_logging/InfoLoggingLoop.java");
     }
 
 }
