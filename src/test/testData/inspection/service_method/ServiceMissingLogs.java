@@ -4,9 +4,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServiceWithoutLogs {
+public class ServiceMissingLogs {
 
-    private static final Logger log = LoggerFactory.getLogger(ServiceWithoutLogs.class);
+    private static final Logger log = LoggerFactory.getLogger(ServiceMissingLogs.class);
 
     public void <weak_warning descr="LogSensei: Service method missing entry and exit logs">noAnyLogs</weak_warning>(){
         String name = "test";
@@ -14,11 +14,19 @@ public class ServiceWithoutLogs {
 
     public void <weak_warning descr="LogSensei: Service method missing entry log">noEntryLog</weak_warning>(){
         String name = "test";
-        log.info("...");
+        log.info("exit");
     }
 
     public void <weak_warning descr="LogSensei: Service method missing exit log">noExitLog</weak_warning>(){
-        log.info("...");
+        log.info("entry");
         String name = "test";
+    }
+
+    public void <weak_warning descr="LogSensei: Service method missing entry and exit logs">empty</weak_warning>(){
+    }
+
+    public void <weak_warning descr="LogSensei: Service method missing exit log">withException</weak_warning>(){
+        log.info("entry");
+        throw new RuntimeException("Error");
     }
 }

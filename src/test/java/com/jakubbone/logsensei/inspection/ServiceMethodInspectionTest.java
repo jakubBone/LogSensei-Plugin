@@ -33,7 +33,14 @@ public class ServiceMethodInspectionTest extends LightJavaCodeInsightFixtureTest
         myFixture.testHighlighting(false,
                 false,
                 true,
-                "/inspection/service_method/ServiceWithoutLogs.java");
+                "/inspection/service_method/ServiceMissingLogs.java");
+    }
+
+    public void testHighlighting_whenServiceCorrectLogs() {
+        myFixture.testHighlighting(false,
+                false,
+                false,
+                "/inspection/service_method/ServiceMissingLogs.java");
     }
 
 
