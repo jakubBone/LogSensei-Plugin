@@ -1,9 +1,16 @@
 package com.jakubbone.logsensei.inspection;
 
-import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
+import com.intellij.testFramework.LightProjectDescriptor;
+
+import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NonNls;
 
-public class ServiceMethodInspectionTest extends JavaCodeInsightFixtureTestCase {
+public class ServiceMethodInspectionTest extends LightJavaCodeInsightFixtureTestCase {
+
+    @Override
+    protected LightProjectDescriptor getProjectDescriptor() {
+        return JAVA_17;
+    }
 
     @Override
     protected @NonNls String getTestDataPath() {
@@ -22,10 +29,12 @@ public class ServiceMethodInspectionTest extends JavaCodeInsightFixtureTestCase 
         super.tearDown();
     }
 
-    /*public void testHighlighting_whenNoLogsInServiceMethod() {
+    public void testHighlighting_whenServiceMethodWithoutLogs() {
         myFixture.testHighlighting(false,
                 false,
                 true,
-                "/inspection/service_method/ServiceMethod.java");
-    }*/
+                "/inspection/service_method/ServiceWithoutLogs.java");
+    }
+
+
 }

@@ -47,15 +47,6 @@ public class ServiceMethodInspection extends BaseLogInspection {
                     return;
                 }
 
-                String description;
-                if (!hasEntry && !hasExit) {
-                    description = "LogSensei: Service method missing entry and exit logs";
-                } else if (!hasEntry) {
-                    description = "LogSensei: Service method missing entry log";
-                } else {
-                    description = "LogSensei: Service method missing exit log";
-                }
-
                 registerLogProblem(
                         holder,
                         nameIdentifier,
