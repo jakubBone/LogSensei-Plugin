@@ -42,6 +42,4 @@ public class ServiceMethodInspectionTest extends LightJavaCodeInsightFixtureTest
                 false,
                 "/inspection/service_method/ServiceMissingLogs.java");
     }
-
-
 }

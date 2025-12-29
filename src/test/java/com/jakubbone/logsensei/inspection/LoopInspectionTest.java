@@ -35,4 +35,12 @@ public class LoopInspectionTest extends LightJavaCodeInsightFixtureTestCase {
                 "/inspection/loop_logging/InfoLoggingLoop.java");
     }
 
+    public void testHighlighting_whenDebugLoggingInLoop() {
+        myFixture.testHighlighting(
+                false,
+                false,
+                false,
+                "/inspection/loop_logging/DebugWarnLoggingLoop.java");
+    }
+
 }

@@ -30,12 +30,10 @@ public class InfoLoggingLoop {
         }
     }
 
-
    public void logInFor() {
         int limit = 10;
         for(int i = 0; i < limit; i++) {
             log.<weak_warning descr="LogSensei: High-frequency logs detected in loop. Consider using DEBUG level.">info</weak_warning>("...");
         }
     }
-
 }

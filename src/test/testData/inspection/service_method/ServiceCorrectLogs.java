@@ -10,11 +10,11 @@ public class ServiceCorrectLogs {
 
     public void public(){
         log.info("entry");
-        String name = "test";
+        String name = "test"; // no action
         log.info("exit");
     }
 
     private void priv() {
-        String name = "test";
+        String name = "test"; // no action
     }
 }
