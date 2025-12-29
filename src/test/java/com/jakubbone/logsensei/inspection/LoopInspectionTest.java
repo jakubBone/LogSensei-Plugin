@@ -27,20 +27,20 @@ public class LoopInspectionTest extends LightJavaCodeInsightFixtureTestCase {
         super.tearDown();
     }
 
-    public void testHighlighting_whenInfoLoggingInLoop() {
+    public void testHighlighting_whenLoopWithInfoLog() {
         myFixture.testHighlighting(
                 false,
                 false,
                 true,
-                "/inspection/loop_logging/InfoLoggingLoop.java");
+                "/inspection/loop_logging/LoopWithInfoLog.java");
     }
 
-    public void testHighlighting_whenDebugLoggingInLoop() {
+    public void testHighlighting_whenLoopWithDebugWarnLogs() {
         myFixture.testHighlighting(
                 false,
                 false,
                 false,
-                "/inspection/loop_logging/DebugWarnLoggingLoop.java");
+                "/inspection/loop_logging/LoopWithDebugWarnLogs.java");
     }
 
 }

@@ -2,9 +2,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DebugWarnLoggingLoop {
+public class LoopWithDebugWarnLogs {
 
-    private static final Logger log = LoggerFactory.getLogger(DebugWarnLoggingLoop.class);
+    private static final Logger log = LoggerFactory.getLogger(LoopWithDebugWarnLogs.class);
 
     public void existingDebugLogInFor() {
         int limit = 10;

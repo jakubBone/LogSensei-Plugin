@@ -1,4 +1,4 @@
-public class EmptyEarlyReturn {
+public class EarlyReturnNoLogs {
 
     public void emptyEarly(String var){
         if(var == null){
@@ -6,10 +6,11 @@ public class EmptyEarlyReturn {
         }
     }
 
-    public void emptyEarlyWithDefault(String var){
+    public String emptyEarlyWithDefault(String var){
         if(var == null){
-            return default; // no action
+            return "var is null"; // no action
         }
+        return var;
     }
 
     public void emptyEarlyWithNoBrackets(String var){

@@ -1,8 +1,8 @@
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NonEmptyCatch {
-    private static final Logger log = LoggerFactory.getLogger(NonEmptyCatch.class);
+public class CatchWithLogs {
+    private static final Logger log = LoggerFactory.getLogger(CatchWithLogs.class);
 
     public void withLog() {
         try {

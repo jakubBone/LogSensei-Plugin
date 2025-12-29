@@ -4,17 +4,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServiceCorrectLogs {
+public class ServiceWithLogs {
 
-    private static final Logger log = LoggerFactory.getLogger(ServiceMissingLogs.class);
+    private static final Logger log = LoggerFactory.getLogger(ServiceWithLogs.class);
 
-    public void public(){
+    public void publicMethod(){
         log.info("entry");
         String name = "test"; // no action
         log.info("exit");
     }
 
-    private void priv() {
+    private void privMethod() {
         String name = "test"; // no action
     }
 }

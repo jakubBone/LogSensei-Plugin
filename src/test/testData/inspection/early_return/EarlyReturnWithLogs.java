@@ -1,9 +1,9 @@
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NonEmptyEarlyReturn {
+public class EarlyReturnWithLogs {
 
-private static final Logger log = LoggerFactory.getLogger(NonEmptyEarlyReturn.class);
+private static final Logger log = LoggerFactory.getLogger(EarlyReturnWithLogs.class);
 
     public void withLog(String var) {
         if(var == null){

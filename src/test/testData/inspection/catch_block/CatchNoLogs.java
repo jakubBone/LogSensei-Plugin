@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class EmptyCatch {
+public class CatchNoLogs {
     public void emptyBlock() {
         try {
             riskyOperation();

@@ -27,19 +27,19 @@ public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCas
         super.tearDown();
     }
 
-    public void testHighlighting_whenCatchEmpty() {
+    public void testHighlighting_whenCatchNoLogs() {
         myFixture.testHighlighting(false,
                 false,
                 true,
-                "/inspection/catch_block/EmptyCatch.java");
+                "/inspection/catch_block/CatchNoLogs.java");
     }
 
-    public void testHighlighting_whenCatchNonEmpty() {
+    public void testHighlighting_whenCatchWithLogs() {
         myFixture.testHighlighting(
                 false,
                 false,
                 false,
-                "/inspection/catch_block/NonEmptyCatch.java");
+                "/inspection/catch_block/CatchWithLogs.java");
     }
 }
 
