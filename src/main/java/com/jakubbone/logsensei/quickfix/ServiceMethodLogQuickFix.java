@@ -48,14 +48,16 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor problemDescriptor) {
-
-        LoggingLibrary selectedLibrary = askUserForLibraryAndAnnotation(project);
-        if(selectedLibrary == null){
-            return;
+    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+        LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
+        if(lib != null){
+            addLog(project, descriptor, lib);
+            showInfoLevelEducation(project);
         }
+    }
 
-        PsiElement psiElement = problemDescriptor.getPsiElement();
+    private void addLog(Project project, ProblemDescriptor descriptor, LoggingLibrary lib) {
+        PsiElement psiElement = descriptor.getPsiElement();
         if(psiElement == null){
             return;
         }
@@ -70,7 +72,7 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
             return;
         }
 
-        implementLoggingSolution(project, containingClass, selectedLibrary);
+        implementLoggingSolution(project, containingClass, lib);
 
         if(needsEntryLog){
             addEntryLog(project, psiMethod);
@@ -79,8 +81,6 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
         if(needsExitLog){
             addExitLog(project, psiMethod);
         }
-
-        showInfoLevelEducation(project);
     }
 
     private void addEntryLog(Project project, PsiMethod method){
