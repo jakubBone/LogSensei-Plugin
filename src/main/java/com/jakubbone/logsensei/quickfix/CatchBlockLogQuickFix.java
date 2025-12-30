@@ -28,19 +28,16 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-
-        LoggingLibrary selectedLibrary = askUserForLibraryAndAnnotation(project);
-        if(selectedLibrary == null){
-            return;
+        LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
+        if(lib != null){
+            addLog(project, descriptor, lib);
+            showErrorLevelEducation(project);
         }
-
-        PsiElement catchKeyword = descriptor.getPsiElement();
-        addLog(project, catchKeyword, selectedLibrary);
-
-        showErrorLevelEducation(project);
     }
 
-    private void addLog(Project project, PsiElement catchKeyword, LoggingLibrary selectedLibrary){
+    private void addLog(Project project, ProblemDescriptor descriptor, LoggingLibrary selectedLibrary){
+        PsiElement catchKeyword = descriptor.getPsiElement();
+
         PsiCatchSection catchSection = PsiTreeUtil.getParentOfType(catchKeyword, PsiCatchSection.class);
         if(catchSection == null){
             return;
