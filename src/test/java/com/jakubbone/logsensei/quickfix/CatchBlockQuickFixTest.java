@@ -50,7 +50,7 @@ public class CatchBlockQuickFixTest extends LightJavaCodeInsightFixtureTestCase 
         assertTrue("Should add @Slf4j", text.contains("@lombok.extern.slf4j.Slf4j"));
     }
 
-    public void testQuickFix_shouldAddErrorLog_whenThrowException(){
+    public void testQuickFix_shouldAddErrorLog_BeforeExistingStatement(){
         PsiFile file = myFixture.configureByText("Test.java", """
                 public class Test {
                     public void test(){
