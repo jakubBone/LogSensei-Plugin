@@ -31,19 +31,45 @@ public class CatchBlockQuickFixTest extends LightJavaCodeInsightFixtureTestCase 
         super.tearDown();
     }
 
-    public void testQuickFix_shouldAddErrorLogToCatchBlock(){
+    public void testQuickFix_shouldAddErrorLog_whenCatchEmpty(){
         PsiFile file = myFixture.configureByText("Test.java", """
                 public class Test {
                     public void test(){
                         try {
                            risky();
-                        } catch (Exception x){
-                          // empty
+                        } catch (IOException e) {
+                           throw new RuntimeException(e);
                         }
                     }
                 }
                 """);
 
+        String text = getFileTextAfterQuickFix(file);
+
+        assertTrue("should contain error log", text.contains("log.error"));
+        assertTrue("Should add @Slf4j", text.contains("@lombok.extern.slf4j.Slf4j"));
+    }
+
+    public void testQuickFix_shouldAddErrorLog_whenThrowException(){
+        PsiFile file = myFixture.configureByText("Test.java", """
+                public class Test {
+                    public void test(){
+                        try {
+                           risky();
+                        } catch (IOException e) {
+                           throw new RuntimeException(e);
+                        }
+                    }
+                }
+                """);
+
+        String text = getFileTextAfterQuickFix(file);
+
+        assertTrue("should contain error log", text.contains("log.error"));
+        assertTrue("Should add @Slf4j", text.contains("@lombok.extern.slf4j.Slf4j"));
+    }
+
+    private String getFileTextAfterQuickFix(PsiFile file) {
         PsiElement catchKeyword = findCatch(file);
 
         assertNotNull(catchKeyword);
@@ -54,10 +80,7 @@ public class CatchBlockQuickFixTest extends LightJavaCodeInsightFixtureTestCase 
             quickFix.addLog(getProject(), catchKeyword, LoggingLibrary.SLF4J_LOGBACK);
         });
 
-        String result = file.getText();
-
-        assertTrue("should contain error log", result.contains("log.error"));
-        assertTrue("Should add @Slf4j", result.contains("@lombok.extern.slf4j.Slf4j"));
+        return file.getText();
     }
 
     private PsiElement findCatch(PsiFile file) {
