@@ -38,7 +38,7 @@ public class CatchBlockQuickFixTest extends LightJavaCodeInsightFixtureTestCase 
                         try {
                            risky();
                         } catch (IOException e) {
-                           throw new RuntimeException(e);
+                      
                         }
                     }
                 }
