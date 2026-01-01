@@ -31,7 +31,7 @@ public class EarlyReturnQuickFixTest extends LightJavaCodeInsightFixtureTestCase
         super.tearDown();
     }
 
-    public void testQuickFix_shouldAddDebugLog(){
+    public void testQuickFix_shouldAddDebugLog_whenEarlyReturn(){
         PsiFile file = myFixture.configureByText("Test.java", """
                 public class Test {
                     public void test(int numb){
@@ -46,7 +46,24 @@ public class EarlyReturnQuickFixTest extends LightJavaCodeInsightFixtureTestCase
 
         assertTrue("should contain error log", text.contains("log.debug"));
         assertTrue("", text.contains("@lombok.extern.slf4j.Slf4j"));
+    }
 
+    public void testQuickFix_shouldAddDebugLog_beforeExistingStatement(){
+        PsiFile file = myFixture.configureByText("Test.java", """
+                public class Test {
+                    public void test(int numb){
+                        if(numb == 0){
+                            numb++;
+                            return;
+                        }
+                    }
+                }
+                """);
+
+        String text = getFileTextAfterQuickFix(file);
+
+        assertTrue("should contain error log", text.contains("log.debug"));
+        assertTrue("", text.contains("@lombok.extern.slf4j.Slf4j"));
     }
 
     private String getFileTextAfterQuickFix(PsiFile file) {
