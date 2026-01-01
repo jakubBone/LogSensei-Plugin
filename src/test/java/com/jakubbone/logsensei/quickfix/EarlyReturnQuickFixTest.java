@@ -67,20 +67,20 @@ public class EarlyReturnQuickFixTest extends LightJavaCodeInsightFixtureTestCase
     }
 
     private String getFileTextAfterQuickFix(PsiFile file) {
-        PsiElement returnKeyword = findReturn(file);
+        PsiElement keyword = findReturnKeyword(file);
 
-        assertNotNull(returnKeyword);
+        assertNotNull(keyword);
 
         EarlyReturnLogQuickFix quickFix = new EarlyReturnLogQuickFix();
 
         WriteCommandAction.runWriteCommandAction(getProject(),() -> {
-            quickFix.addLog(getProject(), returnKeyword, LoggingLibrary.SLF4J_LOGBACK);
+            quickFix.addLog(getProject(), keyword, LoggingLibrary.SLF4J_LOGBACK);
         });
 
         return file.getText();
     }
 
-    private PsiElement findReturn(PsiFile file) {
+    private PsiElement findReturnKeyword(PsiFile file) {
         return PsiTreeUtil.findChildrenOfType(file, PsiKeyword.class)
                 .stream()
                 .filter(k -> "return".equals(k.getText()))

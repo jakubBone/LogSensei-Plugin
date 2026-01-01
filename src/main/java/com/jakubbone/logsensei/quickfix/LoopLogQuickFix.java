@@ -28,7 +28,6 @@ public class LoopLogQuickFix implements LocalQuickFix {
         this.problematicLogs = problematicLogs;
     }
 
-
     @Override
     public @IntentionFamilyName @NotNull String getFamilyName() {
         return "Change log level: INFO -> DEBUG";
@@ -38,19 +37,18 @@ public class LoopLogQuickFix implements LocalQuickFix {
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
         LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
         if(lib != null){
-            PsiElement psiElement = descriptor.getPsiElement();
-            addLog(project, descriptor, lib);
+            PsiElement loopKeyword = descriptor.getPsiElement();
+            addLog(project, loopKeyword, lib);
             showDebugLevelEducation(project);
         }
     }
 
-    private void addLog(Project project, ProblemDescriptor descriptor, LoggingLibrary lib) {
-        PsiElement psiElement = descriptor.getPsiElement();
-        if (psiElement == null) {
+    private void addLog(Project project, PsiElement loopKeyword, LoggingLibrary lib) {
+        if (loopKeyword == null) {
             return;
         }
 
-        PsiClass containingClass = PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(loopKeyword, PsiClass.class);
         if (containingClass == null) {
             return;
         }

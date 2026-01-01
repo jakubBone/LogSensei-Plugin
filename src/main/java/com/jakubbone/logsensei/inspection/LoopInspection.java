@@ -74,6 +74,7 @@ public class LoopInspection extends BaseLogInspection {
                 );
             }
         }
+
     }
 
     private List<PsiMethodCallExpression> findInfoLogsInLoop(PsiStatement statement){
