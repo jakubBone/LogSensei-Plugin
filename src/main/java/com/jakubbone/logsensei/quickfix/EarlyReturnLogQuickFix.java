@@ -35,13 +35,13 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
         LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
         if(lib != null){
-            addLog(project, descriptor, lib);
+            PsiElement returnKeyword = descriptor.getPsiElement();
+            addLog(project, returnKeyword, lib);
             showDebugLevelEducation(project);
         }
     }
 
-    private void addLog(Project project, ProblemDescriptor descriptor, LoggingLibrary lib){
-        PsiElement returnKeyword = descriptor.getPsiElement();
+    public void addLog(Project project, PsiElement returnKeyword, LoggingLibrary lib){
         PsiReturnStatement returnStmt = PsiTreeUtil.getParentOfType(returnKeyword, PsiReturnStatement.class);
         if (returnStmt == null) {
             return;
