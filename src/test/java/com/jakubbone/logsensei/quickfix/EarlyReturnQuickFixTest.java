@@ -45,7 +45,7 @@ public class EarlyReturnQuickFixTest extends LightJavaCodeInsightFixtureTestCase
         String text = getFileTextAfterQuickFix(file);
 
         assertTrue("should contain error log", text.contains("log.debug"));
-        assertTrue("", text.contains("@lombok.extern.slf4j.Slf4j"));
+        assertTrue("Should add @Slf4j", text.contains("@lombok.extern.slf4j.Slf4j"));
     }
 
     public void testQuickFix_shouldAddDebugLog_beforeExistingStatement(){
@@ -63,7 +63,7 @@ public class EarlyReturnQuickFixTest extends LightJavaCodeInsightFixtureTestCase
         String text = getFileTextAfterQuickFix(file);
 
         assertTrue("should contain error log", text.contains("log.debug"));
-        assertTrue("", text.contains("@lombok.extern.slf4j.Slf4j"));
+        assertTrue("Should add @Slf4j", text.contains("@lombok.extern.slf4j.Slf4j"));
     }
 
     private String getFileTextAfterQuickFix(PsiFile file) {

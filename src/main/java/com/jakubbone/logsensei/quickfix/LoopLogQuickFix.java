@@ -36,9 +36,9 @@ public class LoopLogQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-
         LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
         if(lib != null){
+            PsiElement psiElement = descriptor.getPsiElement();
             addLog(project, descriptor, lib);
             showDebugLevelEducation(project);
         }
