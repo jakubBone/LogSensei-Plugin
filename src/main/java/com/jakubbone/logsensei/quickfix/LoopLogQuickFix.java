@@ -43,7 +43,7 @@ public class LoopLogQuickFix implements LocalQuickFix {
         }
     }
 
-    private void addLog(Project project, PsiElement loopKeyword, LoggingLibrary lib) {
+    public void addLog(Project project, PsiElement loopKeyword, LoggingLibrary lib) {
         if (loopKeyword == null) {
             return;
         }
