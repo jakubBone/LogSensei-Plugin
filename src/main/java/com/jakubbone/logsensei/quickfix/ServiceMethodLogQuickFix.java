@@ -51,23 +51,23 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
         LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
         if(lib != null){
-            addLog(project, descriptor, lib);
+            PsiElement methodIdentifier = descriptor.getPsiElement();
+            addLog(project, methodIdentifier, lib);
             showInfoLevelEducation(project);
         }
     }
 
-    private void addLog(Project project, ProblemDescriptor descriptor, LoggingLibrary lib) {
-        PsiElement psiElement = descriptor.getPsiElement();
-        if(psiElement == null){
+    public void addLog(Project project, PsiElement methodIdentifier, LoggingLibrary lib) {
+        if (methodIdentifier == null) {
             return;
         }
 
-        PsiClass containingClass = PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(methodIdentifier, PsiClass.class);
         if(containingClass == null){
             return;
         }
 
-        PsiMethod psiMethod = PsiTreeUtil.getParentOfType(psiElement, PsiMethod.class);
+        PsiMethod psiMethod = PsiTreeUtil.getParentOfType(methodIdentifier, PsiMethod.class);
         if(psiMethod == null){
             return;
         }
