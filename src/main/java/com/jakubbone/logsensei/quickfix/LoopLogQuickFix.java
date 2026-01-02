@@ -63,35 +63,6 @@ public class LoopLogQuickFix implements LocalQuickFix {
         }
     }
 
-    /*@Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor problemDescriptor) {
-
-        LoggingLibrary selectedLibrary = askUserForLibraryAndAnnotation(project);
-        if(selectedLibrary == null){
-            return;
-        }
-
-        PsiElement psiElement = problemDescriptor.getPsiElement();
-        if (psiElement == null) {
-            return;
-        }
-
-        PsiClass containingClass = PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
-        if (containingClass == null) {
-            return;
-        }
-
-        implementLoggingSolution(project, containingClass, selectedLibrary);
-
-        for(PsiMethodCallExpression logCall: problematicLogs){
-            if(!logCall.isValid()){
-                continue;
-            }
-            changeLogLevelToDebug(project, logCall);
-        }
-        showDebugLevelEducation(project);
-    }*/
-
     private void changeLogLevelToDebug(@NotNull Project project, @NotNull PsiMethodCallExpression logCall) {
         PsiReferenceExpression logExpression = logCall.getMethodExpression();
         String currentText = logExpression.getText();
