@@ -73,7 +73,6 @@ public class LoopQuickFixTest extends LightJavaCodeInsightFixtureTestCase {
         List<PsiLoopStatement> loops = findAllLoops(file);
         assertFalse("should find loops", loops.isEmpty());
 
-
         List<PsiMethodCallExpression> calls = createInfoLogCalls(file);
         assertFalse("should find info calls", calls.isEmpty());
 

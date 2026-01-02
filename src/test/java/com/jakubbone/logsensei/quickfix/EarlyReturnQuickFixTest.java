@@ -68,8 +68,7 @@ public class EarlyReturnQuickFixTest extends LightJavaCodeInsightFixtureTestCase
 
     private String getFileTextAfterQuickFix(PsiFile file) {
         PsiElement keyword = findReturnKeyword(file);
-
-        assertNotNull(keyword);
+        assertNotNull("should find catch keyword", keyword);
 
         EarlyReturnLogQuickFix quickFix = new EarlyReturnLogQuickFix();
 
