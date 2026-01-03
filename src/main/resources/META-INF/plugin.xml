@@ -4,24 +4,39 @@
     <vendor email="jakub.bone@gmail.com" url="https://github.com/jakubBone">Jakub Bone</vendor>
 
     <description><![CDATA[
-    LogSensei helps Java developers learn good logging practices by suggesting where and what type of logs to add.
-    Features:
-    - Suggests adding error logs in empty catch blocks
-    - Warns about null checks without logging
-    - Recommends debug logs for public method entries
-    - Adds info logs for service methods
-    - Educational tooltips explaining log levels
+    <b>LogSensei</b> helps Java developers write better logging code by detecting missing logs and suggesting appropriate log levels.
+
+    <br/><br/>
+    <b>Features:</b>
+    <ul>
+        <li><b>Catch blocks</b> — detects empty catch blocks, suggests ERROR level logging</li>
+        <li><b>Loops</b> — warns about INFO logs in loops, suggests changing to DEBUG</li>
+        <li><b>Early returns</b> — detects guard clauses without logging, suggests DEBUG level</li>
+        <li><b>Service methods</b> — ensures @Service methods have entry/exit INFO logs</li>
+    </ul>
+
+    <br/>
+    <b>Smart automation:</b>
+    <ul>
+        <li>Automatically adds Lombok annotations (@Slf4j, @Log4j2)</li>
+        <li>Adds missing dependencies to Maven/Gradle</li>
+        <li>Educational tooltips explaining log levels</li>
+    </ul>
+
+    <br/>
+    <b>Supported logging frameworks:</b> SLF4J + Logback, Log4j2, java.util.logging
     ]]></description>
 
     <change-notes><![CDATA[
-    <h3>1.0.0</h3>
+    <b>0.4.0</b>
     <ul>
-        <li>Initial release</li>
-        <li>Basic logging suggestions for catch blocks</li>
-        <li>Null check warnings</li>
-        <li>Public method entry logging</li>
-        <li>Service method logging</li>
-        <li>Educational tooltips</li>
+        <li>4 inspections with quick fixes</li>
+        <li>Catch block inspection — missing ERROR logs</li>
+        <li>Loop inspection — INFO logs that should be DEBUG</li>
+        <li>Early return inspection — missing DEBUG logs</li>
+        <li>Service method inspection — missing entry/exit logs</li>
+        <li>Automatic Lombok annotation injection</li>
+        <li>Automatic dependency management (Maven/Gradle)</li>
     </ul>
     ]]></change-notes>
 
@@ -31,29 +46,33 @@
     <extensions defaultExtensionNs="com.intellij">
         <localInspection
                 language="JAVA"
-                displayName="LogSensei: catch block without error logging"
+                displayName="Catch block without error logging"
                 groupName="LogSensei"
+                shortName="LogSenseiCatchBlock"
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.CatchBlockInspection"/>
         <localInspection
                 language="JAVA"
-                displayName="LogSensei: high-frequency log in loop"
+                displayName="High-frequency log in loop"
                 groupName="LogSensei"
+                shortName="LogSenseiLoop"
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.LoopInspection"/>
         <localInspection
                 language="JAVA"
-                displayName="LogSensei: early return log"
+                displayName="Early return without logging"
                 groupName="LogSensei"
+                shortName="LogSenseiEarlyReturn"
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.EarlyReturnInspection"/>
         <localInspection
                 language="JAVA"
-                displayName="LogSensei: service method missing log"
+                displayName="Service method missing entry/exit logs"
                 groupName="LogSensei"
+                shortName="LogSenseiServiceMethod"
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.ServiceMethodInspection"/>
@@ -61,8 +80,4 @@
                 id="LogSensei"
                 displayType="BALLOON"/>
     </extensions>
-
-    <actions>
-        <!-- Actions here -->
-    </actions>
 </idea-plugin>
