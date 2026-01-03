@@ -1,0 +1,43 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    # Virtual machine operating system
+    runs-on: ubuntu-latest
+
+    steps:
+      # Fetch repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build plugin
+        run: ./gradlew buildPlugin
+
+      - name: Run tests
+        run: ./gradlew test
+
+      # Verify plugin (checks IntelliJ compatibility)
+      - name: Verify plugin
+        run: ./gradlew verifyPlugin
+
+      # Save built ZIP as downloadable artifact
+      - name: Upload plugin artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: logsensei-plugin
+          path: build/distributions/*.zip
