@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei;
+package com.jakubbone.logsensei.dependency;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
