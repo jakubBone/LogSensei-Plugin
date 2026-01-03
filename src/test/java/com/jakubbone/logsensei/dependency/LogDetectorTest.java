@@ -10,28 +10,39 @@ public class LogDetectorTest {
 
     @Test
     public void containsLogCall_shouldDetectSlf4jPatterns() {
-        assertTrue(LogDetector.containsLogCall("log.error(\"msg\", e);"));
-        assertTrue(LogDetector.containsLogCall("log.warn(\"msg\");"));
-        assertTrue(LogDetector.containsLogCall("log.info(\"msg\");"));
-        assertTrue(LogDetector.containsLogCall("log.debug(\"msg\");"));
+        assertTrue("Should detect log.error",
+                LogDetector.containsLogCall("log.error(\"msg\", e);"));
+        assertTrue("Should detect log.warn",
+                LogDetector.containsLogCall("log.warn(\"msg\");"));
+        assertTrue("Should detect log.info",
+                LogDetector.containsLogCall("log.info(\"msg\");"));
+        assertTrue("Should detect log.debug",
+                LogDetector.containsLogCall("log.debug(\"msg\");"));
     }
 
     @Test
     public void containsLogCall_shouldDetectLoggerVariant() {
-        assertTrue(LogDetector.containsLogCall("logger.info(\"msg\");"));
-        assertTrue(LogDetector.containsLogCall("logger.error(\"msg\");"));
+        assertTrue("Should detect logger.info",
+                LogDetector.containsLogCall("logger.info(\"msg\");"));
+        assertTrue("Should detect logger.error",
+                LogDetector.containsLogCall("logger.error(\"msg\");"));
     }
 
     @Test
     public void containsLogCall_shouldDetectSystemOut() {
-        assertTrue(LogDetector.containsLogCall("System.out.println(\"msg\");"));
-        assertTrue(LogDetector.containsLogCall("System.out.print(x);"));
+        assertTrue("Should detect System.out.println",
+                LogDetector.containsLogCall("System.out.println(\"msg\");"));
+        assertTrue("Should detect System.out.print",
+                LogDetector.containsLogCall("System.out.print(x);"));
     }
 
     @Test
     public void containsLogCall_shouldReturnFalse_whenNoLogPresent() {
-        assertFalse(LogDetector.containsLogCall("doSomething();"));
-        assertFalse(LogDetector.containsLogCall("String x = \"test\";"));
-        assertFalse(LogDetector.containsLogCall("return result;"));
+        assertFalse("Should not detect regular method call",
+                LogDetector.containsLogCall("doSomething();"));
+        assertFalse("Should not detect variable declaration",
+                LogDetector.containsLogCall("String x = \"test\";"));
+        assertFalse("Should not detect return statement",
+                LogDetector.containsLogCall("return result;"));
     }
 }

@@ -11,32 +11,47 @@ import org.junit.Test;
 public class BuildSystemTest {
     @Test
     public void isMaven_shouldReturnTrueOnlyForMaven() {
-        assertTrue(BuildSystem.MAVEN.isMaven());
-        assertFalse(BuildSystem.GRADLE_GROOVY.isMaven());
-        assertFalse(BuildSystem.GRADLE_KOTLIN.isMaven());
-        assertFalse(BuildSystem.UNKNOWN.isMaven());
+        assertTrue("MAVEN should be Maven",
+                BuildSystem.MAVEN.isMaven());
+        assertFalse("GRADLE_GROOVY should not be Maven",
+                BuildSystem.GRADLE_GROOVY.isMaven());
+        assertFalse("GRADLE_KOTLIN should not be Maven",
+                BuildSystem.GRADLE_KOTLIN.isMaven());
+        assertFalse("UNKNOWN should not be Maven",
+                BuildSystem.UNKNOWN.isMaven());
     }
 
     @Test
     public void isGradle_shouldReturnTrueForBothVariants() {
-        assertTrue(BuildSystem.GRADLE_GROOVY.isGradle());
-        assertTrue(BuildSystem.GRADLE_KOTLIN.isGradle());
-        assertFalse(BuildSystem.MAVEN.isGradle());
-        assertFalse(BuildSystem.UNKNOWN.isGradle());
+        assertTrue("GRADLE_GROOVY should be Gradle",
+                BuildSystem.GRADLE_GROOVY.isGradle());
+        assertTrue("GRADLE_KOTLIN should be Gradle",
+                BuildSystem.GRADLE_KOTLIN.isGradle());
+        assertFalse("MAVEN should not be Gradle",
+                BuildSystem.MAVEN.isGradle());
+        assertFalse("UNKNOWN should not be Gradle",
+                BuildSystem.UNKNOWN.isGradle());
     }
 
     @Test
     public void getBuildFile_shouldReturnCorrectFilenames() {
-        assertEquals("pom.xml", BuildSystem.MAVEN.getBuildFile());
-        assertEquals("build.gradle", BuildSystem.GRADLE_GROOVY.getBuildFile());
-        assertEquals("build.gradle.kts", BuildSystem.GRADLE_KOTLIN.getBuildFile());
-        assertNull(BuildSystem.UNKNOWN.getBuildFile());
+        assertEquals("MAVEN should use pom.xml",
+                "pom.xml", BuildSystem.MAVEN.getBuildFile());
+        assertEquals("GRADLE_GROOVY should use build.gradle",
+                "build.gradle", BuildSystem.GRADLE_GROOVY.getBuildFile());
+        assertEquals("GRADLE_KOTLIN should use build.gradle.kts",
+                "build.gradle.kts", BuildSystem.GRADLE_KOTLIN.getBuildFile());
+        assertNull("UNKNOWN should have null build file",
+                BuildSystem.UNKNOWN.getBuildFile());
     }
 
     @Test
     public void getToolName_shouldReturnHumanReadableNames() {
-        assertEquals("Maven", BuildSystem.MAVEN.getToolName());
-        assertEquals("Gradle (Groovy)", BuildSystem.GRADLE_GROOVY.getToolName());
-        assertEquals("Gradle (Kotlin)", BuildSystem.GRADLE_KOTLIN.getToolName());
+        assertEquals("MAVEN toolName should be 'Maven'",
+                "Maven", BuildSystem.MAVEN.getToolName());
+        assertEquals("GRADLE_GROOVY toolName should be 'Gradle (Groovy)'",
+                "Gradle (Groovy)", BuildSystem.GRADLE_GROOVY.getToolName());
+        assertEquals("GRADLE_KOTLIN toolName should be 'Gradle (Kotlin)'",
+                "Gradle (Kotlin)", BuildSystem.GRADLE_KOTLIN.getToolName());
     }
 }
