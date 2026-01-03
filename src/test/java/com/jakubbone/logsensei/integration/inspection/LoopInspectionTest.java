@@ -43,5 +43,4 @@ public class LoopInspectionTest extends LightJavaCodeInsightFixtureTestCase {
                 false,
                 "/inspection/loop_logging/LoopWithDebugWarnLogs.java");
     }
-
 }
