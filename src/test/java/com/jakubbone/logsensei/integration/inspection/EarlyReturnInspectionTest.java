@@ -2,6 +2,7 @@ package com.jakubbone.logsensei.integration.inspection;
 
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
+import com.jakubbone.logsensei.inspection.EarlyReturnInspection;
 import org.jetbrains.annotations.NotNull;
 
 public class EarlyReturnInspectionTest extends LightJavaCodeInsightFixtureTestCase {

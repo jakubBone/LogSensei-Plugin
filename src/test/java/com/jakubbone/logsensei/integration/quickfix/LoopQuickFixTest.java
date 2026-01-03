@@ -13,6 +13,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
+import com.jakubbone.logsensei.quickfix.LoopLogQuickFix;
 
 public class LoopQuickFixTest extends LightJavaCodeInsightFixtureTestCase {
     @Override

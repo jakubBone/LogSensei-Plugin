@@ -3,6 +3,7 @@ package com.jakubbone.logsensei.integration.inspection;
 import com.intellij.testFramework.LightProjectDescriptor;
 
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
+import com.jakubbone.logsensei.inspection.ServiceMethodInspection;
 import org.jetbrains.annotations.NonNls;
 
 public class ServiceMethodInspectionTest extends LightJavaCodeInsightFixtureTestCase {
