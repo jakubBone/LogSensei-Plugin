@@ -31,24 +31,41 @@ public class ServiceMethodQuickFixTest extends LightJavaCodeInsightFixtureTestCa
         super.tearDown();
     }
 
+    public void testQuickFix_shouldAddLogBeforeStatement(){
+        assertServiceMethod("""
+                    doWork();
+                    log.info("exit");  
+            """);
+    }
+    public void testQuickFix_shouldAddLogAfterStatement(){
+        assertServiceMethod("""
+                    log.info("enter"); 
+                    doWork(); 
+            """);
 
-    public void testQuickFix_should(){
+    }
+
+    public void testQuickFix_shouldLogsBeforeAndAfterStatement(){
+        assertServiceMethod("""
+                    doWork(); 
+            """);
+    }
+
+    private void assertServiceMethod(String body){
         PsiFile file = myFixture.configureByText("TestService.java", """
             import org.springframework.stereotype.Service;
             @Service
             public class TestService {
                 public void process() {
-                    doWork();
-                    log.info("exit");
+                     %s
                 }
                 private void doWork() {}
             }
-            """);
+            """.formatted(body));
 
-            PsiElement methodId = findMethodIdentifier(file, "process");
+        PsiElement methodId = findMethodIdentifier(file, "process");
 
-            ServiceMethodLogQuickFix quickFix = new ServiceMethodLogQuickFix(false, false);
-
+        ServiceMethodLogQuickFix quickFix = new ServiceMethodLogQuickFix(false, false);
 
         WriteCommandAction.runWriteCommandAction(getProject(), () -> {
             quickFix.addLog(getProject(), methodId, LoggingLibrary.SLF4J_LOGBACK);
@@ -68,6 +85,4 @@ public class ServiceMethodQuickFixTest extends LightJavaCodeInsightFixtureTestCa
 
         return method != null ? method.getNameIdentifier() : null;
     }
-
-
 }

@@ -103,6 +103,12 @@ public class LoopQuickFixTest extends LightJavaCodeInsightFixtureTestCase {
     }
 
     private PsiElement findLoopKeyword(PsiLoopStatement loop) {
-        return PsiTreeUtil.findChildOfType(loop, PsiKeyword.class);
+        return PsiTreeUtil.findChildrenOfType(loop, PsiKeyword.class).stream()
+                .filter(k -> {
+                    String t = k.getText();
+                    return "for".equals(t) || "while".equals(t) || "do".equals(t);
+                })
+                .findFirst()
+                .orElse(null);
     }
 }
