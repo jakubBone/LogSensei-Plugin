@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei.quickfix;
+package com.jakubbone.logsensei.integration.quickfix;
 
 import java.util.List;
 import java.util.stream.Collectors;

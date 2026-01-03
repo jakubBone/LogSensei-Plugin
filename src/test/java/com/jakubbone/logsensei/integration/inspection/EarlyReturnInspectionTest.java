@@ -1,10 +1,10 @@
-package com.jakubbone.logsensei.inspection;
+package com.jakubbone.logsensei.integration.inspection;
 
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
 
-public class LoopInspectionTest extends LightJavaCodeInsightFixtureTestCase {
+public class EarlyReturnInspectionTest extends LightJavaCodeInsightFixtureTestCase {
     @Override
     protected @NotNull LightProjectDescriptor getProjectDescriptor() {
         return JAVA_17;
@@ -18,7 +18,7 @@ public class LoopInspectionTest extends LightJavaCodeInsightFixtureTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        myFixture.enableInspections(LoopInspection.class);
+        myFixture.enableInspections(EarlyReturnInspection.class);
         myFixture.copyDirectoryToProject("/stubs", "");
     }
 
@@ -27,20 +27,18 @@ public class LoopInspectionTest extends LightJavaCodeInsightFixtureTestCase {
         super.tearDown();
     }
 
-    public void testHighlighting_whenLoopWithInfoLog() {
+    public void testHighlighting_whenEarlyReturnNoLogs() {
         myFixture.testHighlighting(
                 false,
                 false,
                 true,
-                "/inspection/loop_logging/LoopWithInfoLog.java");
+                "/inspection/early_return/EarlyReturnNoLogs.java");
     }
 
-    public void testHighlighting_whenLoopWithDebugWarnLogs() {
-        myFixture.testHighlighting(
+    public void testHighlighting_whenEarlyReturnWithLogs() {
+        myFixture.testHighlighting(false,
                 false,
                 false,
-                false,
-                "/inspection/loop_logging/LoopWithDebugWarnLogs.java");
+                "/inspection/early_return/EarlyReturnWithLogs.java");
     }
-
 }

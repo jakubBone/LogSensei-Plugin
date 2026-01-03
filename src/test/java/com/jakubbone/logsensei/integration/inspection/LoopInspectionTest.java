@@ -1,12 +1,12 @@
-package com.jakubbone.logsensei.inspection;
+package com.jakubbone.logsensei.integration.inspection;
 
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
+import org.jetbrains.annotations.NotNull;
 
-public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCase {
-
+public class LoopInspectionTest extends LightJavaCodeInsightFixtureTestCase {
     @Override
-    protected LightProjectDescriptor getProjectDescriptor() {
+    protected @NotNull LightProjectDescriptor getProjectDescriptor() {
         return JAVA_17;
     }
 
@@ -18,7 +18,7 @@ public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCas
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        myFixture.enableInspections(CatchBlockInspection.class);
+        myFixture.enableInspections(LoopInspection.class);
         myFixture.copyDirectoryToProject("/stubs", "");
     }
 
@@ -27,19 +27,20 @@ public class CatchBlockInspectionTest extends LightJavaCodeInsightFixtureTestCas
         super.tearDown();
     }
 
-    public void testHighlighting_whenCatchNoLogs() {
-        myFixture.testHighlighting(false,
+    public void testHighlighting_whenLoopWithInfoLog() {
+        myFixture.testHighlighting(
+                false,
                 false,
                 true,
-                "/inspection/catch_block/CatchNoLogs.java");
+                "/inspection/loop_logging/LoopWithInfoLog.java");
     }
 
-    public void testHighlighting_whenCatchWithLogs() {
+    public void testHighlighting_whenLoopWithDebugWarnLogs() {
         myFixture.testHighlighting(
                 false,
                 false,
                 false,
-                "/inspection/catch_block/CatchWithLogs.java");
+                "/inspection/loop_logging/LoopWithDebugWarnLogs.java");
     }
-}
 
+}

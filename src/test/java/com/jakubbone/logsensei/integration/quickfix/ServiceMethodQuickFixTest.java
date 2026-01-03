@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei.quickfix;
+package com.jakubbone.logsensei.integration.quickfix;
 
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.PsiElement;

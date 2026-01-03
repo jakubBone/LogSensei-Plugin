@@ -1,4 +1,4 @@
-package com.jakubbone.logsensei.inspection;
+package com.jakubbone.logsensei.integration.inspection;
 
 import com.intellij.testFramework.LightProjectDescriptor;
 
