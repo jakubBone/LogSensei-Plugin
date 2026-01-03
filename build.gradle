@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.jakubbone'
-version = '0.4.0-SNAPSHOT'
+version = '0.5.0'
 
 repositories {
     mavenCentral()
@@ -46,7 +46,7 @@ intellijPlatform {
     pluginConfiguration {
         ideaVersion {
             sinceBuild = '243'
-            untilBuild = '244.*'
+            untilBuild = '251.*'
         }
     }
 
