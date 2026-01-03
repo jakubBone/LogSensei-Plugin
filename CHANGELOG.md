@@ -5,10 +5,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
 
-## [Unreleased]
+## [0.5.0] - 2025-01-03
 ### Added
-- Basic project structure
-- Migration `build.gradle.kts` → `build.gradle`
+- **CI/CD pipeline**
+  - GitHub Actions workflow for build and test
+  - Release workflow for automatic Marketplace publishing
+  - Branch protection rules (master)
+
+- **Integration tests**
+  - `CatchBlockInspectionTest`
+  - `EarlyReturnInspectionTest`
+  - `LoopInspectionTest`
+  - `ServiceMethodInspectionTest`
+
+- **QuickFix tests**
+  - `CatchBlockQuickFixTest`
+  - `EarlyReturnQuickFixTest`
+  - `LoopQuickFixTest`
+  - `ServiceMethodQuickFixTest`
+
+- **Marketplace publishing**
+  - Automatic publishing on version tags (v*)
+  - Updated `plugin.xml` with full description
+
+### Changed
+- Reorganized test structure: `unit/` and `integration/` packages
+- Updated `build.gradle` with publishing configuration
+
 
 ## [0.4.0] - 2025-12-05
 ### Removed
