@@ -1,7 +1,6 @@
 <idea-plugin>
     <id>com.jakubbone.logsensei</id>
     <name>LogSensei</name>
-    <icon>pluginIcon.svg</icon>
     <vendor email="jakub.bone1990@gmail.com" url="https://github.com/jakubBone">Jakub Bone</vendor>
 
     <description><![CDATA[
