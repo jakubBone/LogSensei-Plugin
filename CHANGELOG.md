@@ -67,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 **New feature:** Statement operations 
 
 - **PsiStatementUtils**: Adds a log statement before the target statement
-- **LogDetector**: Detect specigic log calls 
+- **LogDetector**: Detect specific log calls 
 
 
 ## [0.3.0] - 2025-11-09
@@ -127,5 +127,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 **Main feature:** Detect catch blocks with missing logs and suggest `ERROR` level log
 
 - Basic project structure and build configuration
-- **Inspection 1**: catch block mith missing log 
+- **Inspection 1**: catch block with missing log 
 - **QuickFix 1**: add `log.error(...)` and `@Log4j2` annotation 
