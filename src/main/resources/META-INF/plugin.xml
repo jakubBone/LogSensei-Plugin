@@ -25,6 +25,16 @@
 
     <br/>
     <b>Supported logging frameworks:</b> SLF4J + Logback, Log4j2, java.util.logging
+
+    <br/><br/>
+    <b>Usage:</b> Press <b>Alt+Enter</b> on highlighted code and select the suggested fix.
+
+    <br/><br/>
+    <b>Requirements:</b> IntelliJ IDEA 2024.3+, Java 17+, Lombok plugin (recommended)
+
+    <br/><br/>
+    <a href="https://github.com/jakubBone/LogSensei-Plugin">GitHub</a> |
+    <a href="https://github.com/jakubBone/LogSensei-Plugin/issues">Report Issue</a>
     ]]></description>
 
     <change-notes><![CDATA[
@@ -32,7 +42,6 @@
     <ul>
         <li>CI/CD pipeline with GitHub Actions</li>
         <li>Integration tests for all inspections</li>
-        <li>QuickFix tests</li>
         <li>Automatic Marketplace publishing</li>
         <li>4 inspections with quick fixes</li>
         <li>Automatic Lombok annotation injection</li>

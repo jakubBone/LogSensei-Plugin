@@ -1,82 +1,161 @@
 # ![](src/main/resources/META-INF/pluginIcon.svg) LogSensei - IntelliJ IDEA Plugin (Work in Progress)
 
 
-**LogSensei** is an IntelliJ IDEA plugin that detects missing or insufficient logging in Java code and provides context-aware Quick Fixes.  
-I am developing this project to strengthen my skills in **IntelliJ Platform SDK**, **PSI/AST analysis**, and **JVM developer tooling**.
+**LogSensei** is an IntelliJ IDEA plugin that detects missing or insufficient logging in Java code and provides context-aware Quick Fixes.
 
 
-## 🔍 What the plugin does
+## 📋 Requirements
 
-### ✔️ PSI-based inspections
-The plugin analyzes Java code and detects missing logs in:
-
-- empty or poorly handled `catch` blocks  
-- excessive `info` logs inside loops  
-- early-returns missing log statements  
-- missing log entry/exit points in public methods inside `@Service` classes  
+- **IntelliJ IDEA** 2024.3 or newer (Community or Ultimate)
+- **Java** 17+
+- **Project type**: Maven or Gradle (for automatic dependency management)
+- **Lombok plugin** (recommended) — for `@Slf4j` / `@Log4j2` support. Without it, code compiles but IDE shows false errors
 
 
-### ✔️ Quick Fixes (Alt+Enter)
-Each inspection provides ready-to-insert logging snippets, such as:
+## 📥 Installation
 
-- `log.error(...)`  
-- `log.info(...)`  
-- `log.debug(...)`  
+### From JetBrains Marketplace (recommended)
+1. Open IntelliJ IDEA
+2. Go to **Settings** → **Plugins** → **Marketplace**
+3. Search for **"LogSensei"**
+4. Click **Install** → **Restart IDE**
 
-Snippets are inserted using safe PSI transformations (`PsiElementFactory`, `JavaCodeStyleManager`).
+### Manual installation
+1. Download latest `.zip` from [Releases](https://github.com/jakubBone/LogSensei-Plugin/releases)
+2. Go to **Settings** → **Plugins** → ⚙️ → **Install Plugin from Disk...**
+3. Select downloaded `.zip` file → **Restart IDE**
 
-### ✔️ Automatic logger injection
-Depending on the selected logging library, the plugin can:
 
-- add Lombok annotations (`@Log4j2`, `@Slf4j`)  
-- or generate a `java.util.logging.Logger log` field  
+## 🎯 Usage
 
-Imports will be automatically shortened and cleaned up.
+### Automatic inspections
+LogSensei automatically analyzes your code and highlights issues:
 
-### ✔️ Automatic dependency management
-If required dependencies are missing, LogSensei can update:
+| Issue | Highlight | Suggested fix |
+|-------|-----------|---------------|
+| Empty catch block | ⚠️ Warning | Add `log.error(...)` |
+| INFO log in loop | ⚠️ Warning | Change to `log.debug(...)` |
+| Early return without log | ⚠️ Warning | Add `log.debug(...)` |
+| @Service method without entry/exit logs | ⚠️ Warning | Add `log.info(...)` |
 
-- `pom.xml`  
-- `build.gradle`  
-- `build.gradle.kts`  
+### Quick Fix (Alt+Enter)
+1. Place cursor on highlighted code
+2. Press **Alt+Enter** (or click 💡)
+3. Select suggested fix
+4. Choose logging library (first time only)
 
-Supported libraries:
-
-- **Log4j2**  
-- **SLF4J + Logback**  
-- **Lombok**  
+### Supported logging libraries
+When applying a fix, you can choose:
+- **SLF4J + Logback** (recommended)
+- **Log4j2**
 - **java.util.logging**
 
+LogSensei will automatically:
+- Add Lombok annotation (`@Slf4j` or `@Log4j2`) if available
+- Add missing dependencies to `pom.xml` or `build.gradle`
 
 
-## 🛠️ Technologies & Skills Demonstrated
+## 🔍 Inspections
 
-- **IntelliJ Platform SDK**
-  - PSI traversal and analysis  
-  - `LocalInspectionTool` implementations  
-  - `LocalQuickFix` actions   
-- **Java**  
-- **Maven & Gradle integration**  
-- **Lombok annotation processing**  
-- Clean architecture with modular Quick Fixes and centralized dependency logic  
+### 1. Catch block without logging
+```java
+// ⚠️ Warning: Catch block missing ERROR log
+try {
+    riskyOperation();
+} catch (Exception e) {
+    // empty or no log
+}
+
+// ✅ After fix:
+try {
+    riskyOperation();
+} catch (Exception e) {
+    log.error("[methodName] An exception occurred.", e);
+}
+```
+
+### 2. High-frequency log in loop
+```java
+// ⚠️ Warning: INFO log in loop (performance issue)
+for (Item item : items) {
+    log.info("Processing: {}", item);
+}
+
+// ✅ After fix:
+for (Item item : items) {
+    log.debug("Processing: {}", item);
+}
+```
+
+### 3. Early return without logging
+```java
+// ⚠️ Warning: Early return without DEBUG log
+public void process(String input) {
+    if (input == null) return;
+    // ...
+}
+
+// ✅ After fix:
+public void process(String input) {
+    if (input == null) {
+        log.debug("[ClassName] Early return");
+        return;
+    }
+    // ...
+}
+```
+
+### 4. Service method without entry/exit logs
+```java
+@Service
+public class UserService {
+    // ⚠️ Warning: Missing entry/exit logs
+    public User findUser(Long id) {
+        return repository.findById(id);
+    }
+    
+    // ✅ After fix:
+    public User findUser(Long id) {
+        log.info("[findUser] Operation started");
+        User result = repository.findById(id);
+        log.info("[findUser] Operation finished");
+        return result;
+    }
+}
+```
 
 
+## ⚙️ Configuration
 
-## 🎯 Purpose of the project
+Inspections can be enabled/disabled individually:
 
-This project is a practical way to develop skills in:
+**Settings** → **Editor** → **Inspections** → **LogSensei**
 
-- JVM tooling  
-- IDE plugin development  
-- static code analysis  
-- building tools that improve developer productivity  
-
-LogSensei is intentionally evolving, so I can explore deeper parts of IntelliJ SDK and advanced PSI operations.
-
+- ☑️ Catch block without error logging
+- ☑️ High-frequency log in loop
+- ☑️ Early return without logging
+- ☑️ Service method missing entry/exit logs
 
 
-## 📌 Status
+## 🛠️ Technologies
 
-The plugin is **actively developed**.  
-Core features work, and new inspections, fix strategies, and refactorings are added continuously.
+- **IntelliJ Platform SDK** — PSI traversal and analysis
+- **Java 17**
+- **Gradle** with IntelliJ Platform Plugin 2.9.0
+
+
+## 📝 License
+
+[MIT License](LICENSE)
+
+
+## 🤝 Contributing
+
+Issues and Pull Requests are welcome!
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
 
