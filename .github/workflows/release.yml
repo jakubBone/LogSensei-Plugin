@@ -11,6 +11,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
+  permissions:
+    contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -43,34 +46,14 @@ jobs:
         with:
           files: build/distributions/*.zip
           body: |
-            ## What's New in 0.5.0
-            
-            ### Added
-            - **CI/CD pipeline**
-              - GitHub Actions workflow for build and test
-              - Release workflow for automatic Marketplace publishing
-              - Branch protection rules (master)
-            - **Integration tests**
-              - `CatchBlockInspectionTest`
-              - `EarlyReturnInspectionTest`
-              - `LoopInspectionTest`
-              - `ServiceMethodInspectionTest`
-            - **QuickFix tests**
-              - `CatchBlockQuickFixTest`
-              - `EarlyReturnQuickFixTest`
-              - `LoopQuickFixTest`
-              - `ServiceMethodQuickFixTest`
-            - **Marketplace publishing**
-              - Automatic publishing on version tags (v*)
-              - Updated `plugin.xml` with full description
-            
-            ### Changed
-            - Reorganized test structure: `unit/` and `integration/` packages
-            - Updated `build.gradle` with publishing configuration
-            
+            ## LogSensei ${{ github.ref_name }}
+
+            ### What’s new
+            - Updated Marketplace release notes and plugin description
+            - No functional changes
+
             ---
-            
             ### Installation
             **From Marketplace:** Settings → Plugins → Marketplace → search "LogSensei"
-            
+
             **Manual:** Download ZIP below → Settings → Plugins → ⚙️ → Install from Disk
