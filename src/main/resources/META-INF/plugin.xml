@@ -38,6 +38,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <b>0.5.2</b>
+    <ul>
+        <li>Release workflow fixes (publishing pipeline)</li>
+        <li>Updated Marketplace release notes and plugin description</li>
+        <li>No functional changes</li>
+    </ul>
+
     <b>0.5.1</b>
     <ul>
         <li>Improved Marketplace release notes and plugin description</li>

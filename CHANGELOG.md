@@ -4,13 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),  
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [0.5.1] - 2025-01-07
+## [0.5.2] - 2026-01-07
+### Changed
+- Fixed release workflow (GitHub Actions)
+- Updated Marketplace release notes and plugin description
+- No functional changes
+
+
+## [0.5.1] - 2026-01-07
 ### Changed
 - Updated Marketplace release notes and plugin description
 - No functional changes
 
 
-## [0.5.0] - 2025-01-03
+## [0.5.0] - 2026-01-03
 ### Added
 - **CI/CD pipeline**
   - GitHub Actions workflow for build and test
