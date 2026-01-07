@@ -38,14 +38,17 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <b>0.5.1</b>
+    <ul>
+        <li>Improved Marketplace release notes and plugin description</li>
+        <li>No functional changes</li>
+    </ul>
+
     <b>0.5.0</b>
     <ul>
-        <li>CI/CD pipeline with GitHub Actions</li>
-        <li>Integration tests for all inspections</li>
-        <li>Automatic Marketplace publishing</li>
         <li>4 inspections with quick fixes</li>
         <li>Automatic Lombok annotation injection</li>
-        <li>Automatic dependency management (Maven/Gradle)</li>
+        <li>Automatic Maven/Gradle dependency management</li>
     </ul>
     ]]></change-notes>
 
