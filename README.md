@@ -1,4 +1,4 @@
-# ![](src/main/resources/META-INF/pluginIcon.svg) LogSensei - IntelliJ IDEA Plugin (Work in Progress)
+# ![](src/main/resources/META-INF/pluginIcon.svg) LogSensei - IntelliJ IDEA Plugin
 
 
 **LogSensei** is an IntelliJ IDEA plugin that detects missing or insufficient logging in Java code and provides context-aware Quick Fixes.
