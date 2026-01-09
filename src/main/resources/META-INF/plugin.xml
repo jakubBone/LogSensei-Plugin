@@ -42,6 +42,7 @@
     <ul>
         <li>Compatibility: IntelliJ IDEA 2024.3+ (removed upper build limit)</li>
         <li>Updated supported IDE versions (works with 2025.3+)</li>
+        <li>No functional changes</li>
     </ul>
 
     <b>0.5.2</b>
