@@ -2,7 +2,7 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij.platform' version '2.9.0'
+    id 'org.jetbrains.intellij.platform' version '2.10.5'
 }
 
 group = 'com.jakubbone'
@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        intellijIdeaCommunity('2024.3')
+        intellijIdea('2024.3')
         bundledPlugin('com.intellij.java')
 
         instrumentationTools()
