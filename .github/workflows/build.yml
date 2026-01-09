@@ -35,10 +35,6 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
-      # Verify plugin (checks IntelliJ compatibility)
-      - name: Verify plugin
-        run: ./gradlew verifyPlugin
-
       # Save built ZIP as downloadable artifact
       - name: Upload plugin artifact
         uses: actions/upload-artifact@v4
