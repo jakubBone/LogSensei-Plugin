@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),  
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.5.3] - 2026-01-09
+### Changed
+- Compatibility: IntelliJ IDEA 2024.3+ (removed upper build limit)
+- Updated supported IDE versions (works with 2025.3+)
+
+
 ## [0.5.2] - 2026-01-07
 ### Changed
 - Fixed release workflow (GitHub Actions)

@@ -49,8 +49,8 @@ jobs:
             ## LogSensei ${{ github.ref_name }}
 
             ### What’s new
-            - Updated Marketplace release notes and plugin description
-            - No functional changes
+            - Compatibility: IntelliJ IDEA 2024.3+ (removed upper build limit)
+            - Updated supported IDE versions (works with 2025.3+)
 
             ---
             ### Installation
