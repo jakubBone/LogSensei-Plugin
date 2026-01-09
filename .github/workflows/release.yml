@@ -33,9 +33,6 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
-      - name: Build plugin
-        run: ./gradlew buildPlugin
-
       - name: Publish to Marketplace
         env:
           PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
