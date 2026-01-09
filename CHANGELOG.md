@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Compatibility: IntelliJ IDEA 2024.3+ (removed upper build limit)
 - Updated supported IDE versions (works with 2025.3+)
 
+### Internal:
+- CI workflow adjustments (moved verify out / reduced disk usage)
+- Gradle/IntelliJ Platform build configuration updates
+
 
 ## [0.5.2] - 2026-01-07
 ### Changed
