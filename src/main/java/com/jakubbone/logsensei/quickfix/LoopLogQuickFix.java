@@ -8,6 +8,7 @@ import java.util.List;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.util.IntentionFamilyName;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -34,11 +35,18 @@ public class LoopLogQuickFix implements LocalQuickFix {
     }
 
     @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
+
+    @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
         LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
         if(lib != null){
-            PsiElement loopKeyword = descriptor.getPsiElement();
-            addLog(project, loopKeyword, lib);
+            WriteCommandAction.runWriteCommandAction(project, () -> {
+                PsiElement loopKeyword = descriptor.getPsiElement();
+                addLog(project, loopKeyword, lib);
+            });
             showDebugLevelEducation(project);
         }
     }

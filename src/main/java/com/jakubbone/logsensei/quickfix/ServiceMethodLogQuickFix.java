@@ -11,6 +11,7 @@ import java.util.Collection;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.util.IntentionFamilyName;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiCodeBlock;
@@ -48,11 +49,18 @@ public class ServiceMethodLogQuickFix implements LocalQuickFix {
     }
 
     @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
+
+    @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
         LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
         if(lib != null){
-            PsiElement methodIdentifier = descriptor.getPsiElement();
-            addLog(project, methodIdentifier, lib);
+            WriteCommandAction.runWriteCommandAction(project, () -> {
+                PsiElement methodIdentifier = descriptor.getPsiElement();
+                addLog(project, methodIdentifier, lib);
+            });
             showInfoLevelEducation(project);
         }
     }

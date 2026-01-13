@@ -10,6 +10,7 @@ import static com.jakubbone.logsensei.dependency.ui.DependencyDialogService.askU
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.util.IntentionFamilyName;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiCatchSection;
 import com.intellij.psi.PsiClass;
@@ -32,11 +33,18 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
     }
 
     @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
+
+    @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
         LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
         if(lib != null){
-            PsiElement returnKeyword = descriptor.getPsiElement();
-            addLog(project, returnKeyword, lib);
+            WriteCommandAction.runWriteCommandAction(project, () -> {
+                PsiElement returnKeyword = descriptor.getPsiElement();
+                addLog(project, returnKeyword, lib);
+            });
             showDebugLevelEducation(project);
         }
     }

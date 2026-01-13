@@ -8,6 +8,7 @@ import static com.jakubbone.logsensei.dependency.ui.DependencyDialogService.askU
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.util.IntentionFamilyName;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -27,11 +28,20 @@ public class CatchBlockLogQuickFix implements LocalQuickFix {
     }
 
     @Override
+    public boolean startInWriteAction() {
+        return false; //Manage write action manually to allow user dialogs
+    }
+
+    @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+        // Ask user BEFORE write action (dialogs cannot be shown during write action)
         LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
         if(lib != null){
-            PsiElement catchKeyword = descriptor.getPsiElement();
-            addLog(project, catchKeyword, lib);
+            // Now run the code modifications in a write action
+            WriteCommandAction.runWriteCommandAction(project, () -> {
+                PsiElement catchKeyword = descriptor.getPsiElement();
+                addLog(project, catchKeyword, lib);
+            });
             showErrorLevelEducation(project);
         }
     }
