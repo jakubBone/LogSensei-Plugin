@@ -67,7 +67,7 @@ public class LoopQuickFixTest extends LightJavaCodeInsightFixtureTestCase {
         String text = getFileTextAfterQuickFix(file);
 
         assertTrue("should contain debug log", text.contains("log.debug"));
-        assertTrue("Should add @Slf4j", text.contains("@lombok.extern.slf4j.Slf4j"));
+        assertTrue("Should add @Slf4j", text.contains("@Slf4j"));
     }
 
     private String getFileTextAfterQuickFix(PsiFile file) {

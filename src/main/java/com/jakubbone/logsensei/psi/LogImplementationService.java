@@ -51,7 +51,7 @@ public class LogImplementationService {
         modifierList.addBefore(annotation, modifierList.getFirstChild());
 
         JavaCodeStyleManager.getInstance(project)
-                .shortenClassReferences(annotation);
+                .shortenClassReferences(psiClass.getContainingFile());
     }
 
     private static void addJavaUtilLoggerField(@NotNull Project project,
