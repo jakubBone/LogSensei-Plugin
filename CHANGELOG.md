@@ -1,8 +1,20 @@
 # Changelog – LogSensei
 
-All notable changes to this project will be documented in this file.  
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),  
+All notable changes to this project will be documented in this file.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
+
+## [0.5.4] - 2026-01-13
+### Fixed
+- **Critical threading bug**: Fixed "Actions cannot be updated when write-action is running" error
+- Quick fixes now properly manage write actions to allow user dialogs
+- All quick fixes now ask for library selection before executing write operations
+
+### Technical Details
+- Implemented `startInWriteAction() = false` in all LocalQuickFix classes
+- User dialogs now shown outside write action context
+- Code modifications wrapped in `WriteCommandAction.runWriteCommandAction()`
+- This ensures IntelliJ Platform threading model compliance
 
 ## [0.5.3] - 2026-01-09
 ### Changed

@@ -46,8 +46,8 @@ jobs:
             ## LogSensei ${{ github.ref_name }}
 
             ### What’s new
-            - Compatibility: IntelliJ IDEA 2024.3+ (removed upper build limit)
-            - Updated supported IDE versions (works with 2025.3+)
+            - Improved stability and reliability
+            - Enhanced compatibility with IntelliJ Platform
 
             ---
             ### Installation
