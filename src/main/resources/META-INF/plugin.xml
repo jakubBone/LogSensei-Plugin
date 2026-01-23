@@ -13,6 +13,7 @@
         <li><b>Loops</b> — warns about INFO logs in loops, suggests changing to DEBUG</li>
         <li><b>Early returns</b> — detects guard clauses without logging, suggests DEBUG level</li>
         <li><b>Service methods</b> — ensures @Service methods have entry/exit INFO logs</li>
+        <li><b>Controller methods</b> — ensures @RestController/@Controller methods have entry/exit INFO logs</li>
     </ul>
 
     <br/>
@@ -38,6 +39,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <b>0.6.0</b>
+    <ul>
+        <li>New inspection: Controller method missing entry/exit logs (@RestController, @Controller)</li>
+    </ul>
+
     <b>0.5.4</b>
     <ul>
         <li>Improved stability and reliability</li>
@@ -108,6 +114,14 @@
                 enabledByDefault="true"
                 level="WARNING"
                 implementationClass="com.jakubbone.logsensei.inspection.ServiceMethodInspection"/>
+        <localInspection
+                language="JAVA"
+                displayName="Controller method missing entry/exit logs"
+                groupName="LogSensei"
+                shortName="LogSenseiController"
+                enabledByDefault="true"
+                level="WARNING"
+                implementationClass="com.jakubbone.logsensei.inspection.ControllerInspection"/>
         <notificationGroup
                 id="LogSensei"
                 displayType="BALLOON"/>

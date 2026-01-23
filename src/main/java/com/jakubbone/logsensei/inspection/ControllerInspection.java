@@ -1,0 +1,90 @@
+package com.jakubbone.logsensei.inspection;
+
+import static com.jakubbone.logsensei.inspection.detector.LogDetector.containsLogCall;
+
+import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiIdentifier;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiStatement;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.jakubbone.logsensei.quickfix.ControllerLogQuickFix;
+import org.jetbrains.annotations.NotNull;
+
+public class ControllerInspection extends BaseLogInspection {
+
+    private static final String REST_CONTROLLER = "org.springframework.web.bind.annotation.RestController";
+    private static final String CONTROLLER = "org.springframework.stereotype.Controller";
+
+    @Override
+    public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
+        return new JavaElementVisitor() {
+            @Override
+            public void visitMethod(@NotNull PsiMethod method) {
+                super.visitMethod(method);
+
+                if (!isPublicControllerMethod(method)) {
+                    return;
+                }
+
+                PsiCodeBlock body = method.getBody();
+                if (body == null) {
+                    return;
+                }
+
+                PsiIdentifier nameIdentifier = method.getNameIdentifier();
+                if (nameIdentifier == null) {
+                    return;
+                }
+
+                boolean hasEntry = hasLogAtPosition(body, 0);
+                boolean hasExit = hasLogAtPosition(body, body.getStatements().length - 1);
+
+                if (hasEntry && hasExit) {
+                    return;
+                }
+
+                registerLogProblem(
+                        holder,
+                        nameIdentifier,
+                        buildDescription(hasEntry, hasExit),
+                        new ControllerLogQuickFix(hasEntry, hasExit)
+                );
+            }
+        };
+    }
+
+    private boolean isPublicControllerMethod(@NotNull PsiMethod method) {
+        if (!method.hasModifierProperty("public")) {
+            return false;
+        }
+
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(method, PsiClass.class);
+        if (containingClass == null) {
+            return false;
+        }
+
+        PsiModifierList modifierList = containingClass.getModifierList();
+        return modifierList != null &&
+               (modifierList.hasAnnotation(REST_CONTROLLER) || modifierList.hasAnnotation(CONTROLLER));
+    }
+
+    private boolean hasLogAtPosition(PsiCodeBlock body, int position) {
+        PsiStatement[] statements = body.getStatements();
+        if (position < 0 || position >= statements.length) {
+            return false;
+        }
+        return containsLogCall(statements[position].getText());
+    }
+
+    private String buildDescription(boolean hasEntry, boolean hasExit) {
+        if (!hasEntry && !hasExit) {
+            return "Controller method missing entry and exit logs";
+        }
+        return hasEntry ? "Controller method missing exit log" : "Controller method missing entry log";
+    }
+}
