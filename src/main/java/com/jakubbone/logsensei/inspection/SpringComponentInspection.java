@@ -12,13 +12,26 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.jakubbone.logsensei.quickfix.ControllerLogQuickFix;
+import com.jakubbone.logsensei.quickfix.EntryExitLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
-public class ControllerInspection extends BaseLogInspection {
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-    private static final String REST_CONTROLLER = "org.springframework.web.bind.annotation.RestController";
-    private static final String CONTROLLER = "org.springframework.stereotype.Controller";
+public class SpringComponentInspection extends BaseLogInspection {
+
+    /**
+     * Annotation -> Display name mapping.
+     * To add new annotation support, simply add a new entry here.
+     */
+    private static final Map<String, String> ANNOTATION_DISPLAY_NAMES = new LinkedHashMap<>();
+
+    static {
+        ANNOTATION_DISPLAY_NAMES.put("org.springframework.stereotype.Service", "Service");
+        ANNOTATION_DISPLAY_NAMES.put("org.springframework.stereotype.Controller", "Controller");
+        ANNOTATION_DISPLAY_NAMES.put("org.springframework.web.bind.annotation.RestController", "Controller");
+
+    }
 
     @Override
     public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
@@ -27,7 +40,8 @@ public class ControllerInspection extends BaseLogInspection {
             public void visitMethod(@NotNull PsiMethod method) {
                 super.visitMethod(method);
 
-                if (!isPublicControllerMethod(method)) {
+                String componentType = getSpringComponentType(method);
+                if (componentType == null) {
                     return;
                 }
 
@@ -51,26 +65,33 @@ public class ControllerInspection extends BaseLogInspection {
                 registerLogProblem(
                         holder,
                         nameIdentifier,
-                        buildDescription(hasEntry, hasExit),
-                        new ControllerLogQuickFix(hasEntry, hasExit)
+                        buildDescription(componentType, hasEntry, hasExit),
+                        new EntryExitLogQuickFix(hasEntry, hasExit)
                 );
             }
         };
     }
 
-    private boolean isPublicControllerMethod(@NotNull PsiMethod method) {
+    private String getSpringComponentType(@NotNull PsiMethod method) {
         if (!method.hasModifierProperty("public")) {
-            return false;
+            return null;
         }
 
         PsiClass containingClass = PsiTreeUtil.getParentOfType(method, PsiClass.class);
         if (containingClass == null) {
-            return false;
+            return null;
         }
 
         PsiModifierList modifierList = containingClass.getModifierList();
-        return modifierList != null &&
-               (modifierList.hasAnnotation(REST_CONTROLLER) || modifierList.hasAnnotation(CONTROLLER));
+        if (modifierList == null) {
+            return null;
+        }
+
+        return ANNOTATION_DISPLAY_NAMES.entrySet().stream()
+                .filter(entry -> modifierList.hasAnnotation(entry.getKey()))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(null);
     }
 
     private boolean hasLogAtPosition(PsiCodeBlock body, int position) {
@@ -81,10 +102,12 @@ public class ControllerInspection extends BaseLogInspection {
         return containsLogCall(statements[position].getText());
     }
 
-    private String buildDescription(boolean hasEntry, boolean hasExit) {
+    private String buildDescription(String componentType, boolean hasEntry, boolean hasExit) {
         if (!hasEntry && !hasExit) {
-            return "Controller method missing entry and exit logs";
+            return componentType + " method missing entry and exit logs";
         }
-        return hasEntry ? "Controller method missing exit log" : "Controller method missing entry log";
+        return hasEntry
+                ? componentType + " method missing exit log"
+                : componentType + " method missing entry log";
     }
 }

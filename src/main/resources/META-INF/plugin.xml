@@ -12,8 +12,7 @@
         <li><b>Catch blocks</b> — detects empty catch blocks, suggests ERROR level logging</li>
         <li><b>Loops</b> — warns about INFO logs in loops, suggests changing to DEBUG</li>
         <li><b>Early returns</b> — detects guard clauses without logging, suggests DEBUG level</li>
-        <li><b>Service methods</b> — ensures @Service methods have entry/exit INFO logs</li>
-        <li><b>Controller methods</b> — ensures @RestController/@Controller methods have entry/exit INFO logs</li>
+        <li><b>Spring components</b> — ensures @Service/@Controller/@RestController methods have entry/exit INFO logs</li>
     </ul>
 
     <br/>
@@ -41,7 +40,8 @@
     <change-notes><![CDATA[
     <b>0.6.0</b>
     <ul>
-        <li>New inspection: Controller method missing entry/exit logs (@RestController, @Controller)</li>
+        <li>Extended Spring component inspection: now covers @Service, @Controller, and @RestController</li>
+        <li>Refactored: unified Service and Controller inspections into single SpringComponentInspection</li>
     </ul>
 
     <b>0.5.4</b>
@@ -108,20 +108,12 @@
                 implementationClass="com.jakubbone.logsensei.inspection.EarlyReturnInspection"/>
         <localInspection
                 language="JAVA"
-                displayName="Service method missing entry/exit logs"
+                displayName="Spring component method missing entry/exit logs"
                 groupName="LogSensei"
-                shortName="LogSenseiServiceMethod"
+                shortName="LogSenseiSpringComponent"
                 enabledByDefault="true"
                 level="WARNING"
-                implementationClass="com.jakubbone.logsensei.inspection.ServiceMethodInspection"/>
-        <localInspection
-                language="JAVA"
-                displayName="Controller method missing entry/exit logs"
-                groupName="LogSensei"
-                shortName="LogSenseiController"
-                enabledByDefault="true"
-                level="WARNING"
-                implementationClass="com.jakubbone.logsensei.inspection.ControllerInspection"/>
+                implementationClass="com.jakubbone.logsensei.inspection.SpringComponentInspection"/>
         <notificationGroup
                 id="LogSensei"
                 displayType="BALLOON"/>

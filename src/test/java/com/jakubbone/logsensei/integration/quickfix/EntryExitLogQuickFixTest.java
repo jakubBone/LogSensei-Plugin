@@ -8,9 +8,9 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
-import com.jakubbone.logsensei.quickfix.ControllerLogQuickFix;
+import com.jakubbone.logsensei.quickfix.EntryExitLogQuickFix;
 
-public class ControllerQuickFixTest extends LightJavaCodeInsightFixtureTestCase {
+public class EntryExitLogQuickFixTest extends LightJavaCodeInsightFixtureTestCase {
     @Override
     protected LightProjectDescriptor getProjectDescriptor() {
         return JAVA_17;
@@ -32,53 +32,71 @@ public class ControllerQuickFixTest extends LightJavaCodeInsightFixtureTestCase 
         super.tearDown();
     }
 
-    public void testQuickFix_shouldAddLogBeforeStatement(){
-        assertControllerMethod("""
+    // Service tests
+    public void testQuickFix_serviceMethod_shouldAddEntryLog() {
+        assertSpringComponent("Service", """
                     doWork();
                     log.info("exit");
             """);
     }
 
-    public void testQuickFix_shouldAddLogAfterStatement(){
-        assertControllerMethod("""
+    public void testQuickFix_serviceMethod_shouldAddExitLog() {
+        assertSpringComponent("Service", """
                     log.info("enter");
                     doWork();
             """);
-
     }
 
-    public void testQuickFix_shouldLogsBeforeAndAfterStatement(){
-        assertControllerMethod("""
+    public void testQuickFix_serviceMethod_shouldAddBothLogs() {
+        assertSpringComponent("Service", """
                     doWork();
             """);
     }
 
-    public void testQuickFix_withControllerAnnotation(){
-        PsiFile file = myFixture.configureByText("TestController.java", """
-            import org.springframework.stereotype.Controller;
-            @Controller
-            public class TestController {
+    // RestController tests
+    public void testQuickFix_restController_shouldAddEntryLog() {
+        assertRestController("""
+                    doWork();
+                    log.info("exit");
+            """);
+    }
+
+    public void testQuickFix_restController_shouldAddExitLog() {
+        assertRestController("""
+                    log.info("enter");
+                    doWork();
+            """);
+    }
+
+    public void testQuickFix_restController_shouldAddBothLogs() {
+        assertRestController("""
+                    doWork();
+            """);
+    }
+
+    // Controller tests
+    public void testQuickFix_controller_shouldAddBothLogs() {
+        assertController("""
+                    doWork();
+            """);
+    }
+
+    private void assertSpringComponent(String annotation, String body) {
+        PsiFile file = myFixture.configureByText("TestComponent.java", """
+            import org.springframework.stereotype.%s;
+            @%s
+            public class TestComponent {
                 public void process() {
-                     doWork();
+                     %s
                 }
                 private void doWork() {}
             }
-            """);
+            """.formatted(annotation, annotation, body));
 
-        PsiElement methodId = findMethodIdentifier(file, "process");
-
-        ControllerLogQuickFix quickFix = new ControllerLogQuickFix(false, false);
-
-        WriteCommandAction.runWriteCommandAction(getProject(), () -> {
-            quickFix.addLog(getProject(), methodId, LoggingLibrary.SLF4J_LOGBACK);
-        });
-
-        String result = file.getText();
-        assertTrue("Should contain entry log", result.contains("Operation started"));
-        assertTrue("Should contain exit log", result.contains("Operation finished"));
+        assertQuickFixAddsLogs(file);
     }
 
-    private void assertControllerMethod(String body){
+    private void assertRestController(String body) {
         PsiFile file = myFixture.configureByText("TestController.java", """
             import org.springframework.web.bind.annotation.RestController;
             @RestController
@@ -90,9 +108,28 @@ public class ControllerQuickFixTest extends LightJavaCodeInsightFixtureTestCase 
             }
             """.formatted(body));
 
+        assertQuickFixAddsLogs(file);
+    }
+
+    private void assertController(String body) {
+        PsiFile file = myFixture.configureByText("TestController.java", """
+            import org.springframework.stereotype.Controller;
+            @Controller
+            public class TestController {
+                public void process() {
+                     %s
+                }
+                private void doWork() {}
+            }
+            """.formatted(body));
+
+        assertQuickFixAddsLogs(file);
+    }
+
+    private void assertQuickFixAddsLogs(PsiFile file) {
         PsiElement methodId = findMethodIdentifier(file, "process");
 
-        ControllerLogQuickFix quickFix = new ControllerLogQuickFix(false, false);
+        EntryExitLogQuickFix quickFix = new EntryExitLogQuickFix(false, false);
 
         WriteCommandAction.runWriteCommandAction(getProject(), () -> {
             quickFix.addLog(getProject(), methodId, LoggingLibrary.SLF4J_LOGBACK);

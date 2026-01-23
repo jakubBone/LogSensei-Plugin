@@ -26,11 +26,11 @@ import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 import com.jakubbone.logsensei.psi.LogStatementFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class ControllerLogQuickFix implements LocalQuickFix {
+public class EntryExitLogQuickFix implements LocalQuickFix {
     private final boolean needsEntryLog;
     private final boolean needsExitLog;
 
-    public ControllerLogQuickFix(boolean hasEntryLog, boolean hasExitLog) {
+    public EntryExitLogQuickFix(boolean hasEntryLog, boolean hasExitLog) {
         this.needsEntryLog = !hasEntryLog;
         this.needsExitLog = !hasExitLog;
     }
@@ -54,7 +54,7 @@ public class ControllerLogQuickFix implements LocalQuickFix {
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
         LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
-        if(lib != null){
+        if (lib != null) {
             WriteCommandAction.runWriteCommandAction(project, () -> {
                 PsiElement methodIdentifier = descriptor.getPsiElement();
                 addLog(project, methodIdentifier, lib);
@@ -69,44 +69,44 @@ public class ControllerLogQuickFix implements LocalQuickFix {
         }
 
         PsiClass containingClass = PsiTreeUtil.getParentOfType(methodIdentifier, PsiClass.class);
-        if(containingClass == null){
+        if (containingClass == null) {
             return;
         }
 
         PsiMethod psiMethod = PsiTreeUtil.getParentOfType(methodIdentifier, PsiMethod.class);
-        if(psiMethod == null){
+        if (psiMethod == null) {
             return;
         }
 
         implementLoggingSolution(project, containingClass, lib);
 
-        if(needsEntryLog){
+        if (needsEntryLog) {
             addEntryLog(project, psiMethod);
         }
 
-        if(needsExitLog){
+        if (needsExitLog) {
             addExitLog(project, psiMethod);
         }
     }
 
-    private void addEntryLog(Project project, PsiMethod method){
+    private void addEntryLog(Project project, PsiMethod method) {
         PsiCodeBlock body = method.getBody();
-        if(body == null){
+        if (body == null) {
             return;
         }
 
         PsiStatement logStmt = createEntryLog(project, method.getName(), method);
 
-        PsiStatement [] statements = body.getStatements();
+        PsiStatement[] statements = body.getStatements();
 
-        if(statements.length > 0){
+        if (statements.length > 0) {
             body.addBefore(logStmt, statements[0]);
         } else {
             body.add(logStmt);
         }
     }
 
-    private void addExitLog(Project project, PsiMethod method){
+    private void addExitLog(Project project, PsiMethod method) {
         PsiCodeBlock body = method.getBody();
         if (body == null) {
             return;
@@ -115,13 +115,13 @@ public class ControllerLogQuickFix implements LocalQuickFix {
         Collection<PsiReturnStatement> returns =
                 PsiTreeUtil.findChildrenOfAnyType(method, PsiReturnStatement.class);
 
-        if(returns.isEmpty()){
+        if (returns.isEmpty()) {
             addLogAtEnd(project, method);
             return;
         }
 
-        for(PsiReturnStatement returnStmt: returns){
-            if(!hasLogBeforeReturn(returnStmt)){
+        for (PsiReturnStatement returnStmt : returns) {
+            if (!hasLogBeforeReturn(returnStmt)) {
                 PsiStatement logStmt = LogStatementFactory.createExitLog(
                         project,
                         method.getName(),
@@ -132,7 +132,7 @@ public class ControllerLogQuickFix implements LocalQuickFix {
         }
     }
 
-    private void addLogAtEnd(Project project, PsiMethod method){
+    private void addLogAtEnd(Project project, PsiMethod method) {
         PsiStatement logStmt = LogStatementFactory.createExitLog(
                 project,
                 method.getName(),
@@ -140,19 +140,19 @@ public class ControllerLogQuickFix implements LocalQuickFix {
         );
 
         PsiCodeBlock block = method.getBody();
-        if(block != null) {
+        if (block != null) {
             block.add(logStmt);
         }
     }
 
-    private boolean hasLogBeforeReturn(PsiReturnStatement returnStmt){
+    private boolean hasLogBeforeReturn(PsiReturnStatement returnStmt) {
         PsiElement previous = returnStmt.getPrevSibling();
 
-        if((previous instanceof PsiWhiteSpace || previous instanceof PsiComment)){
+        if ((previous instanceof PsiWhiteSpace || previous instanceof PsiComment)) {
             previous = previous.getPrevSibling();
         }
 
-        if(previous instanceof PsiStatement){
+        if (previous instanceof PsiStatement) {
             String text = previous.getText();
             return text.contains("log.") ||
                     text.contains("logger.") ||

@@ -46,8 +46,7 @@ jobs:
             ## LogSensei ${{ github.ref_name }}
 
             ### What’s new
-            - Improved stability and reliability
-            - Enhanced compatibility with IntelliJ Platform
+            - New inspection: Controller method missing entry/exit logs (@RestController, @Controller)
 
             ---
             ### Installation
