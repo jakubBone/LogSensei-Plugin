@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.6.0] - 2026-01-23
+### Added
+- **Controller inspection**: Now detects missing entry/exit logs in `@Controller` and `@RestController` classes
+- Unified Spring component inspection covering `@Service`, `@Controller`, and `@RestController`
+
+### Changed
+- **Refactored**: Merged `ServiceMethodInspection` and `ControllerInspection` into single `SpringComponentInspection`
+- **Refactored**: Merged `ServiceMethodLogQuickFix` and `ControllerLogQuickFix` into single `EntryExitLogQuickFix`
+
+### Technical Details
+- New `ANNOTATION_DISPLAY_NAMES` map allows adding new annotations with single line of code
+- Reduced code duplication (DRY principle)
+
 ## [0.5.4] - 2026-01-13
 ### Fixed
 - **Critical threading bug**: Fixed "Actions cannot be updated when write-action is running" error

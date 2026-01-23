@@ -36,7 +36,9 @@ LogSensei automatically analyzes your code and highlights issues:
 | Empty catch block | ⚠️ Warning | Add `log.error(...)` |
 | INFO log in loop | ⚠️ Warning | Change to `log.debug(...)` |
 | Early return without log | ⚠️ Warning | Add `log.debug(...)` |
-| @Service method without entry/exit logs | ⚠️ Warning | Add `log.info(...)` |
+| Spring component method without entry/exit logs | ⚠️ Warning | Add `log.info(...)` |
+
+Supported Spring annotations: `@Service`, `@Controller`, `@RestController`
 
 ### Quick Fix (Alt+Enter)
 1. Place cursor on highlighted code
@@ -105,15 +107,16 @@ public void process(String input) {
 }
 ```
 
-### 4. Service method without entry/exit logs
+### 4. Spring component method without entry/exit logs
+Works with `@Service`, `@Controller`, and `@RestController`:
 ```java
-@Service
+@Service  // or @Controller, @RestController
 public class UserService {
     // ⚠️ Warning: Missing entry/exit logs
     public User findUser(Long id) {
         return repository.findById(id);
     }
-    
+
     // ✅ After fix:
     public User findUser(Long id) {
         log.info("[findUser] Operation started");
@@ -134,7 +137,7 @@ Inspections can be enabled/disabled individually:
 - ☑️ Catch block without error logging
 - ☑️ High-frequency log in loop
 - ☑️ Early return without logging
-- ☑️ Service method missing entry/exit logs
+- ☑️ Spring component method missing entry/exit logs
 
 
 ## 🛠️ Technologies
