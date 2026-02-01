@@ -38,6 +38,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <b>0.6.1</b>
+    <ul>
+        <li>Full java.util.logging (JUL) support: detection, log generation, education popups</li>
+        <li>JUL-specific quick fix names (SEVERE, FINE) and consistent logger.log(Level.X, ...) convention</li>
+        <li>Expanded log detection: case-insensitive, all JUL levels</li>
+    </ul>
+
     <b>0.6.0</b>
     <ul>
         <li>Extended Spring component inspection: now covers @Service, @Controller, and @RestController</li>
