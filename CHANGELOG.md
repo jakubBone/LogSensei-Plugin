@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.6.1] - 2026-02-01
+### Added
+- **java.util.logging (JUL) support**: full detection and log generation
+- Auto-detection of existing JUL logger fields and `@Log` Lombok annotation
+- JUL log statements use consistent `logger.log(Level.X, ...)` convention
+- JUL-specific quick fix names (`SEVERE`, `FINE` instead of `ERROR`, `DEBUG`)
+- JUL-aware education popups (`SEVERE (ERROR)`, `FINE (DEBUG)`)
+- Automatic FQN shortening for `java.util.logging.Level` references
+- Expanded log detection: case-insensitive matching, all JUL levels (`severe`, `warning`, `fine`, `finer`, `finest`, `config`, `trace`)
+
 ## [0.6.0] - 2026-01-23
 ### Added
 - **Controller inspection**: Now detects missing entry/exit logs in `@Controller` and `@RestController` classes

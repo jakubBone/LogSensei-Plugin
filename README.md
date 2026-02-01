@@ -31,12 +31,12 @@
 ### Automatic inspections
 LogSensei automatically analyzes your code and highlights issues:
 
-| Issue | Highlight | Suggested fix |
-|-------|-----------|---------------|
-| Empty catch block | ⚠️ Warning | Add `log.error(...)` |
-| INFO log in loop | ⚠️ Warning | Change to `log.debug(...)` |
-| Early return without log | ⚠️ Warning | Add `log.debug(...)` |
-| Spring component method without entry/exit logs | ⚠️ Warning | Add `log.info(...)` |
+| Issue | Highlight | SLF4J / Log4j2 fix | JUL fix |
+|-------|-----------|---------------------|---------|
+| Empty catch block | ⚠️ Warning | `log.error(...)` | `logger.log(Level.SEVERE, ...)` |
+| INFO log in loop | ⚠️ Warning | Change to `log.debug(...)` | Change to `logger.log(Level.FINE, ...)` |
+| Early return without log | ⚠️ Warning | `log.debug(...)` | `logger.log(Level.FINE, ...)` |
+| Spring component method without entry/exit logs | ⚠️ Warning | `log.info(...)` | `logger.log(Level.INFO, ...)` |
 
 Supported Spring annotations: `@Service`, `@Controller`, `@RestController`
 
