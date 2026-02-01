@@ -9,9 +9,9 @@
     <br/><br/>
     <b>Features:</b>
     <ul>
-        <li><b>Catch blocks</b> — detects empty catch blocks, suggests ERROR level logging</li>
-        <li><b>Loops</b> — warns about INFO logs in loops, suggests changing to DEBUG</li>
-        <li><b>Early returns</b> — detects guard clauses without logging, suggests DEBUG level</li>
+        <li><b>Catch blocks</b> — detects empty catch blocks, suggests ERROR/SEVERE level logging</li>
+        <li><b>Loops</b> — warns about INFO logs in loops, suggests changing to DEBUG/FINE</li>
+        <li><b>Early returns</b> — detects guard clauses without logging, suggests DEBUG/FINE level</li>
         <li><b>Spring components</b> — ensures @Service/@Controller/@RestController methods have entry/exit INFO logs</li>
     </ul>
 
