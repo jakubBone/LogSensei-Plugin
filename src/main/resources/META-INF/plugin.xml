@@ -38,12 +38,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
-    <b>0.6.2</b>
-    <ul>
-        <li>Updated plugin description for JUL level names</li>
-    </ul>
-
-    <b>0.6.1</b>
+    <b>0.6.4</b>
     <ul>
         <li>Full java.util.logging (JUL) support: detection, log generation, education popups</li>
         <li>JUL-specific quick fix names (SEVERE, FINE) and consistent logger.log(Level.X, ...) convention</li>

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [0.6.1] - 2026-02-01
+## [0.6.4] - 2026-02-01
 ### Added
 - **java.util.logging (JUL) support**: full detection and log generation
 - Auto-detection of existing JUL logger fields and `@Log` Lombok annotation
