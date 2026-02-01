@@ -2,13 +2,26 @@ package com.jakubbone.logsensei.dependency.ui;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.psi.PsiClass;
 import com.jakubbone.logsensei.dependency.DependencyManager;
 import com.jakubbone.logsensei.dependency.model.BuildSystem;
 import com.jakubbone.logsensei.dependency.model.DependencyDetector;
 import com.jakubbone.logsensei.dependency.model.DependencyStatus;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
+import com.jakubbone.logsensei.psi.LogImplementationService;
+import org.jetbrains.annotations.Nullable;
 
 public class DependencyDialogService {
+
+    public static LoggingLibrary askUserForLibraryAndAnnotation(Project project, @Nullable PsiClass psiClass){
+        if (psiClass != null) {
+            LoggingLibrary existing = LogImplementationService.detectExistingLoggerLibrary(psiClass);
+            if (existing != LoggingLibrary.NONE) {
+                return existing;
+            }
+        }
+        return askUserForLibraryAndAnnotation(project);
+    }
 
     public static LoggingLibrary askUserForLibraryAndAnnotation(Project project){
         DependencyStatus status = DependencyDetector.detect(project);

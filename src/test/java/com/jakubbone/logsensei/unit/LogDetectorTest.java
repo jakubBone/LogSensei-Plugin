@@ -37,6 +37,46 @@ public class LogDetectorTest {
     }
 
     @Test
+    public void containsLogCall_shouldDetectCaseInsensitivePatterns() {
+        assertTrue("Should detect LOGGER.info",
+                LogDetector.containsLogCall("LOGGER.info(\"msg\");"));
+        assertTrue("Should detect LOG.error",
+                LogDetector.containsLogCall("LOG.error(\"msg\");"));
+        assertTrue("Should detect Log.debug",
+                LogDetector.containsLogCall("Log.debug(\"msg\");"));
+        assertTrue("Should detect LOGGER.warn",
+                LogDetector.containsLogCall("LOGGER.warn(\"msg\");"));
+    }
+
+    @Test
+    public void containsLogCall_shouldDetectTraceLevel() {
+        assertTrue("Should detect log.trace",
+                LogDetector.containsLogCall("log.trace(\"msg\");"));
+        assertTrue("Should detect LOG.trace",
+                LogDetector.containsLogCall("LOG.trace(\"msg\");"));
+    }
+
+    @Test
+    public void containsLogCall_shouldDetectJavaUtilLoggingPatterns() {
+        assertTrue("Should detect log.severe",
+                LogDetector.containsLogCall("log.severe(\"msg\");"));
+        assertTrue("Should detect log.warning",
+                LogDetector.containsLogCall("log.warning(\"msg\");"));
+        assertTrue("Should detect log.fine",
+                LogDetector.containsLogCall("log.fine(\"msg\");"));
+        assertTrue("Should detect log.finer",
+                LogDetector.containsLogCall("log.finer(\"msg\");"));
+        assertTrue("Should detect log.finest",
+                LogDetector.containsLogCall("log.finest(\"msg\");"));
+        assertTrue("Should detect log.config",
+                LogDetector.containsLogCall("log.config(\"msg\");"));
+        assertTrue("Should detect logger.severe",
+                LogDetector.containsLogCall("logger.severe(\"msg\");"));
+        assertTrue("Should detect logger.fine",
+                LogDetector.containsLogCall("logger.fine(\"msg\");"));
+    }
+
+    @Test
     public void containsLogCall_shouldReturnFalse_whenNoLogPresent() {
         assertFalse("Should not detect regular method call",
                 LogDetector.containsLogCall("doSomething();"));
