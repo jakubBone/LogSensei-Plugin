@@ -1,9 +1,11 @@
 package com.jakubbone.logsensei.inspection;
 
 import static com.jakubbone.logsensei.inspection.detector.LogDetector.hasLogBeforeStatement;
+import static com.jakubbone.logsensei.psi.LogImplementationService.detectExistingLoggerLibrary;
 
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiExpression;
@@ -11,6 +13,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReturnStatement;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 import com.jakubbone.logsensei.quickfix.EarlyReturnLogQuickFix;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,10 +45,15 @@ public class EarlyReturnInspection extends BaseLogInspection {
                     return;
                 }
 
+                PsiClass containingClass = PsiTreeUtil.getParentOfType(statement, PsiClass.class);
+                LoggingLibrary library = (containingClass != null)
+                        ? detectExistingLoggerLibrary(containingClass)
+                        : LoggingLibrary.NONE;
+
                 registerLogProblem(holder,
                         statement.getFirstChild(),
                         "Early return missing log",
-                        new EarlyReturnLogQuickFix()
+                        new EarlyReturnLogQuickFix(library)
                 );
             }
         };

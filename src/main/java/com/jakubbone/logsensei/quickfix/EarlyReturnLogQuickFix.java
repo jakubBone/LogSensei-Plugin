@@ -1,6 +1,7 @@
 package com.jakubbone.logsensei.quickfix;
 
 import static com.jakubbone.logsensei.psi.LogImplementationService.implementLoggingSolution;
+import static com.jakubbone.logsensei.psi.LogImplementationService.resolveLoggerFieldName;
 import static com.jakubbone.logsensei.psi.LogStatementFactory.createDebugLog;
 import static com.jakubbone.logsensei.education.LogEducationNotifier.showDebugLevelEducation;
 import static com.jakubbone.logsensei.psi.LogStatementFactory.createErrorLog;
@@ -20,6 +21,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiReturnStatement;
 import com.intellij.psi.PsiStatement;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 import org.jetbrains.annotations.NotNull;
@@ -27,9 +29,21 @@ import org.jetbrains.annotations.NotNull;
 
 public class EarlyReturnLogQuickFix implements LocalQuickFix {
 
+    private final LoggingLibrary library;
+
+    public EarlyReturnLogQuickFix() {
+        this(LoggingLibrary.NONE);
+    }
+
+    public EarlyReturnLogQuickFix(LoggingLibrary library) {
+        this.library = library;
+    }
+
     @Override
     public @IntentionFamilyName @NotNull String getFamilyName() {
-        return "Add DEBUG log before early return";
+        return library == LoggingLibrary.JAVA_UTIL_LOGGING
+                ? "Add FINE log before early return"
+                : "Add DEBUG log before early return";
     }
 
     @Override
@@ -39,13 +53,14 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-        LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiClass.class);
+        LoggingLibrary lib = askUserForLibraryAndAnnotation(project, containingClass);
         if(lib != null){
             WriteCommandAction.runWriteCommandAction(project, () -> {
                 PsiElement returnKeyword = descriptor.getPsiElement();
                 addLog(project, returnKeyword, lib);
             });
-            showDebugLevelEducation(project);
+            showDebugLevelEducation(project, lib);
         }
     }
 
@@ -67,12 +82,20 @@ public class EarlyReturnLogQuickFix implements LocalQuickFix {
 
         implementLoggingSolution(project, containingClass, lib);
 
+        String loggerName = resolveLoggerFieldName(containingClass);
         PsiStatement logStmt = createDebugLog(
                 project,
+                loggerName,
                 containingClass.getName(),
-                returnStmt
+                returnStmt,
+                lib
         );
 
         addLogBeforeStatement(project, logStmt, returnStmt);
+
+        if (lib == LoggingLibrary.JAVA_UTIL_LOGGING) {
+            JavaCodeStyleManager.getInstance(project)
+                    .shortenClassReferences(containingClass.getContainingFile());
+        }
     }
 }

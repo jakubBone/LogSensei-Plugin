@@ -3,6 +3,7 @@ package com.jakubbone.logsensei.education;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
+import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 
 public class LogEducationNotifier {
 
@@ -13,11 +14,13 @@ public class LogEducationNotifier {
                 .notify(project);
     }
 
-    public static void showErrorLevelEducation(Project project) {
+    public static void showErrorLevelEducation(Project project, LoggingLibrary library) {
+        boolean isJul = (library == LoggingLibrary.JAVA_UTIL_LOGGING);
+        String levelName = isJul ? "SEVERE (ERROR)" : "ERROR";
         notify(
                 project,
-                "🎓 LogSensei: understanding ERROR Level",
-                "ERROR should be used for exceptions and critical failures that prevent normal operation.<br/>" +
+                "🎓 LogSensei: understanding " + levelName + " Level",
+                levelName + " should be used for exceptions and critical failures that prevent normal operation.<br/>" +
                         "<br/>\uD83D\uDD34 <b>Examples</b><br/>" +
                         "• database connection failure<br/>" +
                         "• unhandled exceptions<br/>" +
@@ -38,11 +41,13 @@ public class LogEducationNotifier {
         );
     }
 
-    public static void showDebugLevelEducation(Project project) {
+    public static void showDebugLevelEducation(Project project, LoggingLibrary library) {
+        boolean isJul = (library == LoggingLibrary.JAVA_UTIL_LOGGING);
+        String levelName = isJul ? "FINE (DEBUG)" : "DEBUG";
         notify(
                 project,
-                "🎓 LogSensei: understanding DEBUG Level",
-                "DEBUG should be used for detailed technical information useful during development.<br/>" +
+                "🎓 LogSensei: understanding " + levelName + " Level",
+                levelName + " should be used for detailed technical information useful during development.<br/>" +
                         "<br/>\uD83D\uDFE2 <b>Examples</b><br/>" +
                         "• method entry/exit<br/>" +
                         "• loop iterations<br/>" +

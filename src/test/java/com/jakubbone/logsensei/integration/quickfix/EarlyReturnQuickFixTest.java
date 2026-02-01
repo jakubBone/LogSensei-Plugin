@@ -67,6 +67,38 @@ public class EarlyReturnQuickFixTest extends LightJavaCodeInsightFixtureTestCase
         assertTrue("Should add @Slf4j", text.contains("@Slf4j"));
     }
 
+    public void testQuickFix_shouldAddJulDebugLog_whenJulLoggerExists(){
+        PsiFile file = myFixture.configureByText("Test.java", """
+                import java.util.logging.Logger;
+                public class Test {
+                    private static final Logger logger = Logger.getLogger(Test.class.getName());
+                    public void test(int numb){
+                        if(numb == 0){
+                            return;
+                        }
+                    }
+                }
+                """);
+
+        PsiElement keyword = findReturnKeyword(file);
+        assertNotNull("should find return keyword", keyword);
+
+        EarlyReturnLogQuickFix quickFix = new EarlyReturnLogQuickFix();
+
+        WriteCommandAction.runWriteCommandAction(getProject(), () -> {
+            quickFix.addLog(getProject(), keyword, LoggingLibrary.JAVA_UTIL_LOGGING);
+        });
+
+        String text = file.getText();
+        // In production, shortenClassReferences resolves to Level.FINE with import.
+        // In light test fixtures, the mock JDK may not include java.util.logging.Level,
+        // so the FQN form may remain. Accept either form.
+        assertTrue("should contain JUL log(Level.FINE) call",
+                text.contains("logger.log(Level.FINE") ||
+                text.contains("logger.log(java.util.logging.Level.FINE"));
+        assertFalse("should not contain SLF4J debug call", text.contains("log.debug"));
+    }
+
     private String getFileTextAfterQuickFix(PsiFile file) {
         PsiElement keyword = findReturnKeyword(file);
         assertNotNull("should find catch keyword", keyword);

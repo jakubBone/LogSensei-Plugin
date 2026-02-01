@@ -24,14 +24,22 @@ import org.jetbrains.annotations.NotNull;
 public class LoopLogQuickFix implements LocalQuickFix {
 
     private final List<PsiMethodCallExpression> problematicLogs;
+    private final LoggingLibrary library;
 
     public LoopLogQuickFix(List<PsiMethodCallExpression> problematicLogs) {
+        this(problematicLogs, LoggingLibrary.NONE);
+    }
+
+    public LoopLogQuickFix(List<PsiMethodCallExpression> problematicLogs, LoggingLibrary library) {
         this.problematicLogs = problematicLogs;
+        this.library = library;
     }
 
     @Override
     public @IntentionFamilyName @NotNull String getFamilyName() {
-        return "Change log level: INFO -> DEBUG";
+        return library == LoggingLibrary.JAVA_UTIL_LOGGING
+                ? "Change log level: INFO -> FINE"
+                : "Change log level: INFO -> DEBUG";
     }
 
     @Override
@@ -41,13 +49,14 @@ public class LoopLogQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-        LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiClass.class);
+        LoggingLibrary lib = askUserForLibraryAndAnnotation(project, containingClass);
         if(lib != null){
             WriteCommandAction.runWriteCommandAction(project, () -> {
                 PsiElement loopKeyword = descriptor.getPsiElement();
                 addLog(project, loopKeyword, lib);
             });
-            showDebugLevelEducation(project);
+            showDebugLevelEducation(project, lib);
         }
     }
 
@@ -67,17 +76,33 @@ public class LoopLogQuickFix implements LocalQuickFix {
             if(!logCall.isValid()){
                 continue;
             }
-            changeLogLevelToDebug(project, logCall);
+            changeLogLevelToDebug(project, logCall, lib);
         }
     }
 
-    private void changeLogLevelToDebug(@NotNull Project project, @NotNull PsiMethodCallExpression logCall) {
+    private void changeLogLevelToDebug(@NotNull Project project, @NotNull PsiMethodCallExpression logCall, @NotNull LoggingLibrary library) {
         PsiReferenceExpression logExpression = logCall.getMethodExpression();
-        String currentText = logExpression.getText();
-        String newText = currentText.replace(".info", ".debug");
-
+        String methodName = logExpression.getReferenceName();
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-        PsiExpression newExpression = factory.createExpressionFromText(newText, logCall);
-        logExpression.replace(newExpression);
+
+        if ("log".equals(methodName)) {
+            // .log(Level.INFO, ...) pattern — replace Level.INFO in the first argument
+            PsiExpression[] args = logCall.getArgumentList().getExpressions();
+            if (args.length > 0 && args[0].getText().contains("INFO")) {
+                String argText = args[0].getText();
+                String newArgText = (library == LoggingLibrary.JAVA_UTIL_LOGGING)
+                        ? argText.replace("INFO", "FINE")
+                        : argText.replace("INFO", "DEBUG");
+                PsiExpression newArg = factory.createExpressionFromText(newArgText, logCall);
+                args[0].replace(newArg);
+            }
+        } else {
+            // .info(...) pattern — replace method name
+            String currentText = logExpression.getText();
+            String replacement = (library == LoggingLibrary.JAVA_UTIL_LOGGING) ? ".fine" : ".debug";
+            String newText = currentText.replace(".info", replacement);
+            PsiExpression newExpression = factory.createExpressionFromText(newText, logCall);
+            logExpression.replace(newExpression);
+        }
     }
 }

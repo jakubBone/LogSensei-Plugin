@@ -1,6 +1,7 @@
 package com.jakubbone.logsensei.quickfix;
 
 import static com.jakubbone.logsensei.psi.LogImplementationService.implementLoggingSolution;
+import static com.jakubbone.logsensei.psi.LogImplementationService.resolveLoggerFieldName;
 import static com.jakubbone.logsensei.psi.LogStatementFactory.createEntryLog;
 import static com.jakubbone.logsensei.education.LogEducationNotifier.showInfoLevelEducation;
 import static com.jakubbone.logsensei.psi.PsiStatementUtils.addLogBeforeStatement;
@@ -21,6 +22,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReturnStatement;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
 import com.jakubbone.logsensei.psi.LogStatementFactory;
@@ -53,7 +55,8 @@ public class EntryExitLogQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-        LoggingLibrary lib = askUserForLibraryAndAnnotation(project);
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiClass.class);
+        LoggingLibrary lib = askUserForLibraryAndAnnotation(project, containingClass);
         if (lib != null) {
             WriteCommandAction.runWriteCommandAction(project, () -> {
                 PsiElement methodIdentifier = descriptor.getPsiElement();
@@ -80,22 +83,29 @@ public class EntryExitLogQuickFix implements LocalQuickFix {
 
         implementLoggingSolution(project, containingClass, lib);
 
+        String loggerName = resolveLoggerFieldName(containingClass);
+
         if (needsEntryLog) {
-            addEntryLog(project, psiMethod);
+            addEntryLog(project, psiMethod, loggerName, lib);
         }
 
         if (needsExitLog) {
-            addExitLog(project, psiMethod);
+            addExitLog(project, psiMethod, loggerName, lib);
+        }
+
+        if (lib == LoggingLibrary.JAVA_UTIL_LOGGING) {
+            JavaCodeStyleManager.getInstance(project)
+                    .shortenClassReferences(containingClass.getContainingFile());
         }
     }
 
-    private void addEntryLog(Project project, PsiMethod method) {
+    private void addEntryLog(Project project, PsiMethod method, String loggerName, LoggingLibrary lib) {
         PsiCodeBlock body = method.getBody();
         if (body == null) {
             return;
         }
 
-        PsiStatement logStmt = createEntryLog(project, method.getName(), method);
+        PsiStatement logStmt = createEntryLog(project, loggerName, method.getName(), method, lib);
 
         PsiStatement[] statements = body.getStatements();
 
@@ -106,7 +116,7 @@ public class EntryExitLogQuickFix implements LocalQuickFix {
         }
     }
 
-    private void addExitLog(Project project, PsiMethod method) {
+    private void addExitLog(Project project, PsiMethod method, String loggerName, LoggingLibrary lib) {
         PsiCodeBlock body = method.getBody();
         if (body == null) {
             return;
@@ -116,7 +126,7 @@ public class EntryExitLogQuickFix implements LocalQuickFix {
                 PsiTreeUtil.findChildrenOfAnyType(method, PsiReturnStatement.class);
 
         if (returns.isEmpty()) {
-            addLogAtEnd(project, method);
+            addLogAtEnd(project, method, loggerName, lib);
             return;
         }
 
@@ -124,19 +134,23 @@ public class EntryExitLogQuickFix implements LocalQuickFix {
             if (!hasLogBeforeReturn(returnStmt)) {
                 PsiStatement logStmt = LogStatementFactory.createExitLog(
                         project,
+                        loggerName,
                         method.getName(),
-                        returnStmt
+                        returnStmt,
+                        lib
                 );
                 addLogBeforeStatement(project, logStmt, returnStmt);
             }
         }
     }
 
-    private void addLogAtEnd(Project project, PsiMethod method) {
+    private void addLogAtEnd(Project project, PsiMethod method, String loggerName, LoggingLibrary lib) {
         PsiStatement logStmt = LogStatementFactory.createExitLog(
                 project,
+                loggerName,
                 method.getName(),
-                method
+                method,
+                lib
         );
 
         PsiCodeBlock block = method.getBody();
@@ -153,10 +167,10 @@ public class EntryExitLogQuickFix implements LocalQuickFix {
         }
 
         if (previous instanceof PsiStatement) {
-            String text = previous.getText();
+            String text = previous.getText().toLowerCase();
             return text.contains("log.") ||
                     text.contains("logger.") ||
-                    text.contains("System.out.print");
+                    text.contains("system.out.print");
         }
         return false;
     }
