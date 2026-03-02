@@ -38,6 +38,12 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <b>0.6.5</b>
+    <ul>
+        <li>Compatibility improvements with IntelliJ IDEA 2024.3+</li>
+        <li>Enhanced stability and reliability</li>
+    </ul>
+
     <b>0.6.4</b>
     <ul>
         <li>Full java.util.logging (JUL) support: detection, log generation, education popups</li>

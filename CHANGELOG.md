@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.6.5] - 2026-03-02
+### Fixed
+- Deprecated `Project.getBaseDir()` API usage - replaced with `LocalFileSystem.getInstance().findFileByPath()`
+- Improved compatibility with IntelliJ Platform 2024.3+
+
+### Technical Details
+- Updated `DependencyManager` and `BuildSystemDetector` to use modern IntelliJ API
+- Added proper null safety checks for file path resolution
+
 ## [0.6.4] - 2026-02-01
 ### Added
 - **java.util.logging (JUL) support**: full detection and log generation
