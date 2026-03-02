@@ -1,13 +1,18 @@
 package com.jakubbone.logsensei.dependency;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.jakubbone.logsensei.dependency.model.BuildSystem;
 
 public class BuildSystemDetector {
 
     public static BuildSystem detectBuildSystem(Project project){
-        VirtualFile baseDir = project.getBaseDir();
+        String basePath = project.getBasePath();
+        if (basePath == null) {
+            return BuildSystem.UNKNOWN;
+        }
+        VirtualFile baseDir = LocalFileSystem.getInstance().findFileByPath(basePath);
         if(baseDir == null){
             return BuildSystem.UNKNOWN;
         }

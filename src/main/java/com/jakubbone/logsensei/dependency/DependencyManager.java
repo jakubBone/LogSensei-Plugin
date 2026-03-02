@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.jakubbone.logsensei.dependency.model.BuildSystem;
 import com.jakubbone.logsensei.dependency.model.LoggingLibrary;
@@ -13,7 +14,11 @@ public class DependencyManager {
     public static boolean addDependencies(Project project, BuildSystem buildSystem,
                                           boolean addLombok, LoggingLibrary loggingLibrary) {
 
-        VirtualFile buildFile = project.getBaseDir().findChild(buildSystem.getBuildFile());
+        VirtualFile baseDir = LocalFileSystem.getInstance().findFileByPath(project.getBasePath());
+        if (baseDir == null) {
+            return false;
+        }
+        VirtualFile buildFile = baseDir.findChild(buildSystem.getBuildFile());
 
         try{
             String currentContent = readFile(buildFile);
