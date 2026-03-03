@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.jakubbone.logsensei</id>
     <name>LogSensei</name>
-    <version>0.6.5</version>
+    <version>0.6.7</version>
     <vendor email="jakub.bone1990@gmail.com" url="https://github.com/jakubBone">Jakub Bone</vendor>
 
     <description><![CDATA[
@@ -39,6 +39,12 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <b>0.6.7</b>
+    <ul>
+        <li>Fixed version detection for marketplace updates</li>
+        <li>Your IDE will now show available updates correctly</li>
+    </ul>
+
     <b>0.6.6</b>
     <ul>
         <li>Users can now see and install available updates in IntelliJ marketplace</li>
